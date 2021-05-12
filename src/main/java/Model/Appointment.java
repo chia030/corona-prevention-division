@@ -1,15 +1,22 @@
 package Model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@Entity
+@Table(name = "appointments" )
 public class Appointment {
 
+    @Id
+    private int appointment_id;
     private Result result;
     private LocalDate date;
     private LocalTime time;
     private long CPR;
-    private Center center;
+    private Center center; //add center ID here
     private String patientEmail;
 
 
@@ -22,6 +29,18 @@ public class Appointment {
         this.CPR = CPR;
         this.center = center;
         this.patientEmail = patientEmail;
+    }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "result=" + result +
+                ", date=" + date +
+                ", time=" + time +
+                ", CPR=" + CPR +
+                ", center=" + center +
+                ", patientEmail='" + patientEmail + '\'' +
+                '}';
     }
 
     public Result getResult() {
@@ -71,4 +90,6 @@ public class Appointment {
     public void setPatientEmail(String patientEmail) {
         this.patientEmail = patientEmail;
     }
+
+
 }

@@ -1,12 +1,22 @@
 package Model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "addresses" )
 public class Address {
+
+    @Id
     private int addressID;
     private String city;
     private int postCode;
     private String streetName;
     private String streetNumber;
     private String floor;
+
+    public Address() {}
 
     public Address(int addressID, String city, int postCode, String streetName, String streetNumber, String floor) {
         this.addressID = addressID;

@@ -1,7 +1,14 @@
 package Model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "patients" )
 public class Patient {
 
+    @Id
     private long CPR;
     private String emailAddress;
     private boolean isApproved;
@@ -12,6 +19,15 @@ public class Patient {
         this.CPR = CPR;
         this.emailAddress = emailAddress;
         this.isApproved = isApproved;
+    }
+
+    @Override
+    public String toString() {
+        return "Patient{" +
+                "CPR=" + CPR +
+                ", emailAddress='" + emailAddress + '\'' +
+                ", isApproved=" + isApproved +
+                '}';
     }
 
     public long getCPR() {

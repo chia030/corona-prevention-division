@@ -1,13 +1,19 @@
 package Model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.ArrayList;
 
+@Entity
+@Table(name = "centers" )
 public class Center {
 
+    @Id
     private int centerID;
     private CenterType centerType;
-    private Address address;
-    private ArrayList<WorkDay> workDays;
+    private Address address; //add the IDs here
+    private ArrayList<WorkDay> workDays; //I think we need to change this to List
 
     public Center() {}
 
@@ -16,6 +22,16 @@ public class Center {
         this.centerType = centerType;
         this.address = address;
         this.workDays = workDays;
+    }
+
+    @Override
+    public String toString() {
+        return "Center{" +
+                "centerID=" + centerID +
+                ", centerType=" + centerType +
+                ", address=" + address +
+                ", workDays=" + workDays +
+                '}';
     }
 
     public int getCenterID() {

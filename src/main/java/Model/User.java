@@ -1,10 +1,19 @@
 package Model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "users" )
 public class User {
 
+    @Id
     private String username;
     private String password;
     private UserType level;
+
+    public User() {}
 
     public User(String username, String password, UserType level) {
         this.username = username;
