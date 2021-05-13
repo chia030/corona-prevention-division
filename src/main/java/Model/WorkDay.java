@@ -1,14 +1,22 @@
 package Model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalTime;
 
+@Entity
+@Table(name = "work_days" )
 public class WorkDay {
 
+    @Id
     private int workDayID;
     private LocalTime openingTime;
     private LocalTime closingTime;
     private int interval; //In minutes
     private int capacity;
+
+    public WorkDay() {}
 
     public WorkDay(int workDayID, LocalTime openingTime, LocalTime closingTime, int interval, int capacity) {
         this.workDayID = workDayID;
