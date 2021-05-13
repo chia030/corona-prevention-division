@@ -1,6 +1,6 @@
 package com.cpd.coronapreventiondivision.Model;
 
-public class WeekDay {
+public class WorkWeek {
 
     private WorkDay monday;
     private WorkDay tuesday;
@@ -10,7 +10,7 @@ public class WeekDay {
     private WorkDay saturday;
     private WorkDay sunday;
 
-    public WeekDay(WorkDay monday, WorkDay tuesday, WorkDay wednesday, WorkDay thursday, WorkDay friday, WorkDay saturday, WorkDay sunday) {
+    public WorkWeek(WorkDay monday, WorkDay tuesday, WorkDay wednesday, WorkDay thursday, WorkDay friday, WorkDay saturday, WorkDay sunday) {
         this.monday = monday;
         this.tuesday = tuesday;
         this.wednesday = wednesday;

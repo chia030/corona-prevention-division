@@ -9,7 +9,7 @@ public class Appointment {
     private Result result;
     private LocalDate date;
     private LocalTime time;
-    private long CPR;
+    private Patient CPR;
     private Center center; //add center ID here
     private String patientEmail;
 
@@ -25,7 +25,7 @@ public class Appointment {
 
     public Appointment() {}
 
-    public Appointment(Result result, LocalDate date, LocalTime time, long CPR, Center center, String patientEmail) {
+    public Appointment(Result result, LocalDate date, LocalTime time, Patient CPR, Center center, String patientEmail) {
         this.result = result;
         this.date = date;
         this.time = time;
@@ -70,11 +70,11 @@ public class Appointment {
         this.time = time;
     }
 
-    public long getCPR() {
+    public Patient getCPR() {
         return CPR;
     }
 
-    public void setCPR(long CPR) {
+    public void setCPR(Patient CPR) {
         this.CPR = CPR;
     }
 

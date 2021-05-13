@@ -5,11 +5,10 @@ public class Center {
 
     private int centerID;
     private CenterType centerType;
-    private String addressID;
     private Address address; //add the IDs here
-    private WeekDay weekday;
+    private WorkWeek weekday;
 
-    private enum CenterType {
+    public enum CenterType {
         PCR_TEST,
         MODERNA_VACCINE,
         COMIRNATY_VACCINE
@@ -17,7 +16,7 @@ public class Center {
 
     public Center() {}
 
-    public Center(int centerID, CenterType centerType, Address address, WeekDay weekday) {
+    public Center(int centerID, CenterType centerType, Address address, WorkWeek weekday) {
         this.centerID = centerID;
         this.centerType = centerType;
         this.address = address;
@@ -42,6 +41,14 @@ public class Center {
         this.centerID = centerID;
     }
 
+    public WorkWeek getWeekday() {
+        return weekday;
+    }
+
+    public void setWeekday(WorkWeek weekday) {
+        this.weekday = weekday;
+    }
+
     public CenterType getCenterType() {
         return centerType;
     }
@@ -58,11 +65,11 @@ public class Center {
         this.address = address;
     }
 
-    public WeekDay getWorkDays() {
+    public WorkWeek getWorkDays() {
         return weekday;
     }
 
-    public void setWorkDays(WeekDay weekday) {
+    public void setWorkDays(WorkWeek weekday) {
         this.weekday = weekday;
     }
 }
