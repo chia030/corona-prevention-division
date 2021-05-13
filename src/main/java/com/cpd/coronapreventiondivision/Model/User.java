@@ -6,6 +6,11 @@ public class User {
     private String password;
     private UserType level;
 
+    public enum UserType {
+        ADMIN,
+        SECRETARY
+    }
+
     public User() {}
 
     public User(String username, String password, UserType level) {

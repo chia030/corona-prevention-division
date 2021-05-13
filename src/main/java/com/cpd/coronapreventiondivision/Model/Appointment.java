@@ -13,6 +13,15 @@ public class Appointment {
     private Center center; //add center ID here
     private String patientEmail;
 
+    public enum Result {
+        BOOKED,
+        MISSED,
+        POSITIVE,
+        NEGATIVE,
+        INCONCLUSIVE,
+        PARTIAL_VACCINE,
+        VACCINATED
+    }
 
     public Appointment() {}
 
