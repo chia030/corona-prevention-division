@@ -5,11 +5,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.ArrayList;
 
-@Entity
-@Table(name = "centers" )
 public class Center {
 
-    @Id
     private int centerID;
     private CenterType centerType;
     private String addressID;
