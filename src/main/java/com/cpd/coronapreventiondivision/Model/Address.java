@@ -1,4 +1,4 @@
-package Model;
+package com.cpd.coronapreventiondivision.Model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

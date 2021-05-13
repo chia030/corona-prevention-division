@@ -1,4 +1,4 @@
-package Handler;
+package com.cpd.coronapreventiondivision.Handler;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
