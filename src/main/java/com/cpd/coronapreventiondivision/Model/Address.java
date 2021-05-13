@@ -2,7 +2,6 @@ package com.cpd.coronapreventiondivision.Model;
 
 public class Address {
 
-    private int addressID;
     private String city;
     private int postCode;
     private String streetName;
@@ -21,14 +20,8 @@ public class Address {
 
     @Override
     public String toString() {
-        return "Address{" +
-                "addressID=" + addressID +
-                ", city='" + city + '\'' +
-                ", postCode=" + postCode +
-                ", streetName='" + streetName + '\'' +
-                ", streetNumber='" + streetNumber + '\'' +
-                ", floor='" + floor + '\'' +
-                '}';
+        return  city + " " + postCode + " " + streetName + '\'' +
+                " " + streetNumber + " " + floor;
     }
 
     public String getCity() {
