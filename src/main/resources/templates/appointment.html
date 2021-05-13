@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book a test</title>
+</head>
+<body>
+    <!--Header-->
+    <div>
+        <h1>
+            Header
+        </h1>
+    </div>
+
+    <!--Select center-->
+    <div>
+        <select name="select-center">
+            <option th:text="Please select a center..."></option>
+            <option th:each="center : ${centers}" th:value="${center.centerID}" th:text="${center.address}">
+            </option>
+        </select>
+    </div>
+
+    <!--Select date and time-->
+    <div></div>
+
+    <!--Enter credentials-->
+    <div></div>
+
+</body>
+</html>

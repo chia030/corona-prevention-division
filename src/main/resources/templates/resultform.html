@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book a test</title>
+</head>
+<body>
+
+<!--View results-->
+<div>
+    <form th:action="@{/results}">
+        <label>Appointment ID</label>
+        <input name="appointmentID" type="number" disabled th:value="${appointmentID}" />
+        <label>CPR number</label>
+        <input name="cpr" type="number" maxlength="10" th:value="${cpr}" />
+        <button type="submit">View results</button>
+    </form>
+</div>
+
+</body>
+</html>

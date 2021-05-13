@@ -11,13 +11,17 @@ public class Patient {
     @Id
     private long CPR;
     private String emailAddress;
+    private String firstName;
+    private String lastName;
     private boolean isApproved;
 
     public Patient() {}
 
-    public Patient(long CPR, String emailAddress, boolean isApproved) {
+    public Patient(long CPR, String emailAddress, String firstName, String lastName, boolean isApproved) {
         this.CPR = CPR;
         this.emailAddress = emailAddress;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.isApproved = isApproved;
     }
 
@@ -28,6 +32,22 @@ public class Patient {
                 ", emailAddress='" + emailAddress + '\'' +
                 ", isApproved=" + isApproved +
                 '}';
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public long getCPR() {
