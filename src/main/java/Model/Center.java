@@ -12,6 +12,7 @@ public class Center {
     @Id
     private int centerID;
     private CenterType centerType;
+    private String addressID;
     private Address address; //add the IDs here
     private ArrayList<WorkDay> workDays; //I think we need to change this to List
 
