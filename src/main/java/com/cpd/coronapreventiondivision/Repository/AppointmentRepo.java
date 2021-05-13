@@ -46,6 +46,18 @@ public class AppointmentRepo implements RowMapper<Appointment> {
         return template.queryForObject(query, new Object[]{centerID, date.toString(), time.toString()}, this);
     }
 
+    public Appointment fetchByIdAndCpr(int appointmentID, long cpr){
+        String query = "SELECT * FROM cpd1.appointments WHERE appointment_id = ? AND cpr = ?";
+
+        List<Appointment> a = template.query(query, new Object[]{appointmentID, cpr}, this);
+        if (a.size() > 0){
+            return a.get(0);
+        }
+        else {
+            return null;
+        }
+    }
+
     public List<Appointment> fetchByCpr(long cpr){
         String query = "SELECT * FROM cpd1.appointments WHERE cpr = ?";
 

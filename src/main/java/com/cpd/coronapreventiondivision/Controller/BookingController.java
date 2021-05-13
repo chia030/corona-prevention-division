@@ -17,13 +17,13 @@ public class BookingController {
 
     @GetMapping("/")
     public String landingPage(){
-        return "landing page";
+        return "index";
     }
 
     @GetMapping("/book-a-test")
     public String selectTestCenter(Model model){
         List<Center> testCenters = bookingService.fetchCenterByType("PCR_TEST");
-        model.addAttribute("testCenters", testCenters);
+        model.addAttribute("centers", testCenters);
         System.out.println(model);
 
         return "book-a-test";
