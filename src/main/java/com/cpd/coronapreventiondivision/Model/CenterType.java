@@ -1,4 +1,4 @@
-package Model;
+package com.cpd.coronapreventiondivision.Model;
 
 public enum CenterType {
     PCR_TEST,
