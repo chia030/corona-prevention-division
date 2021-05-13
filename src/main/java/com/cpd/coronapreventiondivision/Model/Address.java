@@ -1,15 +1,7 @@
-package Model;
+package com.cpd.coronapreventiondivision.Model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "addresses" )
 public class Address {
 
-    @Id
-    private int addressID;
     private String city;
     private int postCode;
     private String streetName;
@@ -18,8 +10,7 @@ public class Address {
 
     public Address() {}
 
-    public Address(int addressID, String city, int postCode, String streetName, String streetNumber, String floor) {
-        this.addressID = addressID;
+    public Address(String city, int postCode, String streetName, String streetNumber, String floor) {
         this.city = city;
         this.postCode = postCode;
         this.streetName = streetName;
@@ -29,22 +20,8 @@ public class Address {
 
     @Override
     public String toString() {
-        return "Address{" +
-                "addressID=" + addressID +
-                ", city='" + city + '\'' +
-                ", postCode=" + postCode +
-                ", streetName='" + streetName + '\'' +
-                ", streetNumber='" + streetNumber + '\'' +
-                ", floor='" + floor + '\'' +
-                '}';
-    }
-
-    public int getAddressID() {
-        return addressID;
-    }
-
-    public void setAddressID(int addressID) {
-        this.addressID = addressID;
+        return  city + " " + postCode + " " + streetName + '\'' +
+                " " + streetNumber + " " + floor;
     }
 
     public String getCity() {

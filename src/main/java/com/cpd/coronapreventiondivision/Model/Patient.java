@@ -1,14 +1,11 @@
-package Model;
+package com.cpd.coronapreventiondivision.Model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "patients" )
 public class Patient {
 
-    @Id
     private long CPR;
     private String emailAddress;
     private boolean isApproved;
