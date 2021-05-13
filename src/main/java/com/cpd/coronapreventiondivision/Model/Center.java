@@ -1,27 +1,26 @@
-package Model;
+package com.cpd.coronapreventiondivision.Model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.util.ArrayList;
 
-@Entity
-@Table(name = "centers" )
 public class Center {
 
-    @Id
     private int centerID;
     private CenterType centerType;
     private Address address; //add the IDs here
-    private ArrayList<WorkDay> workDays; //I think we need to change this to List
+    private WorkWeek weekday;
+
+    public enum CenterType {
+        PCR_TEST,
+        MODERNA_VACCINE,
+        COMIRNATY_VACCINE
+    }
 
     public Center() {}
 
-    public Center(int centerID, CenterType centerType, Address address, ArrayList<WorkDay> workDays) {
+    public Center(int centerID, CenterType centerType, Address address, WorkWeek weekday) {
         this.centerID = centerID;
         this.centerType = centerType;
         this.address = address;
-        this.workDays = workDays;
+        this.weekday = weekday;
     }
 
     @Override
@@ -30,7 +29,7 @@ public class Center {
                 "centerID=" + centerID +
                 ", centerType=" + centerType +
                 ", address=" + address +
-                ", workDays=" + workDays +
+                ", workDays=" + weekday +
                 '}';
     }
 
@@ -40,6 +39,14 @@ public class Center {
 
     public void setCenterID(int centerID) {
         this.centerID = centerID;
+    }
+
+    public WorkWeek getWeekday() {
+        return weekday;
+    }
+
+    public void setWeekday(WorkWeek weekday) {
+        this.weekday = weekday;
     }
 
     public CenterType getCenterType() {
@@ -58,11 +65,11 @@ public class Center {
         this.address = address;
     }
 
-    public ArrayList<WorkDay> getWorkDays() {
-        return workDays;
+    public WorkWeek getWorkDays() {
+        return weekday;
     }
 
-    public void setWorkDays(ArrayList<WorkDay> workDays) {
-        this.workDays = workDays;
+    public void setWorkDays(WorkWeek weekday) {
+        this.weekday = weekday;
     }
 }

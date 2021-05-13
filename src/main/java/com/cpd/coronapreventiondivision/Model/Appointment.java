@@ -1,28 +1,31 @@
-package Model;
+package com.cpd.coronapreventiondivision.Model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@Entity
-@Table(name = "appointments" )
 public class Appointment {
 
-    @Id
     private int appointment_id;
     private Result result;
     private LocalDate date;
     private LocalTime time;
-    private long CPR;
+    private Patient CPR;
     private Center center; //add center ID here
     private String patientEmail;
 
+    public enum Result {
+        BOOKED,
+        MISSED,
+        POSITIVE,
+        NEGATIVE,
+        INCONCLUSIVE,
+        PARTIAL_VACCINE,
+        VACCINATED
+    }
 
     public Appointment() {}
 
-    public Appointment(Result result, LocalDate date, LocalTime time, long CPR, Center center, String patientEmail) {
+    public Appointment(Result result, LocalDate date, LocalTime time, Patient CPR, Center center, String patientEmail) {
         this.result = result;
         this.date = date;
         this.time = time;
@@ -67,11 +70,11 @@ public class Appointment {
         this.time = time;
     }
 
-    public long getCPR() {
+    public Patient getCPR() {
         return CPR;
     }
 
-    public void setCPR(long CPR) {
+    public void setCPR(Patient CPR) {
         this.CPR = CPR;
     }
 
