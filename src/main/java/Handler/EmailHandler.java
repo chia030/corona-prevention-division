@@ -3,6 +3,8 @@ package Handler;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Properties;
 
 public class EmailHandler {
@@ -25,6 +27,38 @@ public class EmailHandler {
                         return new PasswordAuthentication(username, password);
                     }
                 });
+    }
+
+    public boolean sendConfirmation(String receivee, String verificationCode){
+        try {
+            String fileName = "src/main/resources/EmailDrafts/confirmation.html";
+            Path path = Path.of(fileName);
+
+            String subject = "Welcome to Corona Prevention Division!";
+            String htmlContent = Files.readString(path);
+            htmlContent = htmlContent.replace("website.com", "https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+
+            return sendEmail(receivee, subject, htmlContent);
+        }
+        catch(Exception e){
+            return false;
+        }
+    }
+
+    public boolean sendResults(String receivee, String resultCode){
+        try {
+            String fileName = "src/main/resources/EmailDrafts/results.html";
+            Path path = Path.of(fileName);
+
+            String subject = "Your test results are here";
+            String htmlContent = Files.readString(path);
+            htmlContent = htmlContent.replace("website.com", "https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+
+            return sendEmail(receivee, subject, htmlContent);
+        }
+        catch(Exception e){
+            return false;
+        }
     }
 
     public boolean sendEmail(String addressList, String subject, String content){
