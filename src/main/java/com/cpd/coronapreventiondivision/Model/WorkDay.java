@@ -1,15 +1,9 @@
 package com.cpd.coronapreventiondivision.Model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.time.LocalTime;
 
-@Entity
-@Table(name = "work_days" )
 public class WorkDay {
 
-    @Id
     private int workDayID;
     private LocalTime openingTime;
     private LocalTime closingTime;

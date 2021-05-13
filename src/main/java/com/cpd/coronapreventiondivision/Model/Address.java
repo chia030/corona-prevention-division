@@ -1,14 +1,7 @@
 package com.cpd.coronapreventiondivision.Model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "addresses" )
 public class Address {
 
-    @Id
     private int addressID;
     private String city;
     private int postCode;

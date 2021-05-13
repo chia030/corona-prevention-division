@@ -1,16 +1,10 @@
 package com.cpd.coronapreventiondivision.Model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@Entity
-@Table(name = "appointments" )
 public class Appointment {
 
-    @Id
     private int appointment_id;
     private Result result;
     private LocalDate date;
