@@ -51,4 +51,7 @@ public class AppointmentRepo implements RowMapper<Appointment> {
 
         return template.query(query, new Object[]{cpr}, this);
     }
+
+
+
 }

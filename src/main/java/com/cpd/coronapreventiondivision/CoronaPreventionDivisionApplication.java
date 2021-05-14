@@ -11,7 +11,6 @@ public class CoronaPreventionDivisionApplication {
 
     public static void main(String[] args) throws Exception{
         SpringApplication.run(CoronaPreventionDivisionApplication.class, args);
-
         //EmailHandler emailhandler = new EmailHandler();
         //emailhandler.sendResults("chiaravisca@outlook.com", "123");
     }
