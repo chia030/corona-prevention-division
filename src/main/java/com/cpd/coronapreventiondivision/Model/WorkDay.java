@@ -4,7 +4,6 @@ import java.time.LocalTime;
 
 public class WorkDay {
 
-    private int workDayID;
     private LocalTime openingTime;
     private LocalTime closingTime;
     private int interval; //In minutes
@@ -12,8 +11,7 @@ public class WorkDay {
 
     public WorkDay() {}
 
-    public WorkDay(int workDayID, LocalTime openingTime, LocalTime closingTime, int interval, int capacity) {
-        this.workDayID = workDayID;
+    public WorkDay(LocalTime openingTime, LocalTime closingTime, int interval, int capacity) {
         this.openingTime = openingTime;
         this.closingTime = closingTime;
         this.interval = interval;
@@ -23,20 +21,11 @@ public class WorkDay {
     @Override
     public String toString() {
         return "WorkDay{" +
-                "workDayID=" + workDayID +
                 ", openingTime=" + openingTime +
                 ", closingTime=" + closingTime +
                 ", interval=" + interval +
                 ", capacity=" + capacity +
                 '}';
-    }
-
-    public int getWorkDayID() {
-        return workDayID;
-    }
-
-    public void setWorkDayID(int workDayID) {
-        this.workDayID = workDayID;
     }
 
     public LocalTime getOpeningTime() {
