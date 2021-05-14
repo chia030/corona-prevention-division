@@ -1,0 +1,61 @@
+body {
+    margin: 0;
+    font-family: "Book Antiqua"; /* we need to change this font fam */
+}
+
+/* HEADER: */
+.header {
+    color: brown;
+    padding: 5px;
+    text-align: center;
+}
+
+/* NAVBAR: */
+.topnav {
+    overflow: hidden;
+}
+
+.topnav li {
+    display: inline;
+    float: left;
+}
+
+.topnav ul {
+    /*top:0;*/
+    position: fixed;
+    width: 100%;
+    background-color: saddlebrown;
+}
+
+/* Navbar links */
+.topnav a {
+    /*float: left;*/
+    display: block;
+    color: cornsilk;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+
+}
+
+/*this is not working :-( */
+.topnav a.active {
+    background-color: brown;
+    color: cornsilk;
+}
+
+/* Links - change color on hover */
+.topnav a:hover:not(.active) {
+    background-color: cornsilk;
+    color: brown;
+}
+
+.contents {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+/* CONTENTS HEADER: */
+.contents h2 {
+    margin-top: 100px;
+}
