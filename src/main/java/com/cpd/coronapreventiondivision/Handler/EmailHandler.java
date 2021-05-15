@@ -1,5 +1,7 @@
 package com.cpd.coronapreventiondivision.Handler;
 
+import com.cpd.coronapreventiondivision.CoronaPreventionDivisionApplication;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -36,7 +38,8 @@ public class EmailHandler {
 
             String subject = "Welcome to Corona Prevention Division!";
             String htmlContent = Files.readString(path);
-            htmlContent = htmlContent.replace("website.com", "https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+            htmlContent = htmlContent.replace("website.com", CoronaPreventionDivisionApplication.domain);
+            htmlContent = htmlContent.replace("verificationCode", verificationCode);
 
             return sendEmail(receivee, subject, htmlContent);
         }

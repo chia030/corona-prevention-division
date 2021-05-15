@@ -8,11 +8,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class CoronaPreventionDivisionApplication {
 
     public static final String domain = "localhost:9090";
+    public static EmailHandler emailhandler;
+
 
     public static void main(String[] args) throws Exception{
         SpringApplication.run(CoronaPreventionDivisionApplication.class, args);
+        emailhandler = new EmailHandler();
 
-        //EmailHandler emailhandler = new EmailHandler();
         //emailhandler.sendResults("chiaravisca@outlook.com", "123");
     }
 }

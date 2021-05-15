@@ -14,11 +14,19 @@
 
     <!--Select center-->
     <div>
-        <select name="select-center">
-            <option th:text="Please select a center..."></option>
-            <option th:each="center : ${centers}" th:value="${center.centerID}" th:text="${center.address}">
-            </option>
-        </select>
+        <form th:action="@{/book-a-test}">
+            <select name="centerid">
+    <!--            <option th:text="Please select a center..."></option>-->
+                <option th:each="center : ${centers}" th:value="${center.centerID}" th:text="${center.address}">
+                </option>
+            </select>
+            <button type="submit">Select center</button>
+        </form>
+
+        <!--Google Maps Embed-->
+        <div style="margin:20px;">
+            <iframe th:src="${googleMapsLink}" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
     </div>
 
     <!--Select date and time-->

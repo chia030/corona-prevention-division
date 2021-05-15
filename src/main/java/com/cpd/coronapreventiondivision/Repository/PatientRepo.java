@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 @Repository
 public class PatientRepo implements RowMapper<Patient> {
@@ -20,7 +21,9 @@ public class PatientRepo implements RowMapper<Patient> {
         return new Patient(
                 rs.getLong(1),
                 rs.getString(2),
-                rs.getBoolean(3)
+                rs.getString(3),
+                rs.getString(4),
+                rs.getBoolean(5)
         );
     }
 
@@ -28,5 +31,11 @@ public class PatientRepo implements RowMapper<Patient> {
         String query = "SELECT * FROM cpd1.patients WHERE cpr = ?";
 
         return template.queryForObject(query, new Object[]{cpr}, this);
+    }
+
+    public List<Patient> fetch(long cpr, String email, String firstName, String lastName){
+        String query = "SELECT * FROM cpd1.patients WHERE cpr = ? AND email = ? and firstname = ? and lastname = ?";
+
+        return template.query(query, new Object[]{cpr, email, firstName, lastName}, this);
     }
 }
