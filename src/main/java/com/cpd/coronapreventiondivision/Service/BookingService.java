@@ -29,6 +29,17 @@ public class BookingService {
         return centerRepo.fetchById(id).getAddress().getGoogleMapsLink();
     }
 
+    public boolean verifyEmail(String approvalID){
+        try {
+            patientRepo.verifyEmail(approvalID);
+
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
+    }
+
     public int sendConfirmation(Long cpr, String email, String firstName, String lastName){
         List<Patient> p = patientRepo.fetch(cpr, email, firstName, lastName);
 
@@ -42,13 +53,13 @@ public class BookingService {
                 String toHash = email + new Date();
                 String approvalID = User.hash(toHash);
                 patient.setApprovalID(approvalID);
-                boolean res = CoronaPreventionDivisionApplication.emailhandler.sendConfirmation(email, approvalID);
+                boolean res = CoronaPreventionDivisionApplication.emailhandler.sendConfirmation(email, approvalID, firstName);
                 if (res)
                     return 1;
                 else return -1;
             }
         }
 
-        return -1;
+        return -2;
     }
 }

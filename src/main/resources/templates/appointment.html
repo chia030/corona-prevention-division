@@ -33,7 +33,19 @@
     <div></div>
 
     <!--Enter credentials-->
-    <div></div>
+    <div>
+        <form th:action="@{send-confirmation}">
+            <label>CPR number:</label>
+            <input type="number" th:name="cpr" />
+            <label>First name:</label>
+            <input type="text" th:name="firstName" />
+            <label>Last name:</label>
+            <input type="text" th:name="lastName" />
+            <label>Email address:</label>
+            <input type="text" th:name="email" />
+            <button type="submit" />
+        </form>
+    </div>
 
 </body>
 </html>

@@ -23,7 +23,8 @@ public class PatientRepo implements RowMapper<Patient> {
                 rs.getString(2),
                 rs.getString(3),
                 rs.getString(4),
-                rs.getBoolean(5)
+                rs.getBoolean(5),
+                rs.getString(6)
         );
     }
 
@@ -33,9 +34,15 @@ public class PatientRepo implements RowMapper<Patient> {
         return template.queryForObject(query, new Object[]{cpr}, this);
     }
 
-    public List<Patient> fetch(long cpr, String email, String firstName, String lastName){
-        String query = "SELECT * FROM cpd1.patients WHERE cpr = ? AND email = ? and firstname = ? and lastname = ?";
+    public void verifyEmail(String approvalID){
+        String query = "UPDATE cpd1.patients SET approved = true, approval_id = null WHERE approval_id = ?";
 
-        return template.query(query, new Object[]{cpr, email, firstName, lastName}, this);
+        template.query(query, new Object[]{approvalID}, this);
+    }
+
+    public List<Patient> fetch(long cpr, String email, String firstName, String lastName){
+        String query = "SELECT * FROM cpd1.patients WHERE cpr = ? and first_name = ? and last_name = ?";
+
+        return template.query(query, new Object[]{cpr, firstName, lastName}, this);
     }
 }

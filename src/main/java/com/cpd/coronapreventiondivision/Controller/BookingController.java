@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 
@@ -24,7 +25,8 @@ public class BookingController {
     }
 
     @GetMapping("/book-a-test")
-    public String selectTestCenter(@RequestParam(required = false) Integer centerid, Model model){
+    public String selectTestCenter(@RequestParam(required = false) Integer centerid,
+                                   Model model){
         List<Center> testCenters = bookingService.fetchCenterByType("PCR_TEST");
         model.addAttribute("centers", testCenters);
         if (centerid != null){
@@ -35,15 +37,27 @@ public class BookingController {
         return "appointment";
     }
 
-    @PostMapping("send-confirmation")
+    @PostMapping("/email-verification")
+    public RedirectView verifyEmail(@RequestParam(name = "id") String verificationCode){
+        bookingService.verifyEmail(verificationCode);
+
+        return new RedirectView("/");
+    }
+
+    @GetMapping("send-confirmation")
     public String sendConfirmation(@RequestParam(required = false) Long cpr,
                                    @RequestParam(required = false) String email,
                                    @RequestParam(required = false) String firstName,
                                    @RequestParam(required = false) String lastName,
                                    Model model){
-        int emailSent = bookingService.sendConfirmation(cpr, email, firstName, lastName);
+        if (cpr != null && email != null && firstName != null && lastName != null){
+            int emailSent = bookingService.sendConfirmation(cpr, email, firstName, lastName);
+            model.addAttribute("outcome", emailSent);
+        }
+        else {
+            model.addAttribute("outcome", -3);
+        }
 
-
-        return "appointment";
+        return "index";
     }
 }
