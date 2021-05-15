@@ -37,7 +37,7 @@ public class BookingController {
         return "appointment";
     }
 
-    @PostMapping("/email-verification")
+    @GetMapping("/email-verification")
     public RedirectView verifyEmail(@RequestParam(name = "id") String verificationCode){
         bookingService.verifyEmail(verificationCode);
 

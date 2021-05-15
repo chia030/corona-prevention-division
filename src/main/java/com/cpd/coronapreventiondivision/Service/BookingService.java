@@ -46,13 +46,14 @@ public class BookingService {
         if(p.size() > 0){
             Patient patient = p.get(0);
 
-            if (patient.isApproved()){
+            if (patient.isApproved() && patient.getEmailAddress() == email){
                 return 0;
             }
             else {
                 String toHash = email + new Date();
                 String approvalID = User.hash(toHash);
                 patient.setApprovalID(approvalID);
+                patientRepo.setApproval(cpr, approvalID, email);
                 boolean res = CoronaPreventionDivisionApplication.emailhandler.sendConfirmation(email, approvalID, firstName);
                 if (res)
                     return 1;
