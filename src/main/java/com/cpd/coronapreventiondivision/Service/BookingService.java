@@ -46,7 +46,7 @@ public class BookingService {
         if(p.size() > 0){
             Patient patient = p.get(0);
 
-            if (patient.isApproved() && patient.getEmailAddress() == email){
+            if (patient.isApproved() && patient.getEmailAddress().equals(email)){
                 return 0;
             }
             else {

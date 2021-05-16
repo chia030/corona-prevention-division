@@ -26,7 +26,7 @@ public class AppointmentRepo implements RowMapper<Appointment> {
     private CenterRepo centerRepo;
 
     private final DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private final DateTimeFormatter tf = DateTimeFormatter.ofPattern("HH:mm");
+    private final DateTimeFormatter tf = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     @Override
     public Appointment mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -50,6 +50,7 @@ public class AppointmentRepo implements RowMapper<Appointment> {
         String query = "SELECT * FROM cpd1.appointments WHERE appointment_id = ? AND cpr = ?";
 
         List<Appointment> a = template.query(query, new Object[]{appointmentID, cpr}, this);
+
         if (a.size() > 0){
             return a.get(0);
         }

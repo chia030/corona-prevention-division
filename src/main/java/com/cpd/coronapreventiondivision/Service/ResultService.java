@@ -21,7 +21,10 @@ public class ResultService {
     PatientRepo patientRepo;
 
     public String fetchResultByIdAndCpr(int appointmentID, long cpr){
-        return appointmentRepo.fetchByIdAndCpr(appointmentID, cpr).getResult().toString();
+
+        String res = appointmentRepo.fetchByIdAndCpr(appointmentID, cpr).getResult().toString();
+
+        return (res != null) ? res : null;
     }
 
     public Patient fetchPatientByCpr(long cpr){
