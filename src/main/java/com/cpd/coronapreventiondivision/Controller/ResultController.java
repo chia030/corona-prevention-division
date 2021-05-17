@@ -28,15 +28,13 @@ public class ResultController {
     public String viewResultForm(@RequestParam(value = "id") Integer id, Model model){
         model.addAttribute("id", id);
 
-        return "resultform";
+        return "booking/resultform";
     }
 
     @PostMapping("/results")
     public String viewResults(@RequestParam(value = "id", required = false) Integer id,
                               @RequestParam(value = "cpr", required = false) Long cpr,
                               Model model) {
-        System.out.println(id + " :id/cpr: " + cpr);
-//        id = 6;
         String result = resultService.fetchResultByIdAndCpr(id, cpr);
 
         if(result != null){
@@ -47,18 +45,17 @@ public class ResultController {
             model.addAttribute("name", name);
             model.addAttribute("result", result);
 
-            return "results";
+            return "booking/results";
         }
 
         return viewResultForm(id, model);
     }
 
-    @PostMapping("downloadPDF")
+    @PostMapping("download-pdf")
     public void downloadPDF(HttpServletResponse response,
-                            @RequestParam(value = "id") Integer id,
-                            @RequestParam(value = "cpr") Long cpr){
+                            @RequestParam(value = "id") Integer id){
         System.out.println("Downloading a PDF!");
-        Appointment appointment = resultService.fetchAppointmentByIdAndCpr(id, cpr);
+        Appointment appointment = resultService.fetchAppointmentById(id);
         if (appointment != null){
             //Generate the PDF
             CertificateHandler.generatePDF(appointment);

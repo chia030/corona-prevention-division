@@ -74,13 +74,13 @@ public class CertificateHandler {
             content = content.replace("{{firstname}}", appointment.getPatient().getFirstName());
             content = content.replace("{{lastname}}", appointment.getPatient().getLastName());
             content = content.replace("{{cpr}}", String.valueOf(appointment.getPatient().getCPR()));
-//            content = content.replace("{{date}}", appointment.getDate().toString());
-//            content = content.replace("{{time}}", appointment.getTime().toString());
-//            content = content.replace("{{city}}", appointment.getCenter().getAddress().getCity());
-//            content = content.replace("{{postcode}}", String.valueOf(appointment.getCenter().getAddress().getPostCode()));
-//            content = content.replace("{{streetname}}", appointment.getCenter().getAddress().getStreetName());
-//            content = content.replace("{{streetnumber}}", appointment.getCenter().getAddress().getStreetNumber());
-//            content = content.replace("{{googlemapslink}}", appointment.getCenter().getAddress().getGoogleMapsLink());
+            content = content.replace("{{date}}", appointment.getDate().toString());
+            content = content.replace("{{time}}", appointment.getTime().toString());
+            content = content.replace("{{city}}", appointment.getCenter().getAddress().getCity());
+            content = content.replace("{{postcode}}", String.valueOf(appointment.getCenter().getAddress().getPostCode()));
+            content = content.replace("{{streetname}}", appointment.getCenter().getAddress().getStreetName());
+            content = content.replace("{{streetnumber}}", appointment.getCenter().getAddress().getStreetNumber());
+            content = content.replace("{{floor}}", appointment.getCenter().getAddress().getFloor());
 
             ConverterProperties converterProperties = new ConverterProperties();
             FontProvider fontProvider  = new FontProvider();

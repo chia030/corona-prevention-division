@@ -2,19 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>View results</title>
+    <title>Results</title>
     <style>
         @import url('https://fonts.googleapis.com/css?family=Oxanium&display=swap');
         @import url('https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap');
         @media only screen and (max-width: 768px) { .content { width: 100%; } }
         a:link { color: #AFAFAF; !important; }
         a:visited { color: #AFAFAF; !important; }
-
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
 
         body {
             font-family: Roboto Slab;
@@ -61,7 +55,7 @@
             font-family: Oxanium, Helvetica;
             font-size: 20px;
             width: auto;
-            margin-top: 30px;
+            margin-top: 50px;
             margin-left: auto;
             margin-right: auto;
             background-color: #FF6219;
@@ -98,18 +92,23 @@
 
         <!--Center-->
         <div class="center">
-            <form action="#" th:action="@{/results}" method="post">
+            <form th:action="@{download-pdf}" method="post">
+                <label>Name:</label>
+                <input readonly="true" th:value="${name}" />
+                <br>
+                <div class="separator"></div>
+
                 <label>Appointment ID:</label>
-                <input type="number" th:name="id" th:value="${id}" />
+                <input readonly="true" th:name="id" th:value="${id}" />
                 <br>
                 <div class="separator"></div>
 
-                <label>CPR number:</label>
-                <input name="cpr" type="number" maxlength="10" th:name="cpr" />
+                <label>Result:</label>
+                <input readonly="true" th:value="${result}" />
                 <br>
                 <div class="separator"></div>
 
-                <button type="submit">View results</button>
+                <button type="submit">Download PDF</button>
             </form>
         </div>
 

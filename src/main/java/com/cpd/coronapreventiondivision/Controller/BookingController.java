@@ -51,12 +51,13 @@ public class BookingController {
     }
 
     @GetMapping("/")
-    public String home(){ return "booking/home"; }
+    public String home(){ return "index"; }
 
     @GetMapping("/test")
     public String testBooking( Model model){
         List<Center> testCenters = bookingService.fetchCenterByType("PCR_TEST");
         model.addAttribute("centers", testCenters);
+        model.addAttribute("selectedCenter", testCenters.get(3));
 
         return "booking/booking";
     }
@@ -72,8 +73,5 @@ public class BookingController {
 
     @GetMapping("/locations")
     public String locations(){ return "booking/locations"; }
-
-    @GetMapping("/info")
-    public String info(){ return "booking/info"; }
 
 }

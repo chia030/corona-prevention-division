@@ -1,6 +1,5 @@
 package com.cpd.coronapreventiondivision.Model;
 
-
 public class Center {
 
     private int centerID;
