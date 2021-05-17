@@ -92,22 +92,24 @@
 
         <!--Center-->
         <div class="center">
-            <label>Name:</label>
-            <input disabled="disabled" th:value="${name}" />
-            <br>
-            <div class="separator"></div>
+            <form th:action="@{downloadPDF}" method="post">
+                <label>Name:</label>
+                <input disabled="disabled" th:value="${name}" />
+                <br>
+                <div class="separator"></div>
 
-            <label>Appointment ID:</label>
-            <input disabled="disabled" th:value="${id}" />
-            <br>
-            <div class="separator"></div>
+                <label>Appointment ID:</label>
+                <input disabled="disabled" th:value="${id}" />
+                <br>
+                <div class="separator"></div>
 
-            <label>Result:</label>
-            <input disabled="disabled" th:value="${result}" />
-            <br>
-            <div class="separator"></div>
+                <label>Result:</label>
+                <input disabled="disabled" th:value="${result}" />
+                <br>
+                <div class="separator"></div>
 
-            <button th:action="@{downloadPDF}">Download PDF</button>
+                <button type="submit">Download PDF</button>
+            </form>
         </div>
 
         <!--Right-->

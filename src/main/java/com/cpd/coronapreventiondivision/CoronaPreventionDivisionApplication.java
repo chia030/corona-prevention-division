@@ -8,9 +8,6 @@ import com.cpd.coronapreventiondivision.Model.Patient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.Date;
 
 @SpringBootApplication
 public class CoronaPreventionDivisionApplication {

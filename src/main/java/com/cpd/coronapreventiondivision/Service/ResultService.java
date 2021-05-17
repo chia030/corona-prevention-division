@@ -21,8 +21,13 @@ public class ResultService {
     PatientRepo patientRepo;
 
     public String fetchResultByIdAndCpr(int appointmentID, long cpr){
+        try{ return appointmentRepo.fetchByIdAndCpr(appointmentID, cpr).getResult().toString(); }
+        catch(Exception e){ return null; }
+    }
 
-        return appointmentRepo.fetchByIdAndCpr(appointmentID, cpr).getResult().toString();
+    public Appointment fetchAppointmentByIdAndCpr(int appointmentID, long cpr){
+        try { return appointmentRepo.fetchByIdAndCpr(appointmentID, cpr); }
+        catch(Exception e){ return null; }
     }
 
     public Patient fetchPatientByCpr(long cpr){
