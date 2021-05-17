@@ -35,7 +35,7 @@ public class ResultController {
                               @RequestParam(value = "cpr", required = false) Long cpr,
                               Model model) {
         System.out.println(id + " :id/cpr: " + cpr);
-        id = 6;
+//        id = 6;
         String result = resultService.fetchResultByIdAndCpr(id, cpr);
 
         if(result != null){
