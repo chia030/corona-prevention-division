@@ -17,31 +17,31 @@ public class ResultController {
     ResultService resultService;
 
     @GetMapping("/results")
-    public String viewResults(@RequestParam(required = false) Integer id,
-                              @RequestParam(required = false) Long cpr,
-                              Model model){
-        if(id == null){
-            return "resultform";
-        }
-
+    public String viewResultForm(@RequestParam(value = "id") Integer id, Model model){
         model.addAttribute("id", id);
-        model.addAttribute("cpr", cpr);
 
-        if(cpr != null){
-            String result = resultService.fetchResultByIdAndCpr(id, cpr);
+        return "resultform";
+    }
 
-            if(result != null){
-                //CPR is correct
-                Patient patient = resultService.fetchPatientByCpr(cpr);
-                String name = patient.getFirstName() + " " + patient.getLastName();
+    @PostMapping("/results")
+    public String viewResults(@RequestParam(value = "id") int id,
+                              @RequestParam(value = "cpr") long cpr,
+                              Model model) {
+        System.out.println(id + " :id/cpr: " + cpr);
 
-                model.addAttribute("name", name);
-                model.addAttribute("result", result);
-                return "results";
-            }
+        String result = resultService.fetchResultByIdAndCpr(id, cpr);
+
+        if(result != null){
+            Patient patient = resultService.fetchPatientByCpr(cpr);
+            String name = patient.getFirstName() + " " + patient.getLastName();
+
+            model.addAttribute("id", id);
+            model.addAttribute("name", name);
+            model.addAttribute("result", result);
+
+            return "results";
         }
 
-        //CPR is incorrect or not specified
-        return "resultform";
+        return viewResultForm(id, model);
     }
 }
