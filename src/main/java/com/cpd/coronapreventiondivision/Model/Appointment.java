@@ -9,7 +9,7 @@ public class Appointment {
     private Result result;
     private LocalDate date;
     private LocalTime time;
-    private Patient CPR;
+    private Patient patient;
     private Center center; //add center ID here
     private String patientEmail;
 
@@ -25,11 +25,11 @@ public class Appointment {
 
     public Appointment() {}
 
-    public Appointment(Result result, LocalDate date, LocalTime time, Patient CPR, Center center, String patientEmail) {
+    public Appointment(Result result, LocalDate date, LocalTime time, Patient patient, Center center, String patientEmail) {
         this.result = result;
         this.date = date;
         this.time = time;
-        this.CPR = CPR;
+        this.patient = patient;
         this.center = center;
         this.patientEmail = patientEmail;
     }
@@ -40,7 +40,7 @@ public class Appointment {
                 "result=" + result +
                 ", date=" + date +
                 ", time=" + time +
-                ", CPR=" + CPR +
+                ", patient=" + patient +
                 ", center=" + center +
                 ", patientEmail='" + patientEmail + '\'' +
                 '}';
@@ -70,12 +70,12 @@ public class Appointment {
         this.time = time;
     }
 
-    public Patient getCPR() {
-        return CPR;
+    public Patient getPatient() {
+        return patient;
     }
 
-    public void setCPR(Patient CPR) {
-        this.CPR = CPR;
+    public void setPatient(Patient CPR) {
+        this.patient = patient;
     }
 
     public Center getCenter() {

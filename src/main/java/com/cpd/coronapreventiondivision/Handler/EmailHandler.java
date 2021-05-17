@@ -1,5 +1,7 @@
 package com.cpd.coronapreventiondivision.Handler;
 
+import com.cpd.coronapreventiondivision.CoronaPreventionDivisionApplication;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -29,14 +31,16 @@ public class EmailHandler {
                 });
     }
 
-    public boolean sendConfirmation(String receivee, String verificationCode){
+    public boolean sendConfirmation(String receivee, String verificationCode, String firstName){
         try {
-            String fileName = "src/main/resources/EmailDrafts/confirmation.html";
+            String fileName = "src/main/resources/emailTemplates/confirmation.html";
             Path path = Path.of(fileName);
 
             String subject = "Welcome to Corona Prevention Division!";
             String htmlContent = Files.readString(path);
-            htmlContent = htmlContent.replace("website.com", "https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+            htmlContent = htmlContent.replace("website.com", CoronaPreventionDivisionApplication.domain);
+            htmlContent = htmlContent.replace("verificationCode", verificationCode);
+            htmlContent = htmlContent.replace("customer", firstName);
 
             return sendEmail(receivee, subject, htmlContent);
         }
@@ -47,7 +51,7 @@ public class EmailHandler {
 
     public boolean sendResults(String receivee, String resultCode){
         try {
-            String fileName = "src/main/resources/EmailDrafts/results.html";
+            String fileName = "src/main/resources/emailTemplates/results.html";
             Path path = Path.of(fileName);
 
             String subject = "Your test results are here";

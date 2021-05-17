@@ -1,5 +1,9 @@
 package com.cpd.coronapreventiondivision.Model;
 
+import com.google.common.hash.Hashing;
+
+import java.nio.charset.StandardCharsets;
+
 public class User {
 
     private String username;
@@ -11,11 +15,9 @@ public class User {
         SECRETARY
     }
 
-    public User() {}
-
     public User(String username, String password, UserType level) {
         this.username = username;
-        this.password = password;
+        this.password = hash(password);
         this.level = level;
     }
 
@@ -26,6 +28,10 @@ public class User {
                 ", password='" + password + '\'' +
                 ", level=" + level +
                 '}';
+    }
+
+    public static String hash(String input){
+        return Hashing.sha256().hashString(input, StandardCharsets.UTF_8).toString();
     }
 
     public String getUsername() {
