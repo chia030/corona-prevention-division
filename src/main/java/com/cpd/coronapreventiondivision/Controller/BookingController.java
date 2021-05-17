@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -41,36 +42,38 @@ public class BookingController {
         return "index";
     }
 
-    @GetMapping("/CPD.dk")
+    @PostMapping("select-center")
+    public void selectCenter(@RequestParam(value = "centerid") Integer centerid, Model model){
+        if (centerid != null){
+            String googleMapsLink = bookingService.fetchCenterGoogleMapsLinkById(centerid);
+            model.addAttribute("googleMapsLink", googleMapsLink);
+        }
+    }
+
+    @GetMapping("/")
     public String home(){ return "booking/home"; }
 
-    @GetMapping("/CPD.dk/pcr-test")
-    public String testBooking(Model model){
+    @GetMapping("/test")
+    public String testBooking( Model model){
         List<Center> testCenters = bookingService.fetchCenterByType("PCR_TEST");
         model.addAttribute("centers", testCenters);
-        if (centerid != null){
-            String googleMapsLink = bookingService.fetchCenterGoogleMapsLinkById(centerid);
-            model.addAttribute("googleMapsLink", googleMapsLink);
-        }
-        return "booking/test";
+
+        return "booking/booking";
     }
-    @GetMapping("/CPD.dk/vaccine")
+    @GetMapping("/vaccine")
     public String vaccineBooking(Model model){
-        List<Center> vaccineCenters2 = bookingService.fetchCenterByType("MODERNA_VACCINE");
-        List<Center> vaccineCenters1 = bookingService.fetchCenterByType("COMIRNATY_VACCINE");
-        List<Center> vaccineCenters = vaccineCenters1.addAll(vaccineCenters2);
+        List<Center> vaccineCenters1 = bookingService.fetchCenterByType("MODERNA_VACCINE");
+        List<Center> vaccineCenters = bookingService.fetchCenterByType("COMIRNATY_VACCINE");
+        vaccineCenters.addAll(vaccineCenters1);
         model.addAttribute("centers", vaccineCenters);
-        if (centerid != null){
-            String googleMapsLink = bookingService.fetchCenterGoogleMapsLinkById(centerid);
-            model.addAttribute("googleMapsLink", googleMapsLink);
-        }
-        return "booking/test";
+
+        return "booking/booking";
     }
 
-    @GetMapping("/CPD.dk/locations")
+    @GetMapping("/locations")
     public String locations(){ return "booking/locations"; }
 
-    @GetMapping("/CPD.dk/info")
+    @GetMapping("/info")
     public String info(){ return "booking/info"; }
 
 }

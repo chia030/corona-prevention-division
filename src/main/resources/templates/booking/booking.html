@@ -40,13 +40,22 @@
     </div>
 
     <!--Select test center-->
-    <div>
-        <h2>Select a test center</h2>
-        <select name="test-center-dropdown">
-            <option th:each="testCenter : ${testCenters}" th:value="${testCenter.address}" th:text="${testCenter.address}">
+<!--Select center-->
+<div>
+    <form th:action="@{select-center}" method="post">
+        <select name="centerid">
+            <!--            <option th:text="Please select a center..."></option>-->
+            <option th:each="center : ${centers}" th:value="${center.centerID}" th:text="${center.address}">
             </option>
         </select>
+        <button type="submit">Select center</button>
+    </form>
+
+    <!--Google Maps Embed-->
+    <div style="margin:20px;">
+        <iframe th:src="${googleMapsLink}" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
     </div>
+</div>
 
     <!--Select date and time-->
     <div>
