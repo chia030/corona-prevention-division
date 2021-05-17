@@ -17,24 +17,6 @@ public class BookingController {
     @Autowired
     BookingService bookingService;
 
-    @GetMapping("/")
-    public String landingPage(){
-        return "index";
-    }
-
-    @GetMapping("/book-a-test")
-    public String selectTestCenter(@RequestParam(required = false) Integer centerid,
-                                   Model model){
-        List<Center> testCenters = bookingService.fetchCenterByType("PCR_TEST");
-        model.addAttribute("centers", testCenters);
-        if (centerid != null){
-            String googleMapsLink = bookingService.fetchCenterGoogleMapsLinkById(centerid);
-            model.addAttribute("googleMapsLink", googleMapsLink);
-        }
-
-        return "appointment";
-    }
-
     @GetMapping("/email-verification")
     public RedirectView verifyEmail(@RequestParam(name = "id") String verificationCode){
         bookingService.verifyEmail(verificationCode);
@@ -58,4 +40,37 @@ public class BookingController {
 
         return "index";
     }
+
+    @GetMapping("/CPD.dk")
+    public String home(){ return "booking/home"; }
+
+    @GetMapping("/CPD.dk/pcr-test")
+    public String testBooking(Model model){
+        List<Center> testCenters = bookingService.fetchCenterByType("PCR_TEST");
+        model.addAttribute("centers", testCenters);
+        if (centerid != null){
+            String googleMapsLink = bookingService.fetchCenterGoogleMapsLinkById(centerid);
+            model.addAttribute("googleMapsLink", googleMapsLink);
+        }
+        return "booking/test";
+    }
+    @GetMapping("/CPD.dk/vaccine")
+    public String vaccineBooking(Model model){
+        List<Center> vaccineCenters2 = bookingService.fetchCenterByType("MODERNA_VACCINE");
+        List<Center> vaccineCenters1 = bookingService.fetchCenterByType("COMIRNATY_VACCINE");
+        List<Center> vaccineCenters = vaccineCenters1.addAll(vaccineCenters2);
+        model.addAttribute("centers", vaccineCenters);
+        if (centerid != null){
+            String googleMapsLink = bookingService.fetchCenterGoogleMapsLinkById(centerid);
+            model.addAttribute("googleMapsLink", googleMapsLink);
+        }
+        return "booking/test";
+    }
+
+    @GetMapping("/CPD.dk/locations")
+    public String locations(){ return "booking/locations"; }
+
+    @GetMapping("/CPD.dk/info")
+    public String info(){ return "booking/info"; }
+
 }

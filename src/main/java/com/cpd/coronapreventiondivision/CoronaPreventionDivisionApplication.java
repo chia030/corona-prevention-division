@@ -17,14 +17,6 @@ public class CoronaPreventionDivisionApplication {
 
     public static void main(String[] args){
         emailhandler = new EmailHandler();
-//        Appointment appointment = new Appointment(
-//                Appointment.Result.MISSED,
-//                null,
-//                null,
-//                new Patient(1405017777, "just1531@stud.kea.dk", "Justas", "Zdanavicius", true, null),
-//                new Center(4, Center.CenterType.COMIRNATY_VACCINE, null, null),
-//                "just1531@stud.kea.dk");
-//        System.out.println(CertificateHandler.generatePDF(appointment));
         SpringApplication.run(CoronaPreventionDivisionApplication.class, args);
     }
 }
