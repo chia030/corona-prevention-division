@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Certificate</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Oxanium&display=swap');
+        @import url('https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap');
+        a:link { color: #FF6219; }
+        a:visited { color: #FF6219; }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Roboto Slab, serif, Roboto, Helvetica, Arial;
+            font-weight: 300;
+            min-height: 500px;
+            margin: 20px;
+        }
+
+        p {
+            font-size: 9px;
+        }
+    </style>
+</head>
+<body>
+<!-- logos -->
+<div >
+    <img src="https://i.ibb.co/VMQ8rtj/corona-prevention-logo.png" alt="Corona Prevention logo" style="margin-top: 20px; width: auto; height: 60px;"/>
+    <img src="https://i.ibb.co/fncfghn/kobenhavns-kommune-logo.png" alt="Kobenhavns kommune" style="margin-top: 20px; width: auto; height: 60px; float: right;"/>
+</div>
+<!-- Colored border -->
+<div style="width: 100%; height: 40px; background-color: #FF6219; margin: 10px 0px;">
+    <h2 style="color: white; font-family: Oxanium, Helvetica; font-size: 20px; padding: 10px; text-align: right;">Patient Report</h2>
+</div>
+
+<table style="width: 100%;">
+    <tbody>
+        <tr>
+            <td style="width: 50%;">
+                <h4 style="text-decoration: underline; margin-bottom: 10px;">Appointment record</h4>
+                <h5> <strong style="color: #FF6219;">CPR number:</strong> {{cpr}}</h5>
+                <h5> <strong style="color: #FF6219;">Full name:</strong> {{firstname}} {{lastname}}</h5>
+                <h5> <strong style="color: #FF6219;">Date of issue:</strong> {{date}}, {{time}}</h5>
+            </td>
+
+            <td style="width: 50%; text-align: right; float: right;">
+                <h4 style="text-decoration: underline; margin-bottom: 10px;">Location</h4>
+                <h5>{{city}}, {{postcode}}</h5>
+                <h5>{{streetname}} {{streetnumber}}</h5>
+                <h5>{{floor}}</h5>
+                <h5><a href="{{googlemapslink}}">View in Google Maps</a></h5>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<div style="height: 600px;">
+    <div style="width: 100%; height: 5px; margin-bottom: 5px; margin-top: 50px; background-color: #FF6219;"></div>
+    <h5><strong style="color: #FF6219;">General comments & Additional information</strong></h5>
+    <h5><strong>Clinical info:</strong> {{result}}</h5>
+
+    <h5><strong style="color: #FF6219;">Ordered Items</strong></h5>
+    <h5>SARS-CoV-2, PCR</h5>
+
+    <div style="width: 100%; margin-top: 20px; height: 20px; background-color: #FF6219; color: white; font-family: 'Courier New', serif">
+        <table style="width: 100%;">
+            <thead style="font-weight: bold;">
+                <th style="width: 20%;">TESTS</th>
+                <th style="width: 20%;">RESULT</th>
+                <th style="width: 10%;">FLAG</th>
+                <th style="width: 10%;">UNITS</th>
+                <th style="width: 10%;">REFERENCE</th>
+                <th style="width: 10%;">INTERVAL</th>
+                <th style="width: 10%;">LAB</th>
+            </thead>
+            <tbody style="color: black;">
+                <tr>
+                    <td style="width: auto; text-wrap: none;">SARS-CoV-2, PCR</td>
+                    <td style="width: auto; text-wrap: none;">{{result}}</td>
+                    <td>Abnormal</td>
+                    <td></td>
+                    <td>Not Detected</td>
+                    <td></td>
+                    <td>01</td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <p style="color:black; font-size: 14px;">{{description}}</p>
+    </div>
+</div>
+
+<footer>
+    <div style="width: 100%; height: 5px; background-color: #FF6219;"></div>
+    <table style="width: 100%">
+        <tbody>
+        <tr>
+            <td style="width: 33%;">
+                <p>Date issued: {{date}}</p>
+            </td>
+            <td style="width: 33%; text-align: center;">
+                <h5>FINAL REPORT</h5>
+            </td>
+            <td style="width: 33%; text-align: right;">
+                <p>Page 1 of 1</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>This document contains private and confidential health information protected by state and federal law.<br>
+                    If you have received this document in error, please call +45 45 45 45 45
+                </p>
+            </td>
+            <td></td>
+            <td style="text-align: right;">
+                <p>© 2021 Corona Prevention Division booking system.<br>
+                    All rights reserved - Enterprise report version 1.00
+                </p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</footer>
+</body>
+
+</html>

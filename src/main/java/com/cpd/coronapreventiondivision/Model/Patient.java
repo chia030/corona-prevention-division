@@ -8,14 +8,20 @@ public class Patient {
 
     private long CPR;
     private String emailAddress;
+    private String firstName;
+    private String lastName;
     private boolean isApproved;
+    private String approvalID;
 
     public Patient() {}
 
-    public Patient(long CPR, String emailAddress, boolean isApproved) {
+    public Patient(long CPR, String emailAddress, String firstName, String lastName, boolean isApproved, String approvalID) {
         this.CPR = CPR;
         this.emailAddress = emailAddress;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.isApproved = isApproved;
+        this.approvalID = approvalID;
     }
 
     @Override
@@ -25,6 +31,30 @@ public class Patient {
                 ", emailAddress='" + emailAddress + '\'' +
                 ", isApproved=" + isApproved +
                 '}';
+    }
+
+    public String getApprovalID() {
+        return approvalID;
+    }
+
+    public void setApprovalID(String approvalID) {
+        this.approvalID = approvalID;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public long getCPR() {
