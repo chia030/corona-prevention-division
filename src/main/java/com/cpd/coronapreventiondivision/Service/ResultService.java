@@ -25,8 +25,8 @@ public class ResultService {
         catch(Exception e){ return null; }
     }
 
-    public Appointment fetchAppointmentById(int appointmentID){
-        try { return appointmentRepo.fetchById(appointmentID); }
+    public Appointment fetchAppointmentByIdAndCpr(int appointmentID, long cpr){
+        try { return appointmentRepo.fetchByIdAndCpr(appointmentID, cpr); }
         catch(Exception e){ return null; }
     }
 

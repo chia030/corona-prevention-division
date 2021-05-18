@@ -92,8 +92,6 @@ public class CertificateHandler {
 
             HtmlConverter.convertToPdf(content, new FileOutputStream("certificate.pdf"), converterProperties);
 
-            System.out.println("PDF generated");
-
             return true;
         }
         catch (IOException ex){

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SARS-CoV-2 PCR test</title>
+    <title>Booking</title>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="/resources/demos/style.css">
     <link rel="stylesheet" href="/booking-style.css">
@@ -30,67 +30,235 @@
     </script>
 </head>
 <body>
-<!--nav bar:-->
+
+<!--Navigation bar-->
 <div class="topnav"></div>
+<div style="height: 75px;" ></div>
+
+<div class="booking-content">
     <!--Header-->
-    <div>
-        <h1>
-            Book a PCR test
-        </h1>
+    <div class="title">
+        <h1 th:text="${title}"></h1>
     </div>
 
-<!--Select center-->
-<div>
-    <form th:action="@{select-center}" method="post">
-        <script>
-            function updateGoogleMaps(){
-                console.log([].filter.call(document.querySelectorAll('option'), (e) => e.selected)[0].value);
-                document.getElementById("google-maps").src = [].filter.call(document.querySelectorAll('option'), (e) => e.selected)[0].value;
-            }
-        </script>
-        <select id="select-google-maps" name="center" onchange="updateGoogleMaps()">
-            <option value="null" disabled>Please select a center...</option>
-            <option th:each="center : ${centers}" th:value="${center.getAddress().getGoogleMapsLink()}" th:text="${center.address}">
-            </option>
-        </select>
-        <button type="submit">Select center</button>
 
-        <!--Google Maps Embed-->
-        <div style="margin:20px;">
-            <iframe id="google-maps" src="https://googlemaps.com/" width="300" height="225" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-        </div>
-    </form>
+    <table>
+        <!--Visuals-->
+        <tr>
+            <td>
+                <div class="pearl">
+                    <h1 style="margin: 50px;">1</h1>
+                </div>
+            </td>
+            <td>
+                <h2>Select a center</h2>
+            </td>
+        </tr>
+        <!--Select center-->
+        <tr>
+            <!--Visual line-->
+            <td>
+                <hr class="string"/>
+            </td>
+            <!--Center selection content-->
+            <td>
+                <div>
+                    <script>
+                        function updateGoogleMaps(){
+                            document.getElementById("google-maps").src = [].filter.call(document.querySelectorAll('option'), (e) => e.selected)[0].value;
+                        }
+                    </script>
+                    <select id="select-google-maps" class="elegant-border center-content" name="center" onchange="updateGoogleMaps()">
+                        <option value="null" selected disabled>Please select a center...</option>
+                        <option th:each="center : ${centers}" th:value="${center.getAddress().getGoogleMapsLink()}" th:text="${center.address}">
+                        </option>
+                    </select>
 
+                    <!--Google Maps Embed-->
+                    <iframe id="google-maps" class="elegant-border center-content" src="https://maps.google.com/" width="600" height="450" style="border:0; margin: 20px 0px;" allowfullscreen=""></iframe>
+                </div>
+            </td>
+            <td style="width: 80px;"></td>
+        </tr>
+
+
+
+        <!--Visuals-->
+        <tr>
+            <td>
+                <div class="pearl">
+                    <h1 style="margin-bottom: 50px;">2</h1>
+                </div>
+            </td>
+            <td>
+                <h2>Select a date</h2>
+            </td>
+        </tr>
+        <!--Select a date-->
+        <tr>
+            <td>
+                <hr class="string"/>
+            </td>
+            <td>
+                <table id="calendar">
+                    <div id="calendar-header" style="display: flex; justify-content: space-between; vertical-align: center;">
+
+                        <button onclick="renderMonth(-1)"><</button>
+                        <h4 id="calendar-selected">{{date}}</h4>
+                        <button onclick="renderMonth(1)">></button>
+                    </div>
+
+                    <thead>
+                        <tr></tr>
+                    </thead>
+                </table>
+
+                <script>
+                    function getSubList(val){
+                        $.ajax({
+                            url: 'get-available-count',
+                            type: 'post',
+                            data: {param:5, param:"2021-05-05"},
+                            success: function (msg) {
+                                $('#id-of-sublist').html(msg);
+                            },
+                        });
+                    }
+
+                    // let jsonFile = {json:JSON.stringify(12)};
+                    // let r = new XMLHttpRequest();
+                    // r.open("POST", "get-available-count", true);
+                    // r.onreadystatechange = function () {
+                    //     if (r.readyState !== 4 || r.status !== 200)
+                    //         return;
+                    //     console.log(r.responseText);
+                    // };
+                    // r.send(jsonFile);
+
+
+                    let table = document.querySelector('#calendar');
+                    let body = document.querySelector('#calendar tbody');
+                    let output = document.querySelector('#calendar-selected');
+
+                    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                    const numOfDays = [31, 28, 31, 30, 31, 30, 31, 30, 31, 30, 31, 30];
+                    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+                    let date = new Date();
+                    let selectedDay = date.getDate();
+                    let selectedMonth = date.getMonth();
+                    let selectedYear = date.getFullYear();
+
+                    renderHeader();
+                    renderMonth(0);
+
+                    function renderHeader(){
+                        let tr = table.tHead.children[0];
+                        table.tBody = document.createElement("tbody");
+
+                        for(d in days){
+                            let th = document.createElement("th");
+                            th.innerHTML = days[d];
+                            tr.appendChild(th);
+                        }
+                    }
+
+                    function renderMonth(mapMonth){
+                        //Update Month selection
+                        selectedMonth += mapMonth;
+
+                        //Account for year change
+                        if (selectedMonth >= 12){
+                            selectedMonth %= 12;
+                            selectedYear++;
+                        }
+                        else if (selectedMonth < 0){
+                            selectedMonth %= 12;
+                            selectedYear--;
+                        }
+
+                        let dayCount = numOfDays[selectedMonth-1];
+                        let currentRow;
+
+                        //Go through each day
+                        for(let i = 0; i < dayCount; i++){
+                            let dayOfWeek = new Date(selectedYear, selectedMonth, i).getDay();
+                            if (dayOfWeek === 0) dayOfWeek = 7; //Adjust for sundays being 0 rather than 7
+                            dayOfWeek--;
+
+                            //Create new row
+                            if (dayOfWeek === 1 || i === 0) {
+                                currentRow = table.insertRow(-1);
+                            }
+
+                            //Insert empty rows to account for month not starting on a Monday
+                            if (i === 0){
+                                for (let j = 0; j < dayOfWeek - 1; j++){
+                                    currentRow.insertCell(0);
+                                }
+                            }
+
+                            //Add day
+                            let currentCell = currentRow.insertCell(-1);
+                            // let available = "[[${getAvailableCount(1, 'hey'')}]]";
+                            // System.out.println(available);
+                            let styling = "color: black;";
+                            if ((selectedYear < new Date().getFullYear()) ||
+                                (selectedYear === new Date().getFullYear() && selectedMonth < new Date().getMonth()) ||
+                                (selectedYear === new Date().getFullYear() && selectedMonth === new Date().getMonth() && i < new Date().getDate())){
+                                styling = "color: #BFBFBF;";
+                            }
+                            currentCell.innerHTML = "<p style='" + styling + "'>" + (i + 1).toString() + "<br><i style='font-size: 8px;'>0 available</i></p>";
+                        }
+
+                        updateSelection();
+                    }
+
+                    function updateSelection(){
+                        output.innerText = months[selectedMonth] + " " + selectedYear;
+                    }
+                </script>
+
+                <p class="center-content">Date: <input type="text" id="datepicker"></p>
+            </td>
+        </tr>
+
+
+
+        <!--Visuals-->
+        <tr>
+            <td>
+                <div class="pearl">
+                    <h1 style="margin-bottom: 50px;">3</h1>
+                </div>
+            </td>
+            <td>
+                <h2>Enter credentials</h2>
+            </td>
+        </tr>
+        <!--Enter credentials-->
+        <tr>
+            <td>
+                <hr class="string"/>
+            </td>
+            <td>
+                <div class="center-content">
+                    <label>CPR number:</label>
+                    <input type="number" th:name="cpr" />
+                    <label>First name:</label>
+                    <input type="text" th:name="firstName" />
+                    <label>Last name:</label>
+                    <input type="text" th:name="lastName" />
+                    <label>Email address:</label>
+                    <input type="text" th:name="email" />
+
+                    <form th:action="@{/confirm-booking}" method="post">
+                        <button type="submit" >Book appointment</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    </table>
 </div>
-
-    <!--Select date and time-->
-    <div>
-        <h2>Pick a date</h2>
-        <p>Date: <input type="text" id="datepicker"></p>
-        <h2>Pick a time</h2>
-        <select name="times-dropdown">
-<!--            <option th:each="testCenter : ${testCenters}" th:value="${testCenter.address}" th:text="${testCenter.address}">-->
-<!--            </option>-->
-        </select>
-    </div>
-
-<!--Select date and time-->
-<div></div>
-
-<!--Enter credentials-->
-<div>
-    <form th:action="@{send-confirmation}">
-        <label>CPR number:</label>
-        <input type="number" th:name="cpr" />
-        <label>First name:</label>
-        <input type="text" th:name="firstName" />
-        <label>Last name:</label>
-        <input type="text" th:name="lastName" />
-        <label>Email address:</label>
-        <input type="text" th:name="email" />
-        <button type="submit" />
-    </form>
-</div>
-
 </body>
 </html>

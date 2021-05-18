@@ -2,12 +2,13 @@ $(document).ready(function(){
 
     const html = [
         '<ul>',
-        '<li><a href="/CPD.dk">CPD.dk</a></li>',
-        '<li><a href="/CPD.dk/pcr-test">PCR-TEST</a></li>',
-        '<li><a href="/CPD.dk/vaccine">VACCINE</a></li>',
-        '<li><a href="/CPD.dk/locations">LOCATIONS</a></li>',
-        '<li><a href="/CPD.dk/info">INFO</a></li>',
-        '</ul>'
+        '<li><img src="https://i.ibb.co/VMQ8rtj/corona-prevention-logo.png" alt="Corona Prevention Division" class="logo"/></li>',
+        '<li><a href="/">Home</a></li>',
+            '<li><a href="/test">Testing</a></li>',
+            '<li><a href="/vaccine">Vaccination</a></li>',
+            '<li><a href="/locations">Locations</a></li>',
+        '</ul>',
+        '<div class="nav-shadow"></div>'
     ].join('\n');
 
     $('.topnav').append(html);

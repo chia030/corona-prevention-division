@@ -25,7 +25,7 @@ public class BookingController {
         return new RedirectView("/");
     }
 
-    @GetMapping("send-confirmation")
+    @GetMapping("confirm-booking")
     public String sendConfirmation(@RequestParam(required = false) Long cpr,
                                    @RequestParam(required = false) String email,
                                    @RequestParam(required = false) String firstName,
@@ -42,12 +42,10 @@ public class BookingController {
         return "index";
     }
 
-    @PostMapping("select-center")
-    public void selectCenter(@RequestParam(value = "centerid") Integer centerid, Model model){
-        if (centerid != null){
-            String googleMapsLink = bookingService.fetchCenterGoogleMapsLinkById(centerid);
-            model.addAttribute("googleMapsLink", googleMapsLink);
-        }
+    @PostMapping("get-available-count")
+    public String getAvailableCount(int centerid, String date){
+        System.out.println("I'm in getAvailableCount!!");
+        return String.valueOf(bookingService.fetchNumberOfAvailableSpots(centerid, date));
     }
 
     @GetMapping("/")
@@ -56,6 +54,7 @@ public class BookingController {
     @GetMapping("/test")
     public String testBooking( Model model){
         List<Center> testCenters = bookingService.fetchCenterByType("PCR_TEST");
+        model.addAttribute("title", "Book a PCR Test appointment");
         model.addAttribute("centers", testCenters);
         model.addAttribute("selectedCenter", testCenters.get(3));
 
@@ -66,6 +65,7 @@ public class BookingController {
         List<Center> vaccineCenters1 = bookingService.fetchCenterByType("MODERNA_VACCINE");
         List<Center> vaccineCenters = bookingService.fetchCenterByType("COMIRNATY_VACCINE");
         vaccineCenters.addAll(vaccineCenters1);
+        model.addAttribute("title", "Book a vaccine shot appointment");
         model.addAttribute("centers", vaccineCenters);
 
         return "booking/booking";

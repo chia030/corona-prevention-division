@@ -42,6 +42,7 @@ public class ResultController {
             String name = patient.getFirstName() + " " + patient.getLastName();
 
             model.addAttribute("id", id);
+            model.addAttribute("cpr", cpr);
             model.addAttribute("name", name);
             model.addAttribute("result", result);
 
@@ -53,9 +54,9 @@ public class ResultController {
 
     @PostMapping("download-pdf")
     public void downloadPDF(HttpServletResponse response,
-                            @RequestParam(value = "id") Integer id){
-        System.out.println("Downloading a PDF!");
-        Appointment appointment = resultService.fetchAppointmentById(id);
+                            @RequestParam(value = "id") Integer id,
+                            @RequestParam(value = "cpr") Long cpr){
+        Appointment appointment = resultService.fetchAppointmentByIdAndCpr(id, cpr);
         if (appointment != null){
             //Generate the PDF
             CertificateHandler.generatePDF(appointment);
