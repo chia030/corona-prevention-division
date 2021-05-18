@@ -15,7 +15,7 @@ body {
 /* HEADER: */
 .title {
     color: black;
-    margin: 5px 0px;
+    margin: 30px 0px;
     text-align: center;
 }
 
@@ -115,11 +115,16 @@ body {
     vertical-align: center;
 }
 
-hr.string {
-    height: 100vh;
+td.string {
+    display: flex;
+    align-content: stretch;
+}
+
+div.string {
+    /*height: 100%;*/
     margin-left: auto;
     margin-right: auto;
-    width: 1px;
+    width: 0px;
     border-left: 5px dashed #AFAFAF;
 }
 
@@ -133,7 +138,7 @@ select#select-google-maps {
 
 .elegant-border {
     border: 2px solid #AFAFAF;
-    border-radius: 5px;
+    border-radius: 10px;
 }
 
 .center-content {
@@ -142,26 +147,40 @@ select#select-google-maps {
 
 /*CALENDAR*/
 #calendar {
-    width: 100%;
+    width: 80%;
     height: 450px;
     background-color: #f8f8f8;
     color: black;
+    border-radius: 0px 0px 10px 10px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #calendar td {
     width: 14%;
     height: 50px;
     text-align: center;
+    border-radius: 10px;
     /*border: 1px solid white;*/
     margin: 0;
 }
 
+#calendar td:hover {
+    background-color: #F0F0F0;
+}
+
 #calendar-header {
+    margin-top: 50px;
     background-color: #FF6219;
+    width: 80%;
     height: 50px;
     color: white;
     font-family: Oxanium, serif, Helvetica;
     font-size: 20px;
+    border-radius: 10px 10px 0px 0px;
+    vertical-align: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #calendar thead {
@@ -175,9 +194,52 @@ select#select-google-maps {
     color: white;
     font-family: Oxanium, serif, Helvetica;
     font-size: 20px;
+    font-weight: bolder;
     border: none;
+    border-radius: 10px;
 }
 
 #calendar-selected {
     margin: 15px;
+}
+
+/*TIMES*/
+
+#times-box {
+    min-height: 50px;
+    display: flex;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0px 50px 0px;
+}
+
+.times {
+    height: 60px;
+    width: 200px;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #AFAFAF;
+    background-color: #FAFAFA;
+    color: black;
+}
+
+#calendar td.selected {
+    border: 1px solid #1cbe00;
+    background-color: #d9ffd2;
+}
+
+.times.selected {
+    border: 2px solid #1cbe00;
+    background-color: #d9ffd2;
+}
+
+.times h4 {
+    color: #595959;
+}
+
+.times h2 {
+    float: right;
+    padding-top: 10px;
 }

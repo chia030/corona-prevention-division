@@ -8,6 +8,7 @@ import com.cpd.coronapreventiondivision.Repository.PatientRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -67,13 +68,32 @@ public class BookingService {
         return -2;
     }
 
-    public String fetchNumberOfAvailableSpots(int centerid, String date){
+    public Center fetchCenterById(int centerid){
+        return centerRepo.fetchById(centerid);
+    }
+
+    public ArrayList<Times> fetchTimes(int id, int dayOfWeek){
+        Center c = centerRepo.fetchById(id);
+        WorkDay d = c.getWeekday().getDay(dayOfWeek);
+        ArrayList<Times> times = new ArrayList<>();
+        int capacity = d.getCapacity();
+        int start = d.getOpeningTime().getMinute() + 60*d.getOpeningTime().getHour(); //in minutes
+        int end = d.getClosingTime().getMinute() + 60*d.getClosingTime().getHour(); //in minutes
+        int interval = d.getInterval(); //in minutes
+
+        for(int i = start; i < end; i += interval){
+            Times time = new Times(String.valueOf(i), String.valueOf(i+interval), String.valueOf(capacity));
+            times.add(time);
+        }
+
+        return times;
+    }
+
+    public String fetchNumberOfAvailableSpots(int centerid, String date, int dayOfWeek){
         WorkWeek workWeek = centerRepo.fetchById(centerid).getWeekday();
         int capacity = 0;
-        Calendar c = Calendar.getInstance();
-        c.setTime(new Date(date));
 
-        switch(c.get(Calendar.DAY_OF_WEEK)){
+        switch(dayOfWeek){
             case 1:
                 capacity = workWeek.getSunday().getCapacity();
                 break;
@@ -98,6 +118,7 @@ public class BookingService {
             default:
                 break;
         }
+
         return String.valueOf(capacity - appointmentRepo.fetchNumberOfAvailableSpots(centerid, date));
     }
 }

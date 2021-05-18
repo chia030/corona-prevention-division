@@ -1,6 +1,7 @@
 package com.cpd.coronapreventiondivision.Controller;
 
 import com.cpd.coronapreventiondivision.Model.Center;
+import com.cpd.coronapreventiondivision.Model.Times;
 import com.cpd.coronapreventiondivision.Service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,8 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -42,10 +45,31 @@ public class BookingController {
         return "index";
     }
 
+    @PostMapping("get-google-maps-link")
+    @ResponseBody
+    public String getGoogleMapsLink(int centerid){
+        try {
+            return bookingService.fetchCenterById(centerid).getAddress().getGoogleMapsLink();
+        }
+        catch(Exception e){
+            return "https://google.com/";
+        }
+    }
+
+    @PostMapping("get-available-times")
+    @ResponseBody
+    public ArrayList<Times> getAvailableTimes(int centerid, String date, int dayOfWeek) {
+        ArrayList<Times> times = bookingService.fetchTimes(centerid, dayOfWeek);
+
+        return times;
+    }
+
     @PostMapping("get-available-count")
-    public String getAvailableCount(int centerid, String date){
-        System.out.println("I'm in getAvailableCount!!");
-        return String.valueOf(bookingService.fetchNumberOfAvailableSpots(centerid, date));
+    @ResponseBody
+    public String getAvailableCount(int centerid, String date, int dayOfWeek){
+        String res = String.valueOf(bookingService.fetchNumberOfAvailableSpots(centerid, date, dayOfWeek));
+        System.out.println("Available:" + res + "centerid: " + centerid + ", date: " + date + ", dayOfWeek: " + dayOfWeek);
+        return res;
     }
 
     @GetMapping("/")
@@ -57,6 +81,8 @@ public class BookingController {
         model.addAttribute("title", "Book a PCR Test appointment");
         model.addAttribute("centers", testCenters);
         model.addAttribute("selectedCenter", testCenters.get(3));
+        ArrayList<Times> times = bookingService.fetchTimes(1, 1);
+        model.addAttribute("times", times);
 
         return "booking/booking";
     }
@@ -67,6 +93,8 @@ public class BookingController {
         vaccineCenters.addAll(vaccineCenters1);
         model.addAttribute("title", "Book a vaccine shot appointment");
         model.addAttribute("centers", vaccineCenters);
+        ArrayList<Times> times = bookingService.fetchTimes(1, 1);
+        model.addAttribute("times", times);
 
         return "booking/booking";
     }
