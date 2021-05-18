@@ -58,7 +58,7 @@ public class BookingController {
 
     @PostMapping("get-available-times")
     @ResponseBody
-    public ArrayList<Times> getAvailableTimes(int centerid, String date, int dayOfWeek) {
+    public ArrayList<Times> getAvailableTimes(Integer centerid, String date, Integer dayOfWeek) {
         ArrayList<Times> times = bookingService.fetchTimes(centerid, dayOfWeek);
 
         return times;

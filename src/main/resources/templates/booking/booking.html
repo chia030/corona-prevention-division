@@ -30,6 +30,7 @@
         <h1 th:text="${title}"></h1>
     </div>
 
+    <div id="selected-center-id" style="display: block;"></div>
 
     <table>
         <!--Visuals-->
@@ -52,7 +53,8 @@
                 <div style="display: flex; flex-direction: column; align-items: center;">
                     <script>
                         function updateGoogleMaps(){
-                            let selectedCenter = [].filter.call(document.querySelectorAll('option'), (e) => e.selected)[0].value;
+                            selectedCenter = [].filter.call(document.querySelectorAll('option'), (e) => e.selected)[0].value;
+                            document.querySelector("#selected-center-id").html = selectedCenter;
                             $.ajax({
                                 url: 'get-google-maps-link',
                                 type: 'post',
@@ -231,7 +233,7 @@
 
                                     //Add 'selected' class to this cell
                                     currentCell.classList.add("selected");
-
+                                    console.log("Selected center: " + selectedCenter);
                                     renderTimes(date, dayOfWeek);
                                 }
                             }
@@ -256,12 +258,15 @@
                     }
 
                     function renderTimes(date, dayOfWeek){
+                        console.log("at renderTime(), centerID: " + document.querySelector("#selected-center-id").html);
+                        console.log("and the actual one is really just " + selectedCenter);
                         $.ajax({
                             url: 'get-available-times',
                             type: 'post',
                             data: {centerid:selectedCenter, date:date, dayOfWeek:dayOfWeek},
                             success: function (response) {
-                                console.log("There are " + response.length() + " times");
+                                console.log("There are " + response + " times");
+                                console.log(response[0].timeStart);
                             }
                         });
                     }
