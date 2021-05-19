@@ -30,8 +30,6 @@
         <h1 th:text="${title}"></h1>
     </div>
 
-    <div id="selected-center-id" style="display: block;"></div>
-
     <table>
         <!--Visuals-->
         <tr>
@@ -54,7 +52,6 @@
                     <script>
                         function updateGoogleMaps(){
                             selectedCenter = [].filter.call(document.querySelectorAll('option'), (e) => e.selected)[0].value;
-                            document.querySelector("#selected-center-id").html = selectedCenter;
                             $.ajax({
                                 url: 'get-google-maps-link',
                                 type: 'post',
@@ -112,23 +109,7 @@
                 </div>
                 <table id="calendar"></table>
 
-                <div id="times-box">
-                    <div class="times selected-times">
-                        <h4>4 available</h4>
-                        <h2>10:15 - 10:30</h2>
-                    </div>
-                    <div class="times">
-                        <h4>2 available</h4>
-                        <h2>10:30 - 10:45</h2>
-                    </div>
-
-                    <th:block th:each="time : ${times}">
-                        <div class="times" th:onclick="selectTime(${time.getTimeStart()})">
-                            <h4 th:text="${time.available}"></h4>
-                            <h2 th:text="${time.getTimeStart()} - ${time.getTimeEnd()}"></h2>
-                        </div>
-                    </th:block>
-                </div>
+                <div id="times-box"></div>
 
                 <script>
                     let table = document.querySelector('#calendar');
@@ -233,7 +214,6 @@
 
                                     //Add 'selected' class to this cell
                                     currentCell.classList.add("selected");
-                                    console.log("Selected center: " + selectedCenter);
                                     renderTimes(date, dayOfWeek);
                                 }
                             }
@@ -258,15 +238,35 @@
                     }
 
                     function renderTimes(date, dayOfWeek){
-                        console.log("at renderTime(), centerID: " + document.querySelector("#selected-center-id").html);
-                        console.log("and the actual one is really just " + selectedCenter);
+                        //Remove all times in timesbox
+                        $('#times-box .times').remove();
+
                         $.ajax({
                             url: 'get-available-times',
                             type: 'post',
                             data: {centerid:selectedCenter, date:date, dayOfWeek:dayOfWeek},
                             success: function (response) {
-                                console.log("There are " + response + " times");
-                                console.log(response[0].timeStart);
+                                //Add new times
+                                for(let i = 0; i < response.length; i++){
+                                    let time = document.createElement("div");
+                                    let hfour = document.createElement("h4");
+                                    let htwo = document.createElement("h2");
+
+                                    console.log("i: " + i + "available: " + response[i].available);
+                                    hfour.innerText = response[i].available;
+                                    htwo.innerText = response[i].timeStart + " - " + response[i].timeEnd;
+
+                                    time.classList.add("times");
+                                    time.appendChild(hfour);
+                                    time.appendChild(htwo);
+
+                                    time.onclick = function(){
+                                        document.querySelectorAll("#times-box div.times.selected").forEach(e => e.classList.remove("selected"));
+                                        time.classList.add("selected");
+                                    }
+
+                                    document.getElementById("times-box").appendChild(time);
+                                }
                             }
                         });
                     }

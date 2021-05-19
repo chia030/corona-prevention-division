@@ -82,7 +82,13 @@ public class BookingService {
         int interval = d.getInterval(); //in minutes
 
         for(int i = start; i < end; i += interval){
-            Times time = new Times(String.valueOf(i), String.valueOf(i+interval), String.valueOf(capacity));
+            int sh = i/60;
+            int sm = i%60;
+            int eh = (i+interval)/60;
+            int em = (i+interval)%60;
+            String s = sh + ":" + (sm < 10 ? "0" + sm : sm);
+            String e = eh + ":" + (em < 10 ? "0" + em : em);
+            Times time = new Times(s, e, capacity + " available");
             times.add(time);
         }
 
