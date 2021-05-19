@@ -74,7 +74,7 @@ public class BookingController {
     public String home(){ return "index"; }
 
     @GetMapping("/test")
-    public String testBooking( Model model){
+    public String testBooking(Model model){
         List<Center> testCenters = bookingService.fetchCenterByType("PCR_TEST");
         model.addAttribute("title", "Book a PCR Test appointment");
         model.addAttribute("centers", testCenters);

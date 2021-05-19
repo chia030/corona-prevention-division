@@ -96,16 +96,16 @@
         <!--Left-->
         <div class="vertical-border" style="float: left;"></div>
 
-        <!--Center-->
-        <div class="center">
-            <form action="#" th:action="@{/login}" method="post">
+        <!--Login Form-->
+        <div class="login">
+            <form th:action="@{/login}" th:object="${user}" method="post">
                 <label>Username:</label>
-                <input type="text"  th:name="username"/>
+                <input type="text" th:name="username" th:field="*{username}" required/>
                 <br>
                 <div class="separator"></div>
 
                 <label>Password:</label>
-                <input name="cpr" type="password" th:name="password"/>
+                <input type="password" th:name="password" th:field="*{password}" required/>
                 <br>
                 <div class="separator"></div>
 
