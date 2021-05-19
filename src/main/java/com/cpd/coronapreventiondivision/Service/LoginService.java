@@ -3,7 +3,9 @@ package com.cpd.coronapreventiondivision.Service;
 import com.cpd.coronapreventiondivision.Model.User;
 import com.cpd.coronapreventiondivision.Repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class LoginService {
 
     @Autowired
@@ -14,6 +16,5 @@ public class LoginService {
             return userRepo.fetchByUsernameAndPassword(username, password);
         } catch(Exception e) { return null; }
     }
-
 
 }
