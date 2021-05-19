@@ -72,11 +72,12 @@ public class BookingService {
         return centerRepo.fetchById(centerid);
     }
 
-    public ArrayList<Times> fetchTimes(int id, int dayOfWeek){
+    public ArrayList<Times> fetchTimes(int id, String date, int dayOfWeek){
         Center c = centerRepo.fetchById(id);
         WorkDay d = c.getWeekday().getDay(dayOfWeek);
         ArrayList<Times> times = new ArrayList<>();
-        int capacity = d.getCapacity();
+
+        int fullCapacity = d.getCapacity();
         int start = d.getOpeningTime().getMinute() + 60*d.getOpeningTime().getHour(); //in minutes
         int end = d.getClosingTime().getMinute() + 60*d.getClosingTime().getHour(); //in minutes
         int interval = d.getInterval(); //in minutes
@@ -88,6 +89,10 @@ public class BookingService {
             int em = (i+interval)%60;
             String s = sh + ":" + (sm < 10 ? "0" + sm : sm);
             String e = eh + ":" + (em < 10 ? "0" + em : em);
+
+            int bookedAppointments = appointmentRepo.fetchNumberOfAvailableSpotsAtTime(id, date, s + ":00");
+            int capacity = fullCapacity - bookedAppointments;
+
             Times time = new Times(s, e, capacity + " available");
             times.add(time);
         }
@@ -95,36 +100,66 @@ public class BookingService {
         return times;
     }
 
-    public String fetchNumberOfAvailableSpots(int centerid, String date, int dayOfWeek){
-        WorkWeek workWeek = centerRepo.fetchById(centerid).getWeekday();
-        int capacity = 0;
+    public ArrayList<String> fetchDays(Integer centerid, int year, int month, int firstDayOfWeek, int dayCount){
+        int dow = firstDayOfWeek - 1;
+        if(dow < 0) dow = 6;
+        ArrayList<String> days = new ArrayList<>();
+        Calendar cal = Calendar.getInstance();
 
-        switch(dayOfWeek){
-            case 1:
-                capacity = workWeek.getSunday().getCapacity();
-                break;
-            case 2:
-                capacity = workWeek.getMonday().getCapacity();
-                break;
-            case 3:
-                capacity = workWeek.getTuesday().getCapacity();
-                break;
-            case 4:
-                capacity = workWeek.getWednesday().getCapacity();
-                break;
-            case 5:
-                capacity = workWeek.getThursday().getCapacity();
-                break;
-            case 6:
-                capacity = workWeek.getFriday().getCapacity();
-                break;
-            case 7:
-                capacity = workWeek.getSaturday().getCapacity();
-                break;
-            default:
-                break;
+        if (centerid == null){
+            for(int i = 0; i < dayCount; i++){
+                days.add("0");
+            }
+            return days;
         }
 
-        return String.valueOf(capacity - appointmentRepo.fetchNumberOfAvailableSpots(centerid, date));
+        WorkWeek workWeek = centerRepo.fetchById(centerid).getWeekday();
+        for(int i = 0; i < dayCount; i++){
+            WorkDay d = workWeek.getDay(dow);
+
+            String count = "0";
+            //If the day is null, there's no spots available that day
+            if(d != null) {
+                int capacity = d.getCapacity();
+                int start = d.getOpeningTime().getMinute() + 60 * d.getOpeningTime().getHour(); //in minutes
+                int end = d.getClosingTime().getMinute() + 60 * d.getClosingTime().getHour(); //in minutes
+                int interval = d.getInterval(); //in minutes
+
+                if((cal.get(Calendar.YEAR) == year && cal.get(Calendar.MONTH) == month && cal.get(Calendar.DAY_OF_MONTH) == i+1))
+                    start = Math.max(start, cal.get(Calendar.MINUTE) + 60*cal.get(Calendar.HOUR_OF_DAY));
+
+                int fullCapacity = capacity * (end - start) / interval;
+
+                String mm = String.valueOf(month+1);
+                if(mm.length() == 1) mm = "0" + mm;
+                String dd = String.valueOf(i+1);
+                if(dd.length() == 1) dd = "0" + dd;
+                String date = year + "-" + mm + "-" + dd;
+
+                String sh = String.valueOf(start/60);
+                String sm = String.valueOf(start%60);
+                sh = sh.length() == 1 ? "0" + sh : sh;
+                sm = sm.length() == 1 ? "0" + sm : sm;
+                String startTime = sh + ":" + sm + ":00";
+
+                int bookedAppointments = appointmentRepo.fetchNumberOfAvailableSpots(centerid, date, startTime);
+                count = String.valueOf(fullCapacity - bookedAppointments);
+
+                //If the day is before today, or the time is after closing no spots should be available
+                if (start > end ||
+                    cal.get(Calendar.YEAR) > year ||
+                    (cal.get(Calendar.YEAR) == year && cal.get(Calendar.MONTH) > month) ||
+                    (cal.get(Calendar.YEAR) == year && cal.get(Calendar.MONTH) == month && cal.get(Calendar.DAY_OF_MONTH) > i+1)) {
+                    count = "0";
+                }
+            }
+
+            days.add(count);
+
+            dow++;
+            if(dow > 6) dow = 0;
+        }
+
+        return days;
     }
 }

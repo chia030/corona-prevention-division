@@ -5,17 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Booking</title>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/resources/demos/style.css">
     <link rel="stylesheet" href="/booking-style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="/permanent.js"></script>
     <script>
-        var selectedCenter;
-        // var selectedYear;
-        // var selectedMonth;
-        // var selectedDay;
+        var selectedCenter; //declare as global to reuse later
+        var selectedTime;
     </script>
 </head>
 <body>
@@ -58,19 +55,10 @@
                                 data: {centerid:selectedCenter},
                                 success: function (response) {
                                     document.getElementById("google-maps").src = response;
+                                    renderMonth(0);
                                 }
                             });
                         }
-
-                        // function selectTime(startingTime){
-                        //     console.log(startingTime);
-                        //
-                        //     //Remove 'selected' class from all other cells
-                        //     document.querySelectorAll(".times-box .times.selected").forEach(e => e.classList.remove("selected"));
-                        //
-                        //     //Add 'selected' class to this cell
-                        //     [].filter.call(document.querySelector(".times"), (e) => e.querySelector("h2").innerText.startsWith(startingTime)).classList.add("selected");
-                        // }
                     </script>
                     <select id="select-google-maps" class="elegant-border center-content" name="center" onchange="updateGoogleMaps()">
                         <option value="null" selected disabled>Please select a center...</option>
@@ -79,7 +67,8 @@
                     </select>
 
                     <!--Google Maps Embed-->
-                    <iframe id="google-maps" class="elegant-border center-content" src="" width="600" height="450" style="border:0; margin: 20px 0px;" allowfullscreen=""></iframe>
+                    <iframe id="google-maps" class="center-content accent-border" src="" width="600" height="450" style="margin: 20px 0px;" allowfullscreen="">
+                    </iframe>
                 </div>
             </td>
             <td style="width: 80px;"></td>
@@ -149,7 +138,9 @@
                     }
 
                     function renderMonth(mapMonth){
-                        recreateCalendar();
+                        //Disable the calendar before it is show
+
+                        //recreateCalendar();
 
                         //Update Month selection
                         selectedMonth += mapMonth;
@@ -167,72 +158,87 @@
                         let dayCount = numOfDays[selectedMonth];
                         let currentRow;
 
-                        //Go through each day
-                        for(let i = 0; i < dayCount; i++){
-
-                            let dayOfWeek = new Date(selectedYear, selectedMonth, i).getDay();
-
-                            //Create new row
-                            if (dayOfWeek === 0 || i === 0) {
-                                currentRow = table.insertRow(-1);
-                            }
-
-                            //Insert empty rows to account for month not starting on a Monday
-                            if (i === 0 && dayOfWeek !== 0){
-                                for (let j = 0; j < dayOfWeek; j++){
-                                    currentRow.insertCell(-1);
-                                }
-                            }
-
-                            //Add day
-                            let currentCell = currentRow.insertCell(-1);
-                            let m = selectedMonth.toString();
-                            if (m.length < 2) m = "0" + m;
-                            let d = (i+1).toString();
-                            if (d.length < 2) d = "0" + d;
-                            let date = selectedYear + "-" + m + "-" + d;
-                            let available = 0;//getAvailableCount(5, date, dayOfWeek);
-
-                            let styling = "color: black;";
-                            if ((selectedYear < new Date().getFullYear()) ||
-                                (selectedYear === new Date().getFullYear() && selectedMonth < new Date().getMonth()) ||
-                                (selectedYear === new Date().getFullYear() && selectedMonth === new Date().getMonth() && i < new Date().getDate())){
-                                styling = "color: #BFBFBF;";
-                                currentCell.innerHTML = cellP(styling, "", i+1);
-                            }
-                            else {
-                                currentCell.innerHTML = cellP(styling, available + " available", i+1);
-                                currentCell.onclick = function(){
-                                    let y = selectedYear;
-                                    let m = selectedMonth + 1;
-                                    let d = i + 1;
-                                    selectedDay = i;
-                                    let date = y + "-" + m + "-" + d;
-                                    console.log(date);
-                                    //Remove 'selected' class from all other cells
-                                    document.querySelectorAll("#calendar td.selected").forEach(e => e.classList.remove("selected"));
-
-                                    //Add 'selected' class to this cell
-                                    currentCell.classList.add("selected");
-                                    renderTimes(date, dayOfWeek);
-                                }
-                            }
-                        }
-
                         output.innerText = months[selectedMonth] + " " + selectedYear;
-                    }
 
-                    function cellP(styling, available, i){
-                        return "<p style='" + styling + " font-size: 20px; font-weight: bold; margin: 10px auto; line-height: 15px;'>" + (i).toString() + "<br><i style='font-size: 9px; height: 20px;" + styling + "'>" + available + "</i></p>";
-                    }
-
-                    function getAvailableCount(centerid, date, dayOfWeek, day){
+                        let firstDayOfWeekInAMonth = new Date(selectedYear, selectedMonth, 1).getDay();
                         $.ajax({
-                            url: 'get-available-count',
+                            url: 'get-available-days',
                             type: 'post',
-                            data: {centerid:centerid, date:date, dayOfWeek:dayOfWeek},
+                            data: {centerid:selectedCenter, year:selectedYear, month:selectedMonth, dayOfWeek:firstDayOfWeekInAMonth, dayNum:numOfDays[selectedMonth]},
                             success: function (response) {
-                                [].filter.call(document.querySelectorAll('#calendar td p'), (e) => e.innerText === day)[0].html = cellP("color: black;", response, day);
+                                //Reenable the calendar here
+
+                                recreateCalendar();
+
+                                //Go through each day
+                                for(let i = 0; i < dayCount; i++){
+                                    let dayOfWeek = new Date(selectedYear, selectedMonth, i).getDay();
+
+                                    //Create new row if needed
+                                    if (dayOfWeek === 0 || i === 0)
+                                        currentRow = table.insertRow(-1);
+
+                                    //Empty cells for offset
+                                    if (i === 0 && dayOfWeek !== 0){
+                                        for (let j = 0; j < dayOfWeek; j++){
+                                            currentRow.insertCell(-1);
+                                        }
+                                    }
+
+                                    //Add day
+                                    let currentCell = currentRow.insertCell(-1); //Add to the end
+                                    let m = selectedMonth.toString();
+                                    if (m.length < 2)
+                                        m = "0" + m;
+
+                                    let d = (i+1).toString();
+                                    if (d.length < 2)
+                                        d = "0" + d;
+
+                                    //currentCell.innerHTML = cellP(styling, available + " available", i + 1);
+
+                                    let p = document.createElement("p");
+                                    let br = document.createElement("br");
+                                    let it = document.createElement("i");
+
+                                    it.style.fontSize = "9px";
+                                    it.style.height = "20px";
+
+                                    p.innerHTML = (i + 1).toString();
+                                    p.style.color = "black";
+                                    p.style.fontSize = "20px";
+                                    p.style.fontWeight = "bold";
+                                    p.style.margin = "10px auto";
+                                    p.style.lineHeight = "15px";
+                                    p.appendChild(br);
+                                    p.appendChild(it);
+
+                                    if (response[i] !== "0") {
+                                        it.innerHTML = response[i] + " available";
+
+                                        currentCell.onclick = function () {
+                                            let y = selectedYear;
+                                            let m = selectedMonth + 1;
+                                            let d = i + 1;
+                                            selectedDay = i;
+                                            let date = y + "-" + m + "-" + d;
+
+                                            //Remove 'selected' class from all other cells
+                                            document.querySelectorAll("#calendar td.selected").forEach(e => e.classList.remove("selected"));
+
+                                            //Add 'selected' class to this cell
+                                            currentCell.classList.add("selected");
+                                            renderTimes(date, dayOfWeek);
+                                        }
+                                    }
+                                    else {
+                                        currentCell.classList.add("disabled");
+                                        p.style.color = "#bfbfbf";
+                                        it.innerHTML = "";
+                                    }
+
+                                    currentCell.appendChild(p);
+                                }
                             }
                         });
                     }
@@ -292,17 +298,23 @@
             <td></td>
             <td>
                 <div class="center-content">
-                    <label>CPR number:</label>
-                    <input type="number" th:name="cpr" />
-                    <label>First name:</label>
-                    <input type="text" th:name="firstName" />
-                    <label>Last name:</label>
-                    <input type="text" th:name="lastName" />
-                    <label>Email address:</label>
-                    <input type="text" th:name="email" />
+                    <form th:action="@{/confirm-booking}" method="post" class="booking-form">
+                        <input type="hidden" th:name="date" value="undefined"/>
+                        <input type="hidden" th:name="time" value="undefined">
 
-                    <form th:action="@{/confirm-booking}" method="post">
-                        <button type="submit" >Book appointment</button>
+                        <label>CPR number:</label>
+                        <input type="number" th:name="cpr" />
+
+                        <label>First name:</label>
+                        <input type="text" th:name="firstName" />
+
+                        <label>Last name:</label>
+                        <input type="text" th:name="lastName" />
+
+                        <label>Email address:</label>
+                        <input type="text" th:name="email" />
+
+                        <button type="submit" class="cta">Book appointment</button>
                     </form>
                 </div>
             </td>

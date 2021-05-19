@@ -141,6 +141,11 @@ select#select-google-maps {
     border-radius: 10px;
 }
 
+.accent-border {
+    border: 3px solid #FF6219;
+    border-radius: 10px;
+}
+
 .center-content {
 
 }
@@ -230,6 +235,23 @@ select#select-google-maps {
     background-color: #d9ffd2;
 }
 
+.disabled {
+    color: #BFBFBF;
+}
+
+#calendar p {
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px auto;
+    line-height: 15px;
+}
+
+#calendar i {
+    font-size: 9px;
+    height: 20px;
+}
+
 .times.selected {
     border: 2px solid #1cbe00;
     background-color: #d9ffd2;
@@ -242,4 +264,38 @@ select#select-google-maps {
 .times h2 {
     float: right;
     padding-top: 10px;
+}
+
+/*FORM*/
+.booking-form {
+    padding: 20px;
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*justify-content: center;*/
+    font-family: "Roboto Slab", serif, Roboto, Verdana;
+    font-size: 18px;
+}
+
+.booking-form label {
+    width: 50%;
+}
+
+.booking-form input {
+    width: 50%;
+    font-size: 18px;
+    margin: 20px auto;
+}
+
+.cta {
+    width: auto;
+    height: auto;
+    font-family: Oxanium, serif, Helvetica;
+    font-weight: normal;
+    font-size: 20px;
+    color: white;
+    background-color: #FF6219;
+    border-radius: 10px;
+    margin: 100px 20px;
+    padding: 14px 20px;
+    border: none;
 }

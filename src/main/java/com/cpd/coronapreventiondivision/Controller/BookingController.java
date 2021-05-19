@@ -28,8 +28,10 @@ public class BookingController {
         return new RedirectView("/");
     }
 
-    @GetMapping("confirm-booking")
-    public String sendConfirmation(@RequestParam(required = false) Long cpr,
+    @PostMapping("confirm-booking")
+    public String sendConfirmation(@RequestParam(required = false) String date,
+                                   @RequestParam(required = false) String time,
+                                   @RequestParam(required = false) Long cpr,
                                    @RequestParam(required = false) String email,
                                    @RequestParam(required = false) String firstName,
                                    @RequestParam(required = false) String lastName,
@@ -59,17 +61,13 @@ public class BookingController {
     @PostMapping("get-available-times")
     @ResponseBody
     public ArrayList<Times> getAvailableTimes(Integer centerid, String date, Integer dayOfWeek) {
-        ArrayList<Times> times = bookingService.fetchTimes(centerid, dayOfWeek);
-
-        return times;
+        return bookingService.fetchTimes(centerid, date, dayOfWeek);
     }
 
-    @PostMapping("get-available-count")
+    @PostMapping("get-available-days")
     @ResponseBody
-    public String getAvailableCount(int centerid, String date, int dayOfWeek){
-        String res = String.valueOf(bookingService.fetchNumberOfAvailableSpots(centerid, date, dayOfWeek));
-        System.out.println("Available:" + res + "centerid: " + centerid + ", date: " + date + ", dayOfWeek: " + dayOfWeek);
-        return res;
+    public ArrayList<String> getAvailableDays(Integer centerid, Integer year, Integer month, Integer dayOfWeek, Integer dayNum){
+        return bookingService.fetchDays(centerid, year, month, dayOfWeek, dayNum);
     }
 
     @GetMapping("/")
@@ -80,9 +78,6 @@ public class BookingController {
         List<Center> testCenters = bookingService.fetchCenterByType("PCR_TEST");
         model.addAttribute("title", "Book a PCR Test appointment");
         model.addAttribute("centers", testCenters);
-        model.addAttribute("selectedCenter", testCenters.get(3));
-        ArrayList<Times> times = bookingService.fetchTimes(1, 1);
-        model.addAttribute("times", times);
 
         return "booking/booking";
     }
@@ -93,8 +88,6 @@ public class BookingController {
         vaccineCenters.addAll(vaccineCenters1);
         model.addAttribute("title", "Book a vaccine shot appointment");
         model.addAttribute("centers", vaccineCenters);
-        ArrayList<Times> times = bookingService.fetchTimes(1, 1);
-        model.addAttribute("times", times);
 
         return "booking/booking";
     }

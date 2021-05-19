@@ -78,10 +78,16 @@ public class AppointmentRepo implements RowMapper<Appointment> {
         return template.query(query, new Object[]{cpr}, this);
     }
 
-    public int fetchNumberOfAvailableSpots(int centerid, String date){
-        String query = "SELECT COUNT(*) FROM cpd1.appointments WHERE center_id = ? AND date = ?";
+    public int fetchNumberOfAvailableSpots(int centerid, String date, String start){
+        String query = "SELECT COUNT(*) FROM cpd1.appointments WHERE center_id = ? AND date = ? AND time > ?";
 
-        return template.queryForObject(query, new Object[]{centerid, date}, Integer.class);
+        return template.queryForObject(query, new Object[]{centerid, date, start}, Integer.class);
+    }
+
+    public int fetchNumberOfAvailableSpotsAtTime(int centerid, String date, String start){
+        String query = "SELECT COUNT(*) FROM cpd1.appointments WHERE center_id = ? AND date = ? AND time = ?";
+
+        return template.queryForObject(query, new Object[]{centerid, date, start}, Integer.class);
     }
 
 }
