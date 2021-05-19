@@ -22,7 +22,7 @@ public class Address {
 
     @Override
     public String toString() {
-        return  city + " " + postCode + " " + streetName + '\'' +
+        return  city + " " + postCode + ", " + streetName + " " +
                 " " + streetNumber + " " + floor;
     }
 

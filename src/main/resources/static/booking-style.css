@@ -1,62 +1,83 @@
-body {
+@import url('https://fonts.googleapis.com/css?family=Oxanium&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap');
+
+* {
     margin: 0;
     padding: 0;
+}
+
+body {
     box-sizing: border-box;
-    font-family: "Book Antiqua"; /* we need to change this font fam */
-     margin: 0em 2em;
+    font-family: Roboto Slab, serif, Helvetica;
+    background-color: #EFEFEF;
 }
 
 /* HEADER: */
-.header {
-    color: brown;
-    padding: 5px;
+.title {
+    color: black;
+    margin: 30px 0px;
     text-align: center;
-}
-
-.title{
-
 }
 
 /* NAVBAR: */
 .topnav {
+    font-family: Oxanium, serif, Helvetica;
+    width: 100%;
     overflow: hidden;
+    background-color: transparent;
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+
+.nav-shadow{
+    height: 15px !important;
+    width: 100%;
+    overflow: hidden;
+    left: 0;
+    background: linear-gradient(0deg, rgba(255,255,255,0) 0%, rgba(220,220,220,1) 100%);
 }
 
 .topnav li {
+    height: auto;
     display: inline;
     float: left;
+    vertical-align: middle;
+    margin: 10px;
 }
 
 .topnav ul {
-    /*top:0;*/
-    position: fixed;
-    width: 100%;
-    background-color: saddlebrown;
-    margin: 0 -2em;
+    overflow: hidden;
+    background-color: white;
+    width: auto;
 }
 
 /* Navbar links */
 .topnav a {
     /*float: left;*/
     display: block;
-    color: cornsilk;
+    color: black;
     text-align: center;
-    padding: 14px 16px;
+    padding: 15px 25px;
     text-decoration: none;
-    font-size: 17px;
+    font-size: 20px;
+}
 
+.topnav .logo {
+    width: auto;
+    height: 40px;
+    margin: 5px 5px 0px 5px;
 }
 
 /*this is not working :-( */
 .topnav a.active {
-    background-color: brown;
-    color: cornsilk;
+    color: #FF6219;
+    text-decoration: underline;
 }
 
 /* Links - change color on hover */
 .topnav a:hover:not(.active) {
-    background-color: cornsilk;
-    color: brown;
+    color: #FF6219;
 }
 
 .contents {
@@ -66,4 +87,159 @@ body {
 /* CONTENTS HEADER: */
 .contents h2 {
     margin-top: 100px;
+}
+
+.booking-content {
+    margin-left: auto;
+    margin-right: auto;
+    width: 80%;
+    background-color: white;
+}
+
+/*VISUALS*/
+
+.pearl {
+    width: 80px;
+    height: 80px;
+    border-radius: 50px;
+    /*background-color: #FF6219;*/
+    background-image: radial-gradient(#e04c02, #FF6219);
+    text-align: center;
+    color: white;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.pearl h1 {
+    font-size: 60px;
+    vertical-align: center;
+}
+
+td.string {
+    display: flex;
+    align-content: stretch;
+}
+
+div.string {
+    /*height: 100%;*/
+    margin-left: auto;
+    margin-right: auto;
+    width: 0px;
+    border-left: 5px dashed #AFAFAF;
+}
+
+/*SELECT*/
+select#select-google-maps {
+    width: 600px;
+    height: 50px;
+    font-family: Roboto, Helvetica, serif;
+    font-size: 20px;
+}
+
+.elegant-border {
+    border: 2px solid #AFAFAF;
+    border-radius: 10px;
+}
+
+.center-content {
+
+}
+
+/*CALENDAR*/
+#calendar {
+    width: 80%;
+    height: 450px;
+    background-color: #f8f8f8;
+    color: black;
+    border-radius: 0px 0px 10px 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#calendar td {
+    width: 14%;
+    height: 50px;
+    text-align: center;
+    border-radius: 10px;
+    /*border: 1px solid white;*/
+    margin: 0;
+}
+
+#calendar td:hover {
+    background-color: #F0F0F0;
+}
+
+#calendar-header {
+    margin-top: 50px;
+    background-color: #FF6219;
+    width: 80%;
+    height: 50px;
+    color: white;
+    font-family: Oxanium, serif, Helvetica;
+    font-size: 20px;
+    border-radius: 10px 10px 0px 0px;
+    vertical-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#calendar thead {
+    height: 30px;
+}
+
+#calendar-header button {
+    background-color: #FF6219;
+    width: 50px;
+    height: inherit;
+    color: white;
+    font-family: Oxanium, serif, Helvetica;
+    font-size: 20px;
+    font-weight: bolder;
+    border: none;
+    border-radius: 10px;
+}
+
+#calendar-selected {
+    margin: 15px;
+}
+
+/*TIMES*/
+
+#times-box {
+    min-height: 50px;
+    display: flex;
+    align-content: flex-start;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px 0px 50px 0px;
+}
+
+.times {
+    height: 60px;
+    width: 200px;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #AFAFAF;
+    background-color: #FAFAFA;
+    color: black;
+}
+
+#calendar td.selected {
+    border: 1px solid #1cbe00;
+    background-color: #d9ffd2;
+}
+
+.times.selected {
+    border: 2px solid #1cbe00;
+    background-color: #d9ffd2;
+}
+
+.times h4 {
+    color: #595959;
+}
+
+.times h2 {
+    float: right;
+    padding-top: 10px;
 }

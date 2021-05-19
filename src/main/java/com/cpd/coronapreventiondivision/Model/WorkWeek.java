@@ -20,6 +20,20 @@ public class WorkWeek {
         this.sunday = sunday;
     }
 
+    public WorkDay getDay(int i){
+        switch(i){
+            case 0: return monday;
+            case 1: return tuesday;
+            case 2: return wednesday;
+            case 3: return thursday;
+            case 4: return friday;
+            case 5: return saturday;
+            case 6: return sunday;
+        }
+
+        return null;
+    }
+
     public WorkDay getMonday() {
         return monday;
     }

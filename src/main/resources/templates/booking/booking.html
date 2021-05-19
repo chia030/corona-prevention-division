@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SARS-CoV-2 PCR test</title>
+    <title>Booking</title>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="/resources/demos/style.css">
     <link rel="stylesheet" href="/booking-style.css">
@@ -12,71 +12,302 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="/permanent.js"></script>
     <script>
-        $( function() {
-            $( "#datepicker" ).datepicker({
-                dateFormat: "yy-mm-dd",
-                firstDay: 1,
-                minDate: 1,
-                maxDate: "+1m"
-            });
-        } );
-        // Something like this will deactivate certain dates depending on the center capacity! ->
-        // $('input').datepicker({
-        //     beforeShowDay: function(date){
-        //         var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
-        //         return [$.inArray(string, array) == -1];
-        //     }
-        // });
+        var selectedCenter;
+        // var selectedYear;
+        // var selectedMonth;
+        // var selectedDay;
     </script>
 </head>
 <body>
-<!--nav bar:-->
+
+<!--Navigation bar-->
 <div class="topnav"></div>
+<div style="height: 75px;" ></div>
+
+<div class="booking-content">
     <!--Header-->
-    <div>
-        <h1>
-            Book a PCR test
-        </h1>
+    <div class="title">
+        <h1 th:text="${title}"></h1>
     </div>
 
-    <!--Select test center-->
-<!--Select center-->
-<div>
-    <form th:action="@{select-center}" method="post">
-        <select name="centerid">
-            <!--            <option th:text="Please select a center..."></option>-->
-            <option th:each="center : ${centers}" th:value="${center.centerID}" th:text="${center.address}">
-            </option>
-        </select>
-        <button type="submit">Select center</button>
-    </form>
+    <div id="selected-center-id" style="display: block;"></div>
 
-    <!--Google Maps Embed-->
-    <div style="margin:20px;">
-        <iframe th:src="${googleMapsLink}" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-    </div>
+    <table>
+        <!--Visuals-->
+        <tr>
+            <td>
+                <div class="pearl">
+                    <h1 style="margin-bottom: 50px;">1</h1>
+                </div>
+            </td>
+            <td>
+                <h2>Choose the location</h2>
+            </td>
+        </tr>
+        <!--Select center-->
+        <tr>
+            <!--Visual line-->
+            <td></td>
+            <!--Center selection content-->
+            <td>
+                <div style="display: flex; flex-direction: column; align-items: center;">
+                    <script>
+                        function updateGoogleMaps(){
+                            selectedCenter = [].filter.call(document.querySelectorAll('option'), (e) => e.selected)[0].value;
+                            document.querySelector("#selected-center-id").html = selectedCenter;
+                            $.ajax({
+                                url: 'get-google-maps-link',
+                                type: 'post',
+                                data: {centerid:selectedCenter},
+                                success: function (response) {
+                                    document.getElementById("google-maps").src = response;
+                                }
+                            });
+                        }
+
+                        // function selectTime(startingTime){
+                        //     console.log(startingTime);
+                        //
+                        //     //Remove 'selected' class from all other cells
+                        //     document.querySelectorAll(".times-box .times.selected").forEach(e => e.classList.remove("selected"));
+                        //
+                        //     //Add 'selected' class to this cell
+                        //     [].filter.call(document.querySelector(".times"), (e) => e.querySelector("h2").innerText.startsWith(startingTime)).classList.add("selected");
+                        // }
+                    </script>
+                    <select id="select-google-maps" class="elegant-border center-content" name="center" onchange="updateGoogleMaps()">
+                        <option value="null" selected disabled>Please select a center...</option>
+                        <option th:each="center : ${centers}" th:value="${center.getCenterID()}" th:text="${center.address}">
+                        </option>
+                    </select>
+
+                    <!--Google Maps Embed-->
+                    <iframe id="google-maps" class="elegant-border center-content" src="" width="600" height="450" style="border:0; margin: 20px 0px;" allowfullscreen=""></iframe>
+                </div>
+            </td>
+            <td style="width: 80px;"></td>
+        </tr>
+
+
+
+        <!--Visuals-->
+        <tr>
+            <td>
+                <div class="pearl">
+                    <h1 style="margin-bottom: 50px;">2</h1>
+                </div>
+            </td>
+            <td>
+                <h2>Select appointment date and time</h2>
+            </td>
+        </tr>
+        <!--Select a date-->
+        <tr>
+            <td></td>
+            <td>
+                <div id="calendar-header" style="display: flex; justify-content: space-between; vertical-align: center;">
+                    <button onclick="renderMonth(-1)"><</button>
+                    <h4 id="calendar-selected"></h4>
+                    <button onclick="renderMonth(1)">></button>
+                </div>
+                <table id="calendar"></table>
+
+                <div id="times-box">
+                    <div class="times selected-times">
+                        <h4>4 available</h4>
+                        <h2>10:15 - 10:30</h2>
+                    </div>
+                    <div class="times">
+                        <h4>2 available</h4>
+                        <h2>10:30 - 10:45</h2>
+                    </div>
+
+                    <th:block th:each="time : ${times}">
+                        <div class="times" th:onclick="selectTime(${time.getTimeStart()})">
+                            <h4 th:text="${time.available}"></h4>
+                            <h2 th:text="${time.getTimeStart()} - ${time.getTimeEnd()}"></h2>
+                        </div>
+                    </th:block>
+                </div>
+
+                <script>
+                    let table = document.querySelector('#calendar');
+                    let body = document.querySelector('#calendar tbody');
+                    let output = document.querySelector('#calendar-selected');
+
+                    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                    const numOfDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+                    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+                    let date = new Date();
+                    let selectedDay = date.getDate();
+                    let selectedMonth = date.getMonth();
+                    let selectedYear = date.getFullYear();
+
+                    renderMonth(0);
+
+                    function recreateCalendar(){
+                        $("#calendar tr").remove();
+                        $("#calendar th").remove();
+                        $("#calendar thead").remove();
+                        $("#calendar tbody").remove();
+
+                        table.tHead = document.createElement("thead");
+
+                        let tr = document.createElement("tr");
+                        table.tHead.appendChild(tr);
+
+                        for(d in days){
+
+                            let th = document.createElement("th");
+                            th.innerHTML = "<h4 style='height: 40px;'>" + days[d] + "</h4>";
+                            tr.appendChild(th);
+                        }
+
+                        table.tBody = document.createElement("tbody");
+                    }
+
+                    function renderMonth(mapMonth){
+                        recreateCalendar();
+
+                        //Update Month selection
+                        selectedMonth += mapMonth;
+
+                        //Account for year change
+                        if (selectedMonth > 11){
+                            selectedMonth = 0;
+                            selectedYear++;
+                        }
+                        else if (selectedMonth < 0){
+                            selectedMonth = 11;
+                            selectedYear--;
+                        }
+
+                        let dayCount = numOfDays[selectedMonth];
+                        let currentRow;
+
+                        //Go through each day
+                        for(let i = 0; i < dayCount; i++){
+
+                            let dayOfWeek = new Date(selectedYear, selectedMonth, i).getDay();
+
+                            //Create new row
+                            if (dayOfWeek === 0 || i === 0) {
+                                currentRow = table.insertRow(-1);
+                            }
+
+                            //Insert empty rows to account for month not starting on a Monday
+                            if (i === 0 && dayOfWeek !== 0){
+                                for (let j = 0; j < dayOfWeek; j++){
+                                    currentRow.insertCell(-1);
+                                }
+                            }
+
+                            //Add day
+                            let currentCell = currentRow.insertCell(-1);
+                            let m = selectedMonth.toString();
+                            if (m.length < 2) m = "0" + m;
+                            let d = (i+1).toString();
+                            if (d.length < 2) d = "0" + d;
+                            let date = selectedYear + "-" + m + "-" + d;
+                            let available = 0;//getAvailableCount(5, date, dayOfWeek);
+
+                            let styling = "color: black;";
+                            if ((selectedYear < new Date().getFullYear()) ||
+                                (selectedYear === new Date().getFullYear() && selectedMonth < new Date().getMonth()) ||
+                                (selectedYear === new Date().getFullYear() && selectedMonth === new Date().getMonth() && i < new Date().getDate())){
+                                styling = "color: #BFBFBF;";
+                                currentCell.innerHTML = cellP(styling, "", i+1);
+                            }
+                            else {
+                                currentCell.innerHTML = cellP(styling, available + " available", i+1);
+                                currentCell.onclick = function(){
+                                    let y = selectedYear;
+                                    let m = selectedMonth + 1;
+                                    let d = i + 1;
+                                    selectedDay = i;
+                                    let date = y + "-" + m + "-" + d;
+                                    console.log(date);
+                                    //Remove 'selected' class from all other cells
+                                    document.querySelectorAll("#calendar td.selected").forEach(e => e.classList.remove("selected"));
+
+                                    //Add 'selected' class to this cell
+                                    currentCell.classList.add("selected");
+                                    console.log("Selected center: " + selectedCenter);
+                                    renderTimes(date, dayOfWeek);
+                                }
+                            }
+                        }
+
+                        output.innerText = months[selectedMonth] + " " + selectedYear;
+                    }
+
+                    function cellP(styling, available, i){
+                        return "<p style='" + styling + " font-size: 20px; font-weight: bold; margin: 10px auto; line-height: 15px;'>" + (i).toString() + "<br><i style='font-size: 9px; height: 20px;" + styling + "'>" + available + "</i></p>";
+                    }
+
+                    function getAvailableCount(centerid, date, dayOfWeek, day){
+                        $.ajax({
+                            url: 'get-available-count',
+                            type: 'post',
+                            data: {centerid:centerid, date:date, dayOfWeek:dayOfWeek},
+                            success: function (response) {
+                                [].filter.call(document.querySelectorAll('#calendar td p'), (e) => e.innerText === day)[0].html = cellP("color: black;", response, day);
+                            }
+                        });
+                    }
+
+                    function renderTimes(date, dayOfWeek){
+                        console.log("at renderTime(), centerID: " + document.querySelector("#selected-center-id").html);
+                        console.log("and the actual one is really just " + selectedCenter);
+                        $.ajax({
+                            url: 'get-available-times',
+                            type: 'post',
+                            data: {centerid:selectedCenter, date:date, dayOfWeek:dayOfWeek},
+                            success: function (response) {
+                                console.log("There are " + response + " times");
+                                console.log(response[0].timeStart);
+                            }
+                        });
+                    }
+                </script>
+            </td>
+        </tr>
+
+
+
+        <!--Visuals-->
+        <tr>
+            <td>
+                <div class="pearl">
+                    <h1 style="margin-bottom: 50px;">3</h1>
+                </div>
+            </td>
+            <td>
+                <h2>Enter credentials</h2>
+            </td>
+        </tr>
+        <!--Enter credentials-->
+        <tr>
+            <td></td>
+            <td>
+                <div class="center-content">
+                    <label>CPR number:</label>
+                    <input type="number" th:name="cpr" />
+                    <label>First name:</label>
+                    <input type="text" th:name="firstName" />
+                    <label>Last name:</label>
+                    <input type="text" th:name="lastName" />
+                    <label>Email address:</label>
+                    <input type="text" th:name="email" />
+
+                    <form th:action="@{/confirm-booking}" method="post">
+                        <button type="submit" >Book appointment</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    </table>
 </div>
-
-    <!--Select date and time-->
-    <div>
-        <h2>Pick a date</h2>
-        <p>Date: <input type="text" id="datepicker"></p>
-        <h2>Pick a time</h2>
-        <select name="times-dropdown">
-<!--            <option th:each="testCenter : ${testCenters}" th:value="${testCenter.address}" th:text="${testCenter.address}">-->
-<!--            </option>-->
-        </select>
-    </div>
-
-    <!--Enter credentials-->
-    <div>
-        <h2>Enter your email</h2>
-        <form id="credentials" method="post">
-            <input name="email" type="text" autocomplete="email">
-            <input type="submit" value="Submit">
-<!-- then it will ask "Is this your CPR? if we have it in the DB or additional info if we don't-->
-        </form>
-    </div>
-
 </body>
 </html>
