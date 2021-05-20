@@ -26,300 +26,326 @@
     <div class="title">
         <h1 th:text="${title}"></h1>
     </div>
+    <form th:action="@{/confirm-booking}" method="post">
+        <input type="hidden" name="centerid" id="input-centerid" value="undefined"/>
+        <input type="hidden" name="year" id="input-year" value="undefined"/>
+        <input type="hidden" name="month" id="input-month" value="undefined"/>
+        <input type="hidden" name="day" id="input-day" value="undefined"/>
+        <input type="hidden" name="time" id="input-time" value="undefined">
 
-    <table>
-        <!--Visuals-->
-        <tr>
-            <td>
-                <div class="pearl">
-                    <h1 style="margin-bottom: 50px;">1</h1>
-                </div>
-            </td>
-            <td>
-                <h2>Choose the location</h2>
-            </td>
-        </tr>
-        <!--Select center-->
-        <tr>
-            <!--Visual line-->
-            <td></td>
-            <!--Center selection content-->
-            <td>
-                <div style="display: flex; flex-direction: column; align-items: center;">
+        <table style="width: 100%;">
+            <!--Visuals-->
+            <tr>
+                <td>
+                    <div class="pearl">
+                        <h1 style="margin-bottom: 50px;">1</h1>
+                    </div>
+                </td>
+                <td>
+                    <h2>Choose the location</h2>
+                </td>
+            </tr>
+            <!--Select center-->
+            <tr>
+                <!--Visual line-->
+                <td></td>
+                <!--Center selection content-->
+                <td>
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <script>
+                            function updateGoogleMaps(){
+                                selectedCenter = [].filter.call(document.querySelectorAll('option'), (e) => e.selected)[0].value;
+                                document.getElementById("input-centerid").value = selectedCenter;
+                                $.ajax({
+                                    url: 'get-google-maps-link',
+                                    type: 'post',
+                                    data: {centerid:selectedCenter},
+                                    success: function (response) {
+                                        document.getElementById("google-maps").src = response;
+                                        renderMonth(0);
+                                    }
+                                });
+                            }
+                        </script>
+                        <select id="select-google-maps" class="elegant-border center-content" name="center" onchange="updateGoogleMaps()">
+                            <option value="null" selected disabled>Please select a center...</option>
+                            <option th:each="center : ${centers}" th:value="${center.getCenterID()}" th:text="${center.address}">
+                            </option>
+                        </select>
+
+                        <!--Google Maps Embed-->
+                        <iframe id="google-maps" class="center-content accent-border" src="" width="600" height="450" style="margin: 20px 0px 50px 0px;" allowfullscreen="">
+                        </iframe>
+                    </div>
+                </td>
+                <td style="width: 80px;"></td>
+            </tr>
+
+
+
+            <!--Visuals-->
+            <tr>
+                <td>
+                    <div class="pearl">
+                        <h1 style="margin-bottom: 50px;">2</h1>
+                    </div>
+                </td>
+                <td>
+                    <h2>Select appointment date and time</h2>
+                </td>
+            </tr>
+            <!--Select a date-->
+            <tr>
+                <td></td>
+                <td>
+                    <div id="calendar-header" style="display: flex; justify-content: space-between; vertical-align: center;">
+                        <button onclick="renderMonth(-1)"><</button>
+                        <h4 id="calendar-selected"></h4>
+                        <button onclick="renderMonth(1)">></button>
+                    </div>
+                    <table id="calendar"></table>
+
+                    <div id="times-box"></div>
+
                     <script>
-                        function updateGoogleMaps(){
-                            selectedCenter = [].filter.call(document.querySelectorAll('option'), (e) => e.selected)[0].value;
+                        let table = document.querySelector('#calendar');
+                        let body = document.querySelector('#calendar tbody');
+                        let output = document.querySelector('#calendar-selected');
+
+                        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                        const numOfDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+                        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+                        let date = new Date();
+                        let selectedDay = date.getDate();
+                        let selectedMonth = date.getMonth();
+                        let selectedYear = date.getFullYear();
+
+                        renderMonth(0);
+
+                        function recreateCalendar(){
+                            $("#calendar tr").remove();
+                            $("#calendar th").remove();
+                            $("#calendar thead").remove();
+                            $("#calendar tbody").remove();
+
+                            table.tHead = document.createElement("thead");
+
+                            let tr = document.createElement("tr");
+                            table.tHead.appendChild(tr);
+
+                            for(d in days){
+
+                                let th = document.createElement("th");
+                                th.innerHTML = "<h4 style='height: 40px;'>" + days[d] + "</h4>";
+                                tr.appendChild(th);
+                            }
+
+                            table.tBody = document.createElement("tbody");
+                        }
+
+                        function renderMonth(mapMonth){
+                            //Disable the calendar before it is show
+
+                            //recreateCalendar();
+
+                            //Update Month selection
+                            selectedMonth += mapMonth;
+
+                            //Account for year change
+                            if (selectedMonth > 11){
+                                selectedMonth = 0;
+                                selectedYear++;
+                            }
+                            else if (selectedMonth < 0){
+                                selectedMonth = 11;
+                                selectedYear--;
+                            }
+
+                            document.getElementById("input-month").value = (selectedMonth+1);
+                            document.getElementById("input-year").value = selectedYear;
+
+                            let dayCount = numOfDays[selectedMonth];
+                            let currentRow;
+
+                            output.innerText = months[selectedMonth] + " " + selectedYear;
+
+                            let firstDayOfWeekInAMonth = new Date(selectedYear, selectedMonth, 1).getDay();
                             $.ajax({
-                                url: 'get-google-maps-link',
+                                url: 'get-available-days',
                                 type: 'post',
-                                data: {centerid:selectedCenter},
+                                data: {centerid:selectedCenter, year:selectedYear, month:selectedMonth, dayOfWeek:firstDayOfWeekInAMonth, dayNum:numOfDays[selectedMonth]},
                                 success: function (response) {
-                                    document.getElementById("google-maps").src = response;
-                                    renderMonth(0);
+                                    //Reenable the calendar here
+
+                                    recreateCalendar();
+
+                                    //Go through each day
+                                    for(let i = 0; i < dayCount; i++){
+                                        let dayOfWeek = new Date(selectedYear, selectedMonth, i).getDay();
+
+                                        //Create new row if needed
+                                        if (dayOfWeek === 0 || i === 0)
+                                            currentRow = table.insertRow(-1);
+
+                                        //Empty cells for offset
+                                        if (i === 0 && dayOfWeek !== 0){
+                                            for (let j = 0; j < dayOfWeek; j++){
+                                                currentRow.insertCell(-1);
+                                            }
+                                        }
+
+                                        //Add day
+                                        let currentCell = currentRow.insertCell(-1); //Add to the end
+                                        let m = selectedMonth.toString();
+                                        if (m.length < 2)
+                                            m = "0" + m;
+
+                                        let d = (i+1).toString();
+                                        if (d.length < 2)
+                                            d = "0" + d;
+
+                                        //currentCell.innerHTML = cellP(styling, available + " available", i + 1);
+
+                                        let p = document.createElement("p");
+                                        let br = document.createElement("br");
+                                        let it = document.createElement("i");
+
+                                        it.style.fontSize = "9px";
+                                        it.style.height = "20px";
+
+                                        p.innerHTML = (i + 1).toString();
+                                        p.style.color = "black";
+                                        p.style.fontSize = "20px";
+                                        p.style.fontWeight = "bold";
+                                        p.style.margin = "10px auto";
+                                        p.style.lineHeight = "15px";
+                                        p.appendChild(br);
+                                        p.appendChild(it);
+
+                                        if (response[i] !== "0") {
+                                            it.innerHTML = response[i] + " available";
+
+                                            currentCell.onclick = function () {
+                                                let y = selectedYear;
+                                                let m = selectedMonth + 1;
+                                                if (m < 10) m = "0" + m
+                                                let d = i + 1;
+                                                if (d < 10) d = "0" + d;
+                                                selectedDay = i;
+                                                document.getElementById("input-day").value = selectedDay+1;
+                                                let date = y + "-" + m + "-" + d;
+
+                                                //Remove 'selected' class from all other cells
+                                                document.querySelectorAll("#calendar td.selected").forEach(e => e.classList.remove("selected"));
+
+                                                //Add 'selected' class to this cell
+                                                currentCell.classList.add("selected");
+                                                renderTimes(date, dayOfWeek);
+                                            }
+                                        }
+                                        else {
+                                            currentCell.classList.add("disabled");
+                                            p.style.color = "#bfbfbf";
+                                            it.innerHTML = "";
+                                        }
+
+                                        currentCell.appendChild(p);
+                                    }
+                                }
+                            });
+                        }
+
+                        function renderTimes(date, dayOfWeek){
+                            //Remove all times in timesbox
+                            $('#times-box .times').remove();
+
+                            $.ajax({
+                                url: 'get-available-times',
+                                type: 'post',
+                                data: {centerid:selectedCenter, date:date, dayOfWeek:dayOfWeek},
+                                success: function (response) {
+                                    //Add new times
+                                    for(let i = 0; i < response.length; i++){
+                                        let time = document.createElement("div");
+                                        let hfour = document.createElement("h4");
+                                        let htwo = document.createElement("h2");
+
+                                        console.log("i: " + i + "available: " + response[i].available);
+                                        hfour.innerText = response[i].available;
+                                        htwo.innerText = response[i].timeStart + " - " + response[i].timeEnd;
+
+                                        time.classList.add("times");
+                                        time.appendChild(hfour);
+                                        time.appendChild(htwo);
+
+                                        time.onclick = function(){
+                                            document.querySelectorAll("#times-box div.times.selected").forEach(e => e.classList.remove("selected"));
+                                            document.getElementById("input-time").value = response[i].timeStart;
+                                            time.classList.add("selected");
+                                        }
+
+                                        document.getElementById("times-box").appendChild(time);
+                                    }
                                 }
                             });
                         }
                     </script>
-                    <select id="select-google-maps" class="elegant-border center-content" name="center" onchange="updateGoogleMaps()">
-                        <option value="null" selected disabled>Please select a center...</option>
-                        <option th:each="center : ${centers}" th:value="${center.getCenterID()}" th:text="${center.address}">
-                        </option>
-                    </select>
-
-                    <!--Google Maps Embed-->
-                    <iframe id="google-maps" class="center-content accent-border" src="" width="600" height="450" style="margin: 20px 0px;" allowfullscreen="">
-                    </iframe>
-                </div>
-            </td>
-            <td style="width: 80px;"></td>
-        </tr>
+                </td>
+            </tr>
 
 
+            <!--Visuals-->
+            <tr>
+                <td>
+                    <div class="pearl">
+                        <h1 style="margin-bottom: 50px;">3</h1>
+                    </div>
+                </td>
+                <td>
+                    <h2>Enter credentials</h2>
+                </td>
+            </tr>
+            <!--Enter credentials-->
+            <tr>
+                <td></td>
+                <td>
+                    <div class="center-content">
 
-        <!--Visuals-->
-        <tr>
-            <td>
-                <div class="pearl">
-                    <h1 style="margin-bottom: 50px;">2</h1>
-                </div>
-            </td>
-            <td>
-                <h2>Select appointment date and time</h2>
-            </td>
-        </tr>
-        <!--Select a date-->
-        <tr>
-            <td></td>
-            <td>
-                <div id="calendar-header" style="display: flex; justify-content: space-between; vertical-align: center;">
-                    <button onclick="renderMonth(-1)"><</button>
-                    <h4 id="calendar-selected"></h4>
-                    <button onclick="renderMonth(1)">></button>
-                </div>
-                <table id="calendar"></table>
+                        <div class="booking-form">
+                            <div class="single-input">
+                                <label>CPR number:</label>
+                                <input type="number" name="cpr" />
+                                <br>
+                            </div>
 
-                <div id="times-box"></div>
+                            <div class="single-input">
+                                <label>First name:</label>
+                                <input type="text" name="firstName" />
+                                <br>
+                            </div>
 
-                <script>
-                    let table = document.querySelector('#calendar');
-                    let body = document.querySelector('#calendar tbody');
-                    let output = document.querySelector('#calendar-selected');
+                            <div class="single-input">
+                                <label>Last name:</label>
+                                <input type="text" name="lastName" />
+                                <br>
+                            </div>
 
-                    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-                    const numOfDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-                    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                            <div class="single-input">
+                                <label>Email address:</label>
+                                <input type="text" th:name="email" />
+                                <br>
+                            </div>
 
-                    let date = new Date();
-                    let selectedDay = date.getDate();
-                    let selectedMonth = date.getMonth();
-                    let selectedYear = date.getFullYear();
+                            <button type="submit" class="cta">Book appointment</button>
+                        </div>
 
-                    renderMonth(0);
-
-                    function recreateCalendar(){
-                        $("#calendar tr").remove();
-                        $("#calendar th").remove();
-                        $("#calendar thead").remove();
-                        $("#calendar tbody").remove();
-
-                        table.tHead = document.createElement("thead");
-
-                        let tr = document.createElement("tr");
-                        table.tHead.appendChild(tr);
-
-                        for(d in days){
-
-                            let th = document.createElement("th");
-                            th.innerHTML = "<h4 style='height: 40px;'>" + days[d] + "</h4>";
-                            tr.appendChild(th);
-                        }
-
-                        table.tBody = document.createElement("tbody");
-                    }
-
-                    function renderMonth(mapMonth){
-                        //Disable the calendar before it is show
-
-                        //recreateCalendar();
-
-                        //Update Month selection
-                        selectedMonth += mapMonth;
-
-                        //Account for year change
-                        if (selectedMonth > 11){
-                            selectedMonth = 0;
-                            selectedYear++;
-                        }
-                        else if (selectedMonth < 0){
-                            selectedMonth = 11;
-                            selectedYear--;
-                        }
-
-                        let dayCount = numOfDays[selectedMonth];
-                        let currentRow;
-
-                        output.innerText = months[selectedMonth] + " " + selectedYear;
-
-                        let firstDayOfWeekInAMonth = new Date(selectedYear, selectedMonth, 1).getDay();
-                        $.ajax({
-                            url: 'get-available-days',
-                            type: 'post',
-                            data: {centerid:selectedCenter, year:selectedYear, month:selectedMonth, dayOfWeek:firstDayOfWeekInAMonth, dayNum:numOfDays[selectedMonth]},
-                            success: function (response) {
-                                //Reenable the calendar here
-
-                                recreateCalendar();
-
-                                //Go through each day
-                                for(let i = 0; i < dayCount; i++){
-                                    let dayOfWeek = new Date(selectedYear, selectedMonth, i).getDay();
-
-                                    //Create new row if needed
-                                    if (dayOfWeek === 0 || i === 0)
-                                        currentRow = table.insertRow(-1);
-
-                                    //Empty cells for offset
-                                    if (i === 0 && dayOfWeek !== 0){
-                                        for (let j = 0; j < dayOfWeek; j++){
-                                            currentRow.insertCell(-1);
-                                        }
-                                    }
-
-                                    //Add day
-                                    let currentCell = currentRow.insertCell(-1); //Add to the end
-                                    let m = selectedMonth.toString();
-                                    if (m.length < 2)
-                                        m = "0" + m;
-
-                                    let d = (i+1).toString();
-                                    if (d.length < 2)
-                                        d = "0" + d;
-
-                                    //currentCell.innerHTML = cellP(styling, available + " available", i + 1);
-
-                                    let p = document.createElement("p");
-                                    let br = document.createElement("br");
-                                    let it = document.createElement("i");
-
-                                    it.style.fontSize = "9px";
-                                    it.style.height = "20px";
-
-                                    p.innerHTML = (i + 1).toString();
-                                    p.style.color = "black";
-                                    p.style.fontSize = "20px";
-                                    p.style.fontWeight = "bold";
-                                    p.style.margin = "10px auto";
-                                    p.style.lineHeight = "15px";
-                                    p.appendChild(br);
-                                    p.appendChild(it);
-
-                                    if (response[i] !== "0") {
-                                        it.innerHTML = response[i] + " available";
-
-                                        currentCell.onclick = function () {
-                                            let y = selectedYear;
-                                            let m = selectedMonth + 1;
-                                            let d = i + 1;
-                                            selectedDay = i;
-                                            let date = y + "-" + m + "-" + d;
-
-                                            //Remove 'selected' class from all other cells
-                                            document.querySelectorAll("#calendar td.selected").forEach(e => e.classList.remove("selected"));
-
-                                            //Add 'selected' class to this cell
-                                            currentCell.classList.add("selected");
-                                            renderTimes(date, dayOfWeek);
-                                        }
-                                    }
-                                    else {
-                                        currentCell.classList.add("disabled");
-                                        p.style.color = "#bfbfbf";
-                                        it.innerHTML = "";
-                                    }
-
-                                    currentCell.appendChild(p);
-                                }
-                            }
-                        });
-                    }
-
-                    function renderTimes(date, dayOfWeek){
-                        //Remove all times in timesbox
-                        $('#times-box .times').remove();
-
-                        $.ajax({
-                            url: 'get-available-times',
-                            type: 'post',
-                            data: {centerid:selectedCenter, date:date, dayOfWeek:dayOfWeek},
-                            success: function (response) {
-                                //Add new times
-                                for(let i = 0; i < response.length; i++){
-                                    let time = document.createElement("div");
-                                    let hfour = document.createElement("h4");
-                                    let htwo = document.createElement("h2");
-
-                                    console.log("i: " + i + "available: " + response[i].available);
-                                    hfour.innerText = response[i].available;
-                                    htwo.innerText = response[i].timeStart + " - " + response[i].timeEnd;
-
-                                    time.classList.add("times");
-                                    time.appendChild(hfour);
-                                    time.appendChild(htwo);
-
-                                    time.onclick = function(){
-                                        document.querySelectorAll("#times-box div.times.selected").forEach(e => e.classList.remove("selected"));
-                                        time.classList.add("selected");
-                                    }
-
-                                    document.getElementById("times-box").appendChild(time);
-                                }
-                            }
-                        });
-                    }
-                </script>
-            </td>
-        </tr>
-
-
-
-        <!--Visuals-->
-        <tr>
-            <td>
-                <div class="pearl">
-                    <h1 style="margin-bottom: 50px;">3</h1>
-                </div>
-            </td>
-            <td>
-                <h2>Enter credentials</h2>
-            </td>
-        </tr>
-        <!--Enter credentials-->
-        <tr>
-            <td></td>
-            <td>
-                <div class="center-content">
-                    <form th:action="@{/confirm-booking}" method="post" class="booking-form">
-                        <input type="hidden" th:name="date" value="undefined"/>
-                        <input type="hidden" th:name="time" value="undefined">
-
-                        <label>CPR number:</label>
-                        <input type="number" th:name="cpr" />
-
-                        <label>First name:</label>
-                        <input type="text" th:name="firstName" />
-
-                        <label>Last name:</label>
-                        <input type="text" th:name="lastName" />
-
-                        <label>Email address:</label>
-                        <input type="text" th:name="email" />
-
-                        <button type="submit" class="cta">Book appointment</button>
-                    </form>
-                </div>
-            </td>
-        </tr>
-    </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
 </div>
+<footer class="footer">© Copyright Corona prevention division, All rights reserved 2021</footer>
 </body>
 </html>

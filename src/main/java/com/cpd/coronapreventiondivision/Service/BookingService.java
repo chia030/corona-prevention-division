@@ -8,6 +8,11 @@ import com.cpd.coronapreventiondivision.Repository.PatientRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -36,7 +41,6 @@ public class BookingService {
     public boolean verifyEmail(String approvalID){
         try {
             patientRepo.verifyEmail(approvalID);
-
             return true;
         }
         catch(Exception e){
@@ -46,30 +50,49 @@ public class BookingService {
 
     public int sendConfirmation(Long cpr, String email, String firstName, String lastName){
         List<Patient> p = patientRepo.fetch(cpr, email, firstName, lastName);
+        Patient patient;
 
         if(p.size() > 0){
-            Patient patient = p.get(0);
-
-            if (patient.isApproved() && patient.getEmailAddress().equals(email)){
-                return 0;
-            }
-            else {
-                String toHash = email + new Date();
-                String approvalID = User.hash(toHash);
-                patient.setApprovalID(approvalID);
-                patientRepo.setApproval(cpr, approvalID, email);
-                boolean res = CoronaPreventionDivisionApplication.emailhandler.sendConfirmation(email, approvalID, firstName);
-                if (res)
-                    return 1;
-                else return -1;
-            }
+            patient = p.get(0);
+        }
+        else {
+            patient = new Patient(cpr, email, firstName, lastName, false, null);
+            boolean inserted = patientRepo.insert(patient);
+            if (!inserted)
+                return -2;
         }
 
-        return -2;
+        if (patient.isApproved() && patient.getEmailAddress().equals(email)){
+            return 0;
+        }
+        else {
+            String toHash = email + new Date();
+            String approvalID = User.hash(toHash);
+            patient.setApprovalID(approvalID);
+            patientRepo.setApproval(cpr, approvalID, email);
+            boolean res = CoronaPreventionDivisionApplication.emailhandler.sendConfirmation(email, approvalID, firstName);
+            if (res)
+                return 1;
+            else return -1;
+        }
     }
 
     public Center fetchCenterById(int centerid){
         return centerRepo.fetchById(centerid);
+    }
+
+    public String bookAppointment(long cpr, String date, String time, int centerid, String email){
+        Center center = fetchCenterById(centerid);
+        Patient patient = patientRepo.fetchByCpr(cpr);
+        Appointment appointment = new Appointment(
+                Appointment.Result.BOOKED,
+                LocalDate.parse(date),
+                LocalTime.parse(time),
+                patient,
+                center,
+                email);
+
+        return String.valueOf(appointmentRepo.insert(appointment));
     }
 
     public ArrayList<Times> fetchTimes(int id, String date, int dayOfWeek){
@@ -90,8 +113,20 @@ public class BookingService {
             String s = sh + ":" + (sm < 10 ? "0" + sm : sm);
             String e = eh + ":" + (em < 10 ? "0" + em : em);
 
-            int bookedAppointments = appointmentRepo.fetchNumberOfAvailableSpotsAtTime(id, date, s + ":00");
+            int offset = 120; //Offset in minutes
+            int oh = (i-offset)/60;
+            int om = (i-offset)%60;
+            String o = (oh < 10 ? "0" + oh : oh) + ":" + (om < 10 ? "0" + om : om);
+
+            int bookedAppointments = appointmentRepo.fetchNumberOfBookedAt(id, date, s + ":00");
             int capacity = fullCapacity - bookedAppointments;
+
+            String currentDate = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(LocalDateTime.now());
+            String currentTime = DateTimeFormatter.ofPattern("HH:mm").format(LocalDateTime.now());
+            if(capacity < 1 ||
+               (currentDate.equals(date) && o.compareTo(currentTime) < 0)){
+                continue;
+            }
 
             Times time = new Times(s, e, capacity + " available");
             times.add(time);
@@ -125,8 +160,13 @@ public class BookingService {
                 int end = d.getClosingTime().getMinute() + 60 * d.getClosingTime().getHour(); //in minutes
                 int interval = d.getInterval(); //in minutes
 
-                if((cal.get(Calendar.YEAR) == year && cal.get(Calendar.MONTH) == month && cal.get(Calendar.DAY_OF_MONTH) == i+1))
-                    start = Math.max(start, cal.get(Calendar.MINUTE) + 60*cal.get(Calendar.HOUR_OF_DAY));
+                //If it's today, show only the times that are bookable
+                if((cal.get(Calendar.YEAR) == year && cal.get(Calendar.MONTH) == month && cal.get(Calendar.DAY_OF_MONTH) == i+1)){
+                    int  offset = 120; //Offset in minutes
+                    int currentTime = cal.get(Calendar.MINUTE) + 60*cal.get(Calendar.HOUR_OF_DAY);
+                    int currentMappedTime = currentTime - (currentTime%interval) + interval + offset;
+                    start = Math.max(start, currentMappedTime);
+                }
 
                 int fullCapacity = capacity * (end - start) / interval;
 
@@ -136,13 +176,11 @@ public class BookingService {
                 if(dd.length() == 1) dd = "0" + dd;
                 String date = year + "-" + mm + "-" + dd;
 
-                String sh = String.valueOf(start/60);
-                String sm = String.valueOf(start%60);
-                sh = sh.length() == 1 ? "0" + sh : sh;
-                sm = sm.length() == 1 ? "0" + sm : sm;
-                String startTime = sh + ":" + sm + ":00";
+                int oh = start/60;
+                int om = start%60;
+                String o = (oh < 10 ? "0" + oh : oh) + ":" + (om < 10 ? "0" + om : om) + ":00";
 
-                int bookedAppointments = appointmentRepo.fetchNumberOfAvailableSpots(centerid, date, startTime);
+                int bookedAppointments = appointmentRepo.fetchNumberOfBookedAfter(centerid, date, o);
                 count = String.valueOf(fullCapacity - bookedAppointments);
 
                 //If the day is before today, or the time is after closing no spots should be available

@@ -16,6 +16,7 @@ body {
 .title {
     color: black;
     margin: 30px 0px;
+    padding-top: 30px;
     text-align: center;
 }
 
@@ -94,6 +95,17 @@ body {
     margin-right: auto;
     width: 80%;
     background-color: white;
+    margin-bottom: 50px;
+}
+
+.footer {
+    background-color: #95918f;
+    height: auto;
+    color: white;
+    font-family: "Roboto Slab", serif, Verdana;
+    text-align: center;
+    width: 100%;
+    padding: 40px 0px;
 }
 
 /*VISUALS*/
@@ -147,7 +159,8 @@ select#select-google-maps {
 }
 
 .center-content {
-
+    display: flex;
+    justify-content: center;
 }
 
 /*CALENDAR*/
@@ -175,7 +188,7 @@ select#select-google-maps {
 }
 
 #calendar-header {
-    margin-top: 50px;
+    margin-top: 30px;
     background-color: #FF6219;
     width: 80%;
     height: 50px;
@@ -269,33 +282,40 @@ select#select-google-maps {
 /*FORM*/
 .booking-form {
     padding: 20px;
-    /*display: flex;*/
-    /*flex-direction: column;*/
-    /*justify-content: center;*/
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     font-family: "Roboto Slab", serif, Roboto, Verdana;
-    font-size: 18px;
+    font-size: 24px;
 }
 
 .booking-form label {
-    width: 50%;
+    width: 40%;
+    margin: 10px auto;
+}
+
+.booking-form .single-input {
+    display: flex;
+    justify-content: space-between;
 }
 
 .booking-form input {
-    width: 50%;
-    font-size: 18px;
-    margin: 20px auto;
+    width: 60%;
+    font-size: 24px;
+    margin: 10px auto;
 }
 
 .cta {
     width: auto;
     height: auto;
     font-family: Oxanium, serif, Helvetica;
-    font-weight: normal;
-    font-size: 20px;
+    font-weight: bold;
+    font-size: 24px;
     color: white;
     background-color: #FF6219;
     border-radius: 10px;
-    margin: 100px 20px;
+    margin: 40px 20px 100px 20px;
     padding: 14px 20px;
     border: none;
 }

@@ -6,7 +6,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -45,6 +44,26 @@ public class PatientRepo implements RowMapper<Patient> {
         String query = "SELECT * FROM cpd1.patients WHERE cpr = ? and first_name = ? and last_name = ?";
 
         return template.query(query, new Object[]{cpr, firstName, lastName}, this);
+    }
+
+    public boolean insert(Patient patient){
+        try {
+            String query = "INSERT INTO cpd1.patients (cpr, email, last_name, first_name, approved, approval_id) VALUES (?, ?, ?, ?, ?, ?);";
+
+            template.update(query,
+                    patient.getCPR(),
+                    patient.getEmailAddress(),
+                    patient.getLastName(),
+                    patient.getFirstName(),
+                    patient.isApproved(),
+                    patient.getApprovalID());
+
+            return true;
+        }
+        catch(Exception e){
+            return false;
+        }
+
     }
 
     public void setApproval(long cpr, String approvalID, String email){
