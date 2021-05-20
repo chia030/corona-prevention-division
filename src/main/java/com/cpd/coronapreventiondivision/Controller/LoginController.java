@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
 public class LoginController {
@@ -14,28 +15,72 @@ public class LoginController {
     LoginService loginService;
 
     @GetMapping("/login")
-    public String loginForm(Model model){
+    public String loginForm(Model model) {
         model.addAttribute("user", new User());
         return "login";
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute("user") User user) {
-        User user2 = new User(user.getUsername(), user.getPassword());
-        System.out.println(user2);
-        User user3 = loginService.fetchByUsernameAndPassword(user2.getUsername(),user2.getPassword());
-        System.out.println(user3);
-        System.out.println(user3 == null ? "wrong credentials" : "successful");
+    public void login(@ModelAttribute(name = "user") User user, Model model) {
 
-        if (user3!=null && user3.getLevel().equals(User.UserType.SECRETARY)) {
-            return "redirect:/home-secretary";
+        user = loginService.verifyCredentials(user);
+
+        if (user!=null) {
+
+            switch ((user.getLevel())) {
+                case ADMIN:
+                    model.addAttribute("user", user);
+                    model.addAttribute("ADMIN");
+                    redirect(model, user.getUsername());
+                    System.out.println("admin in");
+                    break;
+//                    return "/redirect/" + user.getUsername();
+                case SECRETARY:
+                    model.addAttribute("user", user);
+                    model.addAttribute("SECRETARY");
+                    redirect(model, user.getUsername());
+                    System.out.println("secretary in");
+                    break;
+//                    return "/redirect/"+ user.getUsername();
+                default:
+                    model = null;
+                    errorPage();
+//                    return "redirect:/something-went-wrong";
+            }
+
         }
+    }
 
-        else if(user3!=null && user3.getLevel() == User.UserType.ADMIN) {
-            return "redirect:/home-admin";
+    @GetMapping("/redirect/{username}")
+    public RedirectView redirect(@RequestParam Model model, @PathVariable("username") String username) {
+
+        RedirectView rv = new RedirectView();
+
+        if (model.containsAttribute("ADMIN")) {
+            homeAdmin(model, username);
+            rv.setUrl("/home-admin/");
         }
+        else if(model.containsAttribute("SECRETARY")) {
+            homeSecretary(model, username);
+            rv.setUrl("/home-secretary/");
+        }
+        else { errorPage(); }
+        return rv;
+    }
 
-        else return "login";
+    @GetMapping("/home-admin/{username}")
+    public String homeAdmin(@RequestParam Model model, @PathVariable("username") String username) {
+        return "admin/admin-landing";
+    }
+
+    @GetMapping("/home-secretary/{username}")
+    public String homeSecretary(@RequestParam Model model, @PathVariable("username") String username) {
+        return "logging/secretary-landing";
+    }
+
+    @GetMapping("/something-went-wrong")
+    public String errorPage() {
+        return "error-page";
     }
 
 }

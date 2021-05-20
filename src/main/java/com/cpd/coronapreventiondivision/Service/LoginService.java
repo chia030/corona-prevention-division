@@ -17,4 +17,14 @@ public class LoginService {
         } catch(Exception e) { return null; }
     }
 
+    public User verifyCredentials(User user) {
+        try {
+
+            User user2 = new User(user.getUsername(), user.getPassword()); //this hashes the password
+            User user3 = fetchByUsernameAndPassword(user2.getUsername(), user2.getPassword());
+            return user3;
+
+        } catch(Exception e) { return null; }
+    }
+
 }

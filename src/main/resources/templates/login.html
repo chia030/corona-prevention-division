@@ -98,7 +98,7 @@
 
         <!--Login Form-->
         <div class="login">
-            <form th:action="@{/login}" th:object="${user}" method="post">
+            <form th:action="@{/login}" th:object="${user}" th:name="user" method="post">
                 <label>Username:</label>
                 <input type="text" th:name="username" th:field="*{username}" required/>
                 <br>
@@ -110,6 +110,8 @@
                 <div class="separator"></div>
 
                 <button type="submit">Log in</button>
+
+
             </form>
         </div>
 
