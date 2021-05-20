@@ -1,24 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:https="http://www.w3.org/1999/xhtml">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Corona Prevention Division</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/booking-style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="/permanent.js"></script>
 </head>
 <body>
-    <!--Header-->
-    <div></div>
+<!--Navigation bar-->
+<div class="topnav"></div>
+<div style="height: 75px;" ></div>
 
+<div class="booking-content">
     <!--Hero-->
-    <div>
-        <p th:text="${outcome}" />
+    <div id="hero">
+        <div class="hero-content">
+            <!-- left side -->
+            <div class="view-block">
+                <h1>Get a PCR test</h1>
+                <p>
+                    A PCR test shows if you currently have COVID-19. The virus test is performed by taking a throat swab (sample) from your throat. When you book an appointment for a test on Coronaprover.dk, you book an appointment for a PCR test.
+                </p>
+                <button class="cta" onclick="window.location.href='/test'">Book now</button>
+            </div>
+
+            <!-- right side -->
+            <div class="view-block">
+                <h1>Get a vaccine</h1>
+                <p>
+                    With the vaccines currently approved in Denmark, you must be vaccinated twice within the space of a few weeks to achieve the full effect of the vaccination. You must therefore book times for both injections.
+                </p>
+                <button class="cta" onclick="window.location.href='/vaccine'">Book now</button>
+            </div>
+        </div>
+        <div class="hero-subcontent">
+            <h4>Scroll for more</h4>
+        </div>
     </div>
 
     <!--Info-->
-    <div></div>
+    <div>
+        <p>Information about the tests and vaccines is here</p>
+    </div>
 
-    <!--Footer-->
-    <div></div>
-
+</div>
+<footer class="footer">© Copyright Corona prevention division, All rights reserved 2021</footer>
 </body>
 </html>

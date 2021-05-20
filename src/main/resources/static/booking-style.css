@@ -36,7 +36,7 @@ body {
     width: 100%;
     overflow: hidden;
     left: 0;
-    background: linear-gradient(0deg, rgba(255,255,255,0) 0%, rgba(220,220,220,1) 100%);
+    background: linear-gradient(0deg, rgba(255,255,255,0) 0%, rgba(120,120,120,0.5) 100%);
 }
 
 .topnav li {
@@ -205,13 +205,17 @@ select#select-google-maps {
     height: 30px;
 }
 
-#calendar-header button {
+#calendar-header .but {
     background-color: #FF6219;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 50px;
     height: inherit;
     color: white;
     font-family: Oxanium, serif, Helvetica;
-    font-size: 20px;
+    font-size: 30px;
     font-weight: bolder;
     border: none;
     border-radius: 10px;
@@ -307,7 +311,6 @@ select#select-google-maps {
 }
 
 .cta {
-    width: auto;
     height: auto;
     font-family: Oxanium, serif, Helvetica;
     font-weight: bold;
@@ -315,7 +318,63 @@ select#select-google-maps {
     color: white;
     background-color: #FF6219;
     border-radius: 10px;
-    margin: 40px 20px 100px 20px;
     padding: 14px 20px;
     border: none;
+}
+
+#hero {
+    height: 100vh;
+    width: 100%;
+    margin-top: -75px;
+    display: flex;
+    flex-direction: column;
+    justify-content-content: space-between;
+    background-image: url("https://i.ibb.co/Ht3FmDp/pexels-pixabay-33397.jpg");
+    background-size: cover;
+    color: white;
+}
+
+.hero-content {
+    display: flex;
+    justify-content: space-between;
+    height: 90vh;
+    width: 100%;
+}
+
+.hero-subcontent {
+    text-align: center;
+}
+
+.view-block {
+    height: 100%;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 50px;
+}
+
+.view-block h1 {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    color: black;
+    font-family: Oxanium;
+}
+
+.view-block p {
+    margin-bottom: 50px;
+    color: black;
+}
+
+.view-block button.cta {
+    color: black;
+    background-color: white;
+    width: 50%;
+    display: flex;
+    justify-self: center;
+}
+
+#hero h4 {
+    font-weight: 300;
+    color: black;
 }

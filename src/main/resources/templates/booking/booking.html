@@ -99,11 +99,11 @@
                 <td></td>
                 <td>
                     <div id="calendar-header" style="display: flex; justify-content: space-between; vertical-align: center;">
-                        <button onclick="renderMonth(-1)"><</button>
+                        <div class="but" onclick="renderMonth(-1)"><</div>
                         <h4 id="calendar-selected"></h4>
-                        <button onclick="renderMonth(1)">></button>
+                        <div class="but" onclick="renderMonth(1)">></div>
                     </div>
-                    <table id="calendar"></table>
+                    <table id="calendar" class="elegant-border"></table>
 
                     <div id="times-box"></div>
 
@@ -315,31 +315,30 @@
                         <div class="booking-form">
                             <div class="single-input">
                                 <label>CPR number:</label>
-                                <input type="number" name="cpr" />
+                                <input type="number" name="cpr" oninput="this.value=this.value.slice(0,10)"/>
                                 <br>
                             </div>
 
                             <div class="single-input">
                                 <label>First name:</label>
-                                <input type="text" name="firstName" />
+                                <input type="text" maxlength="30" name="firstName" />
                                 <br>
                             </div>
 
                             <div class="single-input">
                                 <label>Last name:</label>
-                                <input type="text" name="lastName" />
+                                <input type="text" maxlength="30" name="lastName" />
                                 <br>
                             </div>
 
                             <div class="single-input">
                                 <label>Email address:</label>
-                                <input type="text" th:name="email" />
+                                <input type="email" maxlength="128" th:name="email" />
                                 <br>
                             </div>
 
-                            <button type="submit" class="cta">Book appointment</button>
+                            <button type="submit" class="cta" style="margin: 40px 20px 100px 20px;">Book appointment</button>
                         </div>
-
                     </div>
                 </td>
             </tr>

@@ -50,14 +50,16 @@ public class BookingController {
                            " email: " + email +
                            " name: " + firstName + " " + lastName);
 
-        String m = String.valueOf(month);
-        String d = String.valueOf(day);
-        if(month < 10) m = "0" + m;
-        if(day < 10) d = "0" + d;
-        String date = year + "-" + m + "-" + d;
+
 
         if (cpr != null && email != null && firstName != null && lastName != null){
             int emailSent = bookingService.sendConfirmation(cpr, email, firstName, lastName);
+
+            String m = String.valueOf(month);
+            String d = String.valueOf(day);
+            if(month < 10) m = "0" + m;
+            if(day < 10) d = "0" + d;
+            String date = year + "-" + m + "-" + d;
 
             if (emailSent == 1) {
                 model.addAttribute("idV", "");
