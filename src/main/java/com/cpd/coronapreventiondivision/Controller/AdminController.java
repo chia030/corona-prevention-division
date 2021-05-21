@@ -18,13 +18,13 @@ public class AdminController {
     AdminService adminService;
 
     @GetMapping("/admin")
-    public String homeAdmin(@RequestParam(name = "user", required = false) User user, Model model) {
+    public String homeAdmin(@RequestParam(name = "user", value="user", required = false) User user, Model model) {
         //Unauthorized entrance
-//        if (user == null) {
-//            return "redirect:/";
-//        }
-//
-//        model.addAttribute("user", user);
+        if (user == null) {
+            return "redirect:/";
+        }
+
+        model.addAttribute("user", user);
 
         //Adding a list of all centers
         List<Center> modernaVaccineCenters = adminService.fetchCenterByType("MODERNA_VACCINE");

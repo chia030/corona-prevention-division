@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class ReportController {
 
-    @PostMapping("/home-secretary")
+    @PostMapping("/secretary")
     public String homeSecretary(@RequestParam User user) {
 //        homeSecretary(LoginController.staticUser);
         return "logging/secretary-landing";
