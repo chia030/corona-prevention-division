@@ -67,14 +67,14 @@
                                 });
                             }
                         </script>
-                        <select id="select-google-maps" class="elegant-border center-content" name="center" onchange="updateGoogleMaps()">
+                        <select id="select-google-maps" class="elegant-border center-content" name="center" onchange="updateGoogleMaps()" required>
                             <option value="null" selected disabled>Please select a center...</option>
                             <option th:each="center : ${centers}" th:value="${center.getCenterID()}" th:text="${center.address}">
                             </option>
                         </select>
 
                         <!--Google Maps Embed-->
-                        <iframe id="google-maps" class="center-content accent-border" src="" width="600" height="450" style="margin: 20px 0px 50px 0px;" allowfullscreen="">
+                        <iframe id="google-maps" class="center-content accent-border picture-background" src="" width="600" height="450" style="margin: 20px 0px 50px 0px;" allowfullscreen="">
                         </iframe>
                     </div>
                 </td>
@@ -315,25 +315,25 @@
                         <div class="booking-form">
                             <div class="single-input">
                                 <label>CPR number:</label>
-                                <input type="number" name="cpr" oninput="this.value=this.value.slice(0,10)"/>
+                                <input type="number" name="cpr" oninput="this.value=this.value.slice(0,10)" required/>
                                 <br>
                             </div>
 
                             <div class="single-input">
                                 <label>First name:</label>
-                                <input type="text" maxlength="30" name="firstName" />
+                                <input type="text" maxlength="30" name="firstName" required/>
                                 <br>
                             </div>
 
                             <div class="single-input">
                                 <label>Last name:</label>
-                                <input type="text" maxlength="30" name="lastName" />
+                                <input type="text" maxlength="30" name="lastName" required/>
                                 <br>
                             </div>
 
                             <div class="single-input">
                                 <label>Email address:</label>
-                                <input type="email" maxlength="128" th:name="email" />
+                                <input type="email" maxlength="128" th:name="email" required/>
                                 <br>
                             </div>
 

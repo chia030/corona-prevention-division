@@ -1,10 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin dashboard</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/booking-style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
 <body>
+<div class="booking-content" style="height: 90vh">
+    <h1 class="title">Admin dashboard</h1>
+    <div class="hero-content">
+        <!--Left side-->
+        <div class="admin-view-block">
+            <form th:action="@{/create-center}" method="get">
+                <h2>Declare a new center</h2>
+                <button class="cta" type="submit">Declare new center</button>
+            </form>
+        </div>
 
+        <!--Right side-->
+        <div class="admin-view-block">
+            <form th:action="@{/update-center}" method="post">
+                <h2>Edit a center</h2>
+                <select id="select-center-admin" class="elegant-border center-content" name="center" required>
+                    <option value="null" selected disabled>Select a center...</option>
+                    <option th:each="center : ${centers}" th:value="${center}" th:text="${center.getAddress().toString()} + ' (' + ${center.getCenterType().toString()} + ')'">
+                    </option>
+                </select>
+                <button class="cta" type="submit">Edit selected center</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+<footer class="footer">© Copyright Corona prevention division, All rights reserved 2021</footer>
 </body>
 </html>
