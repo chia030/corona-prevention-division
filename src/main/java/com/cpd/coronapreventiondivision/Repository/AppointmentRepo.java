@@ -62,7 +62,7 @@ public class AppointmentRepo implements RowMapper<Appointment> {
     public Appointment fetchByIdAndCpr(int appointmentID, long cpr){
         String query = "SELECT * FROM cpd1.appointments WHERE appointment_id = ? AND cpr = ?";
 
-        List<Appointment> a = template.query(query, new Object[]{appointmentID, cpr}, this);
+        List<Appointment> a = template.query(query, this, appointmentID, cpr);
 
         if (a.size() > 0){
             return a.get(0);
@@ -75,13 +75,42 @@ public class AppointmentRepo implements RowMapper<Appointment> {
     public List<Appointment> fetchByCpr(long cpr){
         String query = "SELECT * FROM cpd1.appointments WHERE cpr = ?";
 
-        return template.query(query, new Object[]{cpr}, this);
+        return template.query(query, this, cpr);
+
     }
 
     public int fetchNumberOfAvailableSpots(int centerid, String date){
         String query = "SELECT COUNT(*) FROM cpd1.appointments WHERE center_id = ? AND date = ?";
 
-        return template.queryForObject(query, new Object[]{centerid, date}, Integer.class);
+        return template.queryForObject(query, Integer.class, centerid, date);
+
+    }
+
+
+    public List<Appointment> fetchAll() {
+        String query = "SELECT * FROM cpd1.appointments";
+        return template.query(query, this);
+    }
+
+    public List<Appointment> fetchBooked() {
+
+        String query = "SELECT * FROM cpd1.appointments WHERE result = 'BOOKED'";
+        return template.query(query, this);
+
+    }
+
+    public List<Appointment> fetchResolved() {
+
+        String query = "SELECT * FROM cp1.appointments WHERE result =! 'BOOKED'";
+        return template.query(query, this);
+
+    }
+
+    public List<Appointment> fetchByCenter(int centerID) {
+
+        String query = "SELECT * FROM cp1.appointments WHERE center_id = ?";
+        return template.query(query, this::mapRow, centerID);
+
     }
 
 }
