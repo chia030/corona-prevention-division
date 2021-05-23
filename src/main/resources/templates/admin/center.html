@@ -1,10 +1,238 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Center</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/booking-style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
 <body>
+<div class="booking-content">
+    <h1 class="title" th:text="${title}"></h1>
 
+    <form th:action="@{/submit-center}" method="post">
+        <input type="hidden" name="centerid" th:value="${center.getCenterID()}"/>
+        <table style="width: 100%">
+            <tr>
+                <td style="width: 100px;">
+                    <div class="pearl">
+                        <h1 style="margin-bottom: 50px;">1</h1>
+                    </div>
+                </td>
+                <td>
+                    <h2>Center type</h2>
+                </td>
+                <td style="width: 80px;"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="padding: 50px 0px;">
+                    <select class="select-center-type elegant-border center-content" name="centerType" required>
+                        <option value="null" selected disabled>Select center type...</option>
+                        <option value="PCR_TEST" th:selected="${center.getCenterType().toString() == 'PCR_TEST'}">PCR Test</option>
+                        <option value="MODERNA_VACCINE" th:selected="${center.getCenterType().toString() == 'MODERNA_VACCINE'}">Moderna vaccine</option>
+                        <option value="COMIRNATY_VACCINE" th:selected="${center.getCenterType().toString() == 'COMIRNATY_VACCINE'}">Comirnaty vaccine</option>
+                    </select>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="pearl">
+                        <h1 style="margin-bottom: 50px;">2</h1>
+                    </div>
+                </td>
+                <td>
+                    <h2>Address</h2>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="padding: 50px 0px;">
+                    <div style="padding: 50px; background-color: #FAFAFA" class="elegant-border booking-form">
+                        <div class="single-input">
+                            <label>City:</label>
+                            <input type="text" maxlength="25" name="city" th:value="${center.getAddress().getCity()}" required/>
+                            <br>
+                        </div>
+
+                        <div class="single-input">
+                            <label>Post code:</label>
+                            <input type="number" name="postCode" th:value="${center.getAddress().getPostCode()}" oninput="this.value=this.value.slice(0,5)" required/>
+                            <br>
+                        </div>
+
+                        <div class="single-input">
+                            <label>Street:</label>
+                            <input type="text" maxlength="25" name="streetName" th:value="${center.getAddress().getStreetName()}" required/>
+                            <br>
+                        </div>
+
+                        <div class="single-input">
+                            <label>Street number:</label>
+                            <input type="text" maxlength="5" name="streetNumber" th:value="${center.getAddress().getStreetNumber()}"/>
+                            <br>
+                        </div>
+
+                        <div class="single-input">
+                            <label>Floor:</label>
+                            <input type="text" maxlength="5" name="floor" th:value="${center.getAddress().getFloor()}"/>
+                            <br>
+                        </div>
+
+                        <div class="single-input">
+                            <label>Map embed link:</label>
+                            <input type="text" maxlength="350" name="googleMapsLink" th:value="${center.getAddress().getGoogleMapsLink()}"/>
+                            <br>
+                        </div>
+                    </div>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="pearl">
+                        <h1 style="margin-bottom: 50px;">3</h1>
+                    </div>
+                </td>
+                <td>
+                    <h2>Settings</h2>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="padding: 50px 0px;">
+                    <div class="elegant-border work-day">
+                        <h2>Monday</h2>
+                        <div>
+                            <label>Opening time </label>
+                            <input type="time" name="mOpeningTime" th:value="${center.getWorkWeek().getMonday().getOpeningTime()}" required step="300"/>
+                            <br>
+                            <label>Closing time</label>
+                            <input type="time" name="mClosingTime" th:value="${center.getWorkWeek().getMonday().getClosingTime()}" required step="300"/>
+                            <br>
+                            <label>Appointment duration </label>
+                            <input type="number" name="mInterval" th:value="${center.getWorkWeek().getMonday().getInterval()}" required/>
+                            <br>
+                            <label> Capacity </label>
+                            <input type="number" name="mCapacity" th:value="${center.getWorkWeek().getMonday().getCapacity()}" required/>
+                        </div>
+                    </div>
+                    <div class="elegant-border work-day">
+                        <h2>Tuesday</h2>
+                        <div>
+                            <label>Opening time </label>
+                            <input type="time" name="tOpeningTime" th:value="${center.getWorkWeek().getTuesday().getOpeningTime()}" required step="300"/>
+                            <br>
+                            <label>Closing time</label>
+                            <input type="time" name="tClosingTime" th:value="${center.getWorkWeek().getTuesday().getClosingTime()}" required step="300"/>
+                            <br>
+                            <label>Appointment duration </label>
+                            <input type="number" name="tInterval" th:value="${center.getWorkWeek().getTuesday().getInterval()}" required/>
+                            <br>
+                            <label> Capacity </label>
+                            <input type="number" name="tCapacity" th:value="${center.getWorkWeek().getTuesday().getCapacity()}" required/>
+                        </div>
+                    </div>
+                    <div class="elegant-border work-day">
+                        <h2>Wednesday</h2>
+                        <div>
+                            <label>Opening time </label>
+                            <input type="time" name="wOpeningTime" th:value="${center.getWorkWeek().getWednesday().getOpeningTime()}" required step="300"/>
+                            <br>
+                            <label>Closing time</label>
+                            <input type="time" name="wClosingTime" th:value="${center.getWorkWeek().getWednesday().getClosingTime()}" required step="300"/>
+                            <br>
+                            <label>Appointment duration </label>
+                            <input type="number" name="wInterval" th:value="${center.getWorkWeek().getWednesday().getInterval()}" required/>
+                            <br>
+                            <label> Capacity </label>
+                            <input type="number" name="wCapacity" th:value="${center.getWorkWeek().getWednesday().getCapacity()}" required/>
+                        </div>
+                    </div>
+                    <div class="elegant-border work-day">
+                        <h2>Thursday</h2>
+                        <div>
+                            <label>Opening time </label>
+                            <input type="time" name="thOpeningTime" th:value="${center.getWorkWeek().getThursday().getOpeningTime()}" required step="300"/>
+                            <br>
+                            <label>Closing time</label>
+                            <input type="time" name="thClosingTime" th:value="${center.getWorkWeek().getThursday().getClosingTime()}" required step="300"/>
+                            <br>
+                            <label>Appointment duration </label>
+                            <input type="number" name="thInterval" th:value="${center.getWorkWeek().getThursday().getInterval()}" required/>
+                            <br>
+                            <label> Capacity </label>
+                            <input type="number" name="thCapacity" th:value="${center.getWorkWeek().getThursday().getCapacity()}" required/>
+                        </div>
+                    </div>
+                    <div class="elegant-border work-day">
+                        <h2>Friday</h2>
+                        <div>
+                            <label>Opening time </label>
+                            <input type="time" name="fOpeningTime" th:value="${center.getWorkWeek().getFriday().getOpeningTime()}" required step="300"/>
+                            <br>
+                            <label>Closing time</label>
+                            <input type="time" name="fClosingTime" th:value="${center.getWorkWeek().getFriday().getClosingTime()}" required step="300"/>
+                            <br>
+                            <label>Appointment duration </label>
+                            <input type="number" name="fInterval" th:value="${center.getWorkWeek().getFriday().getInterval()}" required/>
+                            <br>
+                            <label> Capacity </label>
+                            <input type="number" name="fCapacity" th:value="${center.getWorkWeek().getFriday().getCapacity()}" required/>
+                        </div>
+                    </div>
+                    <div class="elegant-border work-day">
+                        <h2>Saturday</h2>
+                        <div>
+                            <label>Opening time </label>
+                            <input type="time" name="sOpeningTime" th:value="${center.getWorkWeek().getSaturday().getOpeningTime()}" required step="300"/>
+                            <br>
+                            <label>Closing time</label>
+                            <input type="time" name="sClosingTime" th:value="${center.getWorkWeek().getSaturday().getClosingTime()}" required step="300"/>
+                            <br>
+                            <label>Appointment duration </label>
+                            <input type="number" name="sInterval" th:value="${center.getWorkWeek().getSaturday().getInterval()}" required/>
+                            <br>
+                            <label> Capacity </label>
+                            <input type="number" name="sCapacity" th:value="${center.getWorkWeek().getSaturday().getCapacity()}" required/>
+                        </div>
+                    </div>
+                    <div class="elegant-border work-day">
+                        <h2>Sunday</h2>
+                        <div>
+                            <label>Opening time </label>
+                            <input type="time" name="suOpeningTime" th:value="${center.getWorkWeek().getSunday().getOpeningTime()}" required step="300"/>
+                            <br>
+                            <label>Closing time</label>
+                            <input type="time" name="suClosingTime" th:value="${center.getWorkWeek().getSunday().getClosingTime()}" required step="300"/>
+                            <br>
+                            <label>Appointment duration </label>
+                            <input type="number" name="suInterval" th:value="${center.getWorkWeek().getSunday().getInterval()}" required/>
+                            <br>
+                            <label> Capacity </label>
+                            <input type="number" name="suCapacity" th:value="${center.getWorkWeek().getSunday().getCapacity()}" required/>
+                        </div>
+                    </div>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="padding: 50px 0px;" class="center-content">
+                    <button type="submit" class="cta">Submit changes</button>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<footer class="footer">© Copyright Corona prevention division, All rights reserved 2021</footer>
 </body>
 </html>

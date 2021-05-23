@@ -2,6 +2,7 @@ package com.cpd.coronapreventiondivision.Model;
 
 public class WorkWeek {
 
+    private int id;
     private WorkDay monday;
     private WorkDay tuesday;
     private WorkDay wednesday;
@@ -18,6 +19,35 @@ public class WorkWeek {
         this.friday = friday;
         this.saturday = saturday;
         this.sunday = sunday;
+    }
+
+    public WorkWeek(int id, WorkDay monday, WorkDay tuesday, WorkDay wednesday, WorkDay thursday, WorkDay friday, WorkDay saturday, WorkDay sunday) {
+        this.id = id;
+        this.monday = monday;
+        this.tuesday = tuesday;
+        this.wednesday = wednesday;
+        this.thursday = thursday;
+        this.friday = friday;
+        this.saturday = saturday;
+        this.sunday = sunday;
+    }
+
+    public WorkWeek(){
+        monday = new WorkDay();
+        tuesday = new WorkDay();
+        wednesday = new WorkDay();
+        thursday = new WorkDay();
+        friday = new WorkDay();
+        saturday = new WorkDay();
+        sunday = new WorkDay();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public WorkDay getDay(int i){

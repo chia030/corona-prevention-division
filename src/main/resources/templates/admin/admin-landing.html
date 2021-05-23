@@ -11,29 +11,45 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
 <body>
-<div class="booking-content" style="height: 90vh">
-    <h1 class="title">Admin dashboard</h1>
-    <div class="hero-content">
-        <!--Left side-->
-        <div class="admin-view-block">
+<div class="booking-content">
+    <h1 class="title" style="margin-bottom: 0px;">Admin dashboard</h1>
+    <div>
+        <div style="padding:50px 50px 20px 50px;">
             <form th:action="@{/create-center}" method="get">
-                <h2>Declare a new center</h2>
                 <button class="cta" type="submit">Declare new center</button>
             </form>
-        </div>
 
-        <!--Right side-->
-        <div class="admin-view-block">
-            <form th:action="@{/update-center}" method="post">
-                <h2>Edit a center</h2>
-                <select id="select-center-admin" class="elegant-border center-content" name="center" required>
-                    <option value="null" selected disabled>Select a center...</option>
-                    <option th:each="center : ${centers}" th:value="${center}" th:text="${center.getAddress().toString()} + ' (' + ${center.getCenterType().toString()} + ')'">
-                    </option>
-                </select>
-                <button class="cta" type="submit">Edit selected center</button>
+            <div style="height: 30px;"></div>
+
+            <form th:action="@{/update-center}" method="post" class="styled-table">
+                <table>
+                    <thead class="styled-table-header">
+                    <tr>
+                        <th>Center location</th>
+                        <th>Type</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:each="center : ${centers}">
+                        <tr>
+                            <td style="padding-left: 30px;" th:text="${center.getAddress().toString()}"></td>
+                            <td th:text="${center.getCenterType().toString()}"></td>
+                            <td>
+                                <button class="small-cta" type="submit" name="centerid" th:value="${center.getCenterID()}">Edit</button>
+                            </td>
+                            <td>
+                                <button class="small-cta" type="submit" name="remove" th:value="${center.getCenterID()}">Remove</button>
+                            </td>
+                        </tr>
+                    </th:block>
+
+                    </tbody>
+                </table>
             </form>
 
+            <div style="height: 50px;"></div>
         </div>
     </div>
 </div>

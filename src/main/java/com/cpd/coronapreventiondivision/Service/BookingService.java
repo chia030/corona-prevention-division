@@ -97,7 +97,7 @@ public class BookingService {
 
     public ArrayList<Times> fetchTimes(int id, String date, int dayOfWeek){
         Center c = centerRepo.fetchById(id);
-        WorkDay d = c.getWeekday().getDay(dayOfWeek);
+        WorkDay d = c.getWorkWeek().getDay(dayOfWeek);
         ArrayList<Times> times = new ArrayList<>();
 
         int fullCapacity = d.getCapacity();
@@ -148,7 +148,7 @@ public class BookingService {
             return days;
         }
 
-        WorkWeek workWeek = centerRepo.fetchById(centerid).getWeekday();
+        WorkWeek workWeek = centerRepo.fetchById(centerid).getWorkWeek();
         for(int i = 0; i < dayCount; i++){
             WorkDay d = workWeek.getDay(dow);
 
