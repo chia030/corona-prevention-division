@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Login to Corona Prevention Division</title>
+    <title>View results</title>
     <style>
         @import url('https://fonts.googleapis.com/css?family=Oxanium&display=swap');
         @import url('https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap');
@@ -96,20 +96,20 @@
         <!--Left-->
         <div class="vertical-border" style="float: left;"></div>
 
-        <!--Login Form-->
-        <div class="login">
-            <form th:action="@{/login}" th:object="${user}" th:name="user" method="post">
-                <label>Username:</label>
-                <input type="text" th:name="username" th:field="*{username}" required/>
+        <!--Center-->
+        <div class="center">
+            <form action="#" th:action="@{/results}" method="post">
+                <label>Appointment ID:</label>
+                <input type="number" readonly="true" th:name="id" th:value="${id}" />
                 <br>
                 <div class="separator"></div>
 
-                <label>Password:</label>
-                <input type="password" th:name="password" th:field="*{password}" required/>
+                <label>CPR number:</label>
+                <input name="cpr" type="number" maxlength="10" th:name="cpr" />
                 <br>
                 <div class="separator"></div>
 
-                <button type="submit">Log in</button>
+                <button type="submit">View results</button>
             </form>
         </div>
 
