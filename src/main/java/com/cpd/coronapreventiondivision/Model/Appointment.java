@@ -33,6 +33,15 @@ public class Appointment {
         this.center = center;
         this.patientEmail = patientEmail;
     }
+    public Appointment(int appointment_id, Result result, LocalDate date, LocalTime time, Patient patient, Center center, String patientEmail) {
+        this.appointment_id = appointment_id;
+        this.result = result;
+        this.date = date;
+        this.time = time;
+        this.patient = patient;
+        this.center = center;
+        this.patientEmail = patientEmail;
+    }
 
     @Override
     public String toString() {
@@ -45,6 +54,10 @@ public class Appointment {
                 ", patientEmail='" + patientEmail + '\'' +
                 '}';
     }
+
+    public int getAppointment_id() { return appointment_id; }
+
+    public void setAppointment_id(int appointment_id) { this.appointment_id = appointment_id; }
 
     public Result getResult() {
         return result;
