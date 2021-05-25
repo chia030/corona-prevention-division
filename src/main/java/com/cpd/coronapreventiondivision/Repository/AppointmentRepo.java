@@ -119,7 +119,7 @@ public class AppointmentRepo implements RowMapper<Appointment> {
 
     public List<Appointment> fetchAll() {
         String query = "SELECT * FROM cpd1.appointments";
-        return template.query(query, this);
+        return template.query(query, this::mapRow);
     }
 
     public List<Appointment> fetchBooked() {
@@ -142,4 +142,19 @@ public class AppointmentRepo implements RowMapper<Appointment> {
         return template.query(query, this::mapRow, centerID);
     }
 
+    public boolean updateAppointment(Appointment.Result status, int appointmentID ) {
+        String query = "UPDATE * FROM cp1.appointments SET result = ? WHERE appointment_id = ? AND result = 'BOOKED'";
+        try {
+            template.update(
+                    connection -> {
+                        PreparedStatement ps = connection.prepareStatement(query);
+                        ps.setString(1, status.name());
+                        ps.setInt(2, appointmentID);
+                        return ps;
+                    });
+            return true;
+        } catch(Exception e) {
+            return false;
+        }
+    }
 }

@@ -46,7 +46,7 @@ public class CenterRepo implements RowMapper<Center> {
     public Center fetchById(int id){
         String query = "SELECT * FROM cpd1.centers WHERE center_id = ?";
 
-        List<Center> c = template.query(query, new Object[]{id}, this);
+        List<Center> c = template.query(query,this,id);
         return (c.size() > 0) ? c.get(0) : null;
     }
 

@@ -33,7 +33,7 @@ public class LoginController {
                     return "redirect:/admin?user=" + user;
                 case SECRETARY:
                     model.addAttribute("user", user);
-                    return "redirect:/secretary";
+                    return "redirect:/secretary?user=" + user;
                 default:
                     return "redirect:/";
             }
