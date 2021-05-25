@@ -16,6 +16,7 @@ body {
 .title {
     color: black;
     margin: 30px 0px;
+    padding-top: 30px;
     text-align: center;
 }
 
@@ -35,7 +36,7 @@ body {
     width: 100%;
     overflow: hidden;
     left: 0;
-    background: linear-gradient(0deg, rgba(255,255,255,0) 0%, rgba(220,220,220,1) 100%);
+    background: linear-gradient(0deg, rgba(255,255,255,0) 0%, rgba(120,120,120,0.5) 100%);
 }
 
 .topnav li {
@@ -94,6 +95,17 @@ body {
     margin-right: auto;
     width: 80%;
     background-color: white;
+    margin-bottom: 50px;
+}
+
+.footer {
+    background-color: #95918f;
+    height: auto;
+    color: white;
+    font-family: "Roboto Slab", serif, Verdana;
+    text-align: center;
+    width: 100%;
+    padding: 40px 0px;
 }
 
 /*VISUALS*/
@@ -141,8 +153,19 @@ select#select-google-maps {
     border-radius: 10px;
 }
 
-.center-content {
+.picture-background {
+    background-image: url("https://i.ibb.co/Ht3FmDp/pexels-pixabay-33397.jpg");
+    background-size: cover;
+}
 
+.accent-border {
+    border: 3px solid #FF6219;
+    border-radius: 10px;
+}
+
+.center-content {
+    display: flex;
+    justify-content: center;
 }
 
 /*CALENDAR*/
@@ -170,7 +193,7 @@ select#select-google-maps {
 }
 
 #calendar-header {
-    margin-top: 50px;
+    margin-top: 30px;
     background-color: #FF6219;
     width: 80%;
     height: 50px;
@@ -187,13 +210,17 @@ select#select-google-maps {
     height: 30px;
 }
 
-#calendar-header button {
+#calendar-header .but {
     background-color: #FF6219;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 50px;
     height: inherit;
     color: white;
     font-family: Oxanium, serif, Helvetica;
-    font-size: 20px;
+    font-size: 30px;
     font-weight: bolder;
     border: none;
     border-radius: 10px;
@@ -230,6 +257,23 @@ select#select-google-maps {
     background-color: #d9ffd2;
 }
 
+.disabled {
+    color: #BFBFBF;
+}
+
+#calendar p {
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px auto;
+    line-height: 15px;
+}
+
+#calendar i {
+    font-size: 9px;
+    height: 20px;
+}
+
 .times.selected {
     border: 2px solid #1cbe00;
     background-color: #d9ffd2;
@@ -242,4 +286,182 @@ select#select-google-maps {
 .times h2 {
     float: right;
     padding-top: 10px;
+}
+
+/*FORM*/
+.booking-form {
+    padding: 20px;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: "Roboto Slab", serif, Roboto, Verdana;
+    font-size: 24px;
+}
+
+.booking-form label {
+    width: 40%;
+    margin: 10px auto;
+}
+
+.booking-form .single-input {
+    display: flex;
+    justify-content: space-between;
+}
+
+.booking-form input {
+    width: 60%;
+    font-size: 24px;
+    margin: 10px auto;
+}
+
+.cta {
+    height: auto;
+    font-family: Oxanium, serif, Helvetica;
+    font-weight: bold;
+    font-size: 24px;
+    color: white;
+    background-color: #FF6219;
+    border-radius: 10px;
+    padding: 14px 20px;
+    border: none;
+}
+
+#hero {
+    height: 100vh;
+    width: 100%;
+    margin-top: -75px;
+    display: flex;
+    flex-direction: column;
+    justify-content-content: space-between;
+    background-image: url("https://i.ibb.co/Ht3FmDp/pexels-pixabay-33397.jpg");
+    background-size: cover;
+    color: white;
+}
+
+.hero-content {
+    display: flex;
+    justify-content: space-between;
+    height: 90vh;
+    width: 100%;
+}
+
+.hero-subcontent {
+    text-align: center;
+}
+
+.view-block {
+    height: 100%;
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 50px;
+}
+
+.admin-view-block {
+    width: 45%;
+    flex-direction: column;
+    justify-content: center;
+    margin: 50px;
+}
+
+.view-block h1 {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    color: black;
+    font-family: Oxanium;
+}
+
+.view-block p {
+    margin-bottom: 50px;
+    color: black;
+}
+
+.view-block button.cta {
+    color: black;
+    background-color: white;
+    width: 50%;
+    display: flex;
+    justify-self: center;
+}
+
+#hero h4 {
+    font-weight: 300;
+    color: white;
+}
+
+/*INFO*/
+
+.info {
+    height: 100vh;
+    width: 100%;
+    text-align: center;
+    padding: 50px;
+}
+
+/*ADMIN*/
+
+#select-center-admin {
+    width: 100%;
+    height: 50px;
+    font-family: Roboto, Helvetica, serif;
+    font-size: 20px;
+    border-radius: 10px;
+}
+
+.select-center-type {
+    width: 100%;
+    height: 50px;
+    font-family: Roboto, Helvetica, serif;
+    font-size: 20px;
+    border-radius: 10px;
+}
+
+.work-day {
+    background-color: #FAFAFA;
+    margin: 20px;
+    padding: 20px;
+}
+
+.work-day div {
+    display: inline;
+    font-size: 20px;
+
+}
+
+.work-day div input {
+    font-size: 20px;
+    margin: 10px;
+}
+
+.small-cta {
+    font-family: "Roboto Slab", serif, Verdana;
+    font-weight: normal;
+    font-size: 18px;
+
+    color: white;
+    background-color: #FF6219;
+
+    border-radius: 10px;
+    padding: 5px;
+    margin: 10px;
+    border: none;
+}
+
+.styled-table {
+    width: 100%;
+    border-radius: 10px;
+    border: 2px solid #AFAFAF;
+    background-color: #FAFAFA;
+}
+
+.styled-table table {
+    width: 100%;
+}
+
+.styled-table-header{
+    font-size: 20px;
+    padding: 20px;
+    border: 2px solid #AFAFAF;
 }

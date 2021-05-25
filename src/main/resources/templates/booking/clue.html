@@ -1,8 +1,15 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Login to Corona Prevention Division</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Booking</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="/permanent.js"></script>
+    <title>Email confirmation</title>
     <style>
         @import url('https://fonts.googleapis.com/css?family=Oxanium&display=swap');
         @import url('https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap');
@@ -10,14 +17,8 @@
         a:link { color: #AFAFAF; !important; }
         a:visited { color: #AFAFAF; !important; }
 
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
         body {
-            font-family: Roboto Slab;
+            font-family: Roboto Slab, serif;
             font-size: 20px;
         }
 
@@ -52,16 +53,16 @@
 
         input {
             width: 50%;
-            font-family: Roboto Slab, Roboto, Verdana;
+            font-family: Roboto Slab, serif, Roboto, Verdana;
             font-size: 20px;
             float: right;
         }
 
         button {
-            font-family: Oxanium, Helvetica;
+            font-family: Oxanium, serif, Helvetica;
             font-size: 20px;
             width: auto;
-            margin-top: 30px;
+            margin-top: 50px;
             margin-left: auto;
             margin-right: auto;
             background-color: #FF6219;
@@ -79,8 +80,6 @@
     </style>
 </head>
 <body>
-
-<!--View results-->
 <div class="content">
     <!-- logos -->
     <div >
@@ -96,21 +95,9 @@
         <!--Left-->
         <div class="vertical-border" style="float: left;"></div>
 
-        <!--Login Form-->
-        <div class="login">
-            <form th:action="@{/login}" th:object="${user}" th:name="user" method="post">
-                <label>Username:</label>
-                <input type="text" th:name="username" th:field="*{username}" required/>
-                <br>
-                <div class="separator"></div>
-
-                <label>Password:</label>
-                <input type="password" th:name="password" th:field="*{password}" required/>
-                <br>
-                <div class="separator"></div>
-
-                <button type="submit">Log in</button>
-            </form>
+        <!--Center-->
+        <div class="center">
+            <h2 th:text="${message}" style="text-align: center; margin: 100px 10px;"></h2>
         </div>
 
         <!--Right-->
@@ -120,6 +107,5 @@
     <!--Bottom-->
     <div class="horizontal-border" />
 </div>
-
 </body>
 </html>

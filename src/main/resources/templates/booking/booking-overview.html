@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Booking</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="/permanent.js"></script>
+    <title>Booking</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Oxanium&display=swap');
+        @import url('https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap');
+        @media only screen and (max-width: 768px) { .content { width: 100%; } }
+        a:link { color: #AFAFAF; !important; }
+        a:visited { color: #AFAFAF; !important; }
+
+        body {
+            font-family: Roboto Slab, serif;
+            font-size: 20px;
+        }
+
+        .horizontal-border {
+            height: 20px;
+            background-color: #EFEFEF;
+        }
+
+        .vertical-border {
+            width: 20px;
+            height: auto;
+            background-color: #EFEFEF;
+        }
+
+        .content {
+            width: 40%;
+            height: auto;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .center {
+            width: 100%;
+            background-color: white;
+            margin: 20px;
+        }
+
+        label {
+            /*float: left;*/
+            width: 50%;
+        }
+
+        input {
+            width: 50%;
+            font-family: Roboto Slab, serif, Roboto, Verdana;
+            font-size: 20px;
+            float: right;
+        }
+
+        button {
+            font-family: Oxanium, serif, Helvetica;
+            font-size: 20px;
+            width: auto;
+            margin-top: 50px;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #FF6219;
+            color: white;
+            border: 0;
+            padding: 12px 40px;
+            display: flex;
+            align-self: center;
+        }
+
+        .separator {
+            width: 100%;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="content">
+    <!-- logos -->
+    <div >
+        <img src="https://i.ibb.co/VMQ8rtj/corona-prevention-logo.png" alt="Corona Prevention logo" style="margin-top: 20px; width: auto; height: 60px;"/>
+        <img src="https://i.ibb.co/fncfghn/kobenhavns-kommune-logo.png" alt="Kobenhavns kommune" style="margin-top: 20px; width: auto; height: 60px; float: right;"/>
+    </div>
+
+    <!--Top-->
+    <div class="horizontal-border"></div>
+
+    <!--Middle-->
+    <div style="display: flex; justify-content: space-between;">
+        <!--Left-->
+        <div class="vertical-border" style="float: left;"></div>
+
+        <!--Center-->
+        <div class="center">
+
+            <h3 th:text="${outcome}" style="text-align: center; margin: 20px 0px;"></h3>
+
+            <div th:if="${booked == 1}">
+                <label>Appointment ID:</label>
+                <input disabled="true" th:value="${idV}" />
+                <br>
+                <div class="separator"></div>
+            </div>
+
+            <label>CPR number:</label>
+            <input disabled="true" th:value="${cprV}" />
+            <br>
+            <div class="separator"></div>
+
+            <label>Email:</label>
+            <input disabled="true" th:value="${emailV}" />
+            <br>
+            <div class="separator"></div>
+
+            <label>Date:</label>
+            <input disabled="true" th:value="${dateV}" />
+            <br>
+            <div class="separator"></div>
+
+            <label>Time:</label>
+            <input disabled="true" th:value="${timeV}" />
+            <br>
+            <div class="separator"></div>
+
+            <label>Location:</label>
+            <input disabled="true" th:value="${locationV}" />
+            <br>
+            <div class="separator"></div>
+
+            <form th:if="${booked == 0}" th:action="@{/confirm-booking}" method="post">
+                <input type="hidden" name="center" th:value="${center}"/>
+                <input type="hidden" name="year" th:value="${year}"/>
+                <input type="hidden" name="month" th:value="${month}"/>
+                <input type="hidden" name="day" th:value="${day}"/>
+                <input type="hidden" name="time" th:value="${time}"/>
+                <input type="hidden" name="cpr" th:value="${cpr}"/>
+                <input type="hidden" name="email" th:value="${email}"/>
+                <input type="hidden" name="firstName" th:value="${firstName}"/>
+                <input type="hidden" name="lastName" th:value="${lastName}"/>
+
+                <button type="submit">I've confirmed my email</button>
+            </form>
+
+            <form th:if="${booked == 1}" th:action="@{/}" method="get">
+                <button type="submit">Return to homepage</button>
+            </form>
+        </div>
+
+        <!--Right-->
+        <div class="vertical-border" style="float: right;"></div>
+    </div>
+
+    <!--Bottom-->
+    <div class="horizontal-border" />
+</div>
+
+</body>
+</html>

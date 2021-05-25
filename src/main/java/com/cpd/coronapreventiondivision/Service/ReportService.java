@@ -1,5 +1,9 @@
 package com.cpd.coronapreventiondivision.Service;
 
+
+import org.springframework.stereotype.Service;
+
+
 import com.cpd.coronapreventiondivision.Model.Appointment;
 import com.cpd.coronapreventiondivision.Repository.AppointmentRepo;
 import org.springframework.beans.factory.annotation.Autowired;

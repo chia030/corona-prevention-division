@@ -1,10 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin dashboard</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/booking-style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
 <body>
+<div class="booking-content">
+    <h1 class="title" style="margin-bottom: 0px;">Admin dashboard</h1>
+    <div>
+        <div style="padding:50px 50px 20px 50px;">
+            <form th:action="@{/create-center}" method="get">
+                <button class="cta" type="submit">Declare new center</button>
+            </form>
 
+            <div style="height: 30px;"></div>
+
+            <form th:action="@{/update-center}" method="post" class="styled-table">
+                <table>
+                    <thead class="styled-table-header">
+                    <tr>
+                        <th>Center location</th>
+                        <th>Type</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:each="center : ${centers}">
+                        <tr>
+                            <td style="padding-left: 30px;" th:text="${center.getAddress().toString()}"></td>
+                            <td th:text="${center.getCenterType().toString()}"></td>
+                            <td>
+                                <button class="small-cta" type="submit" name="centerid" th:value="${center.getCenterID()}">Edit</button>
+                            </td>
+                            <td>
+                                <button class="small-cta" type="submit" name="remove" th:value="${center.getCenterID()}">Remove</button>
+                            </td>
+                        </tr>
+                    </th:block>
+
+                    </tbody>
+                </table>
+            </form>
+
+            <div style="height: 50px;"></div>
+        </div>
+    </div>
+</div>
+<footer class="footer">© Copyright Corona prevention division, All rights reserved 2021</footer>
 </body>
 </html>

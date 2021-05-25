@@ -2,6 +2,7 @@ package com.cpd.coronapreventiondivision.Model;
 
 public class Address {
 
+    private int id;
     private String city;
     private int postCode;
     private String streetName;
@@ -9,9 +10,26 @@ public class Address {
     private String floor;
     private String googleMapsLink;
 
-    public Address() {}
+    public Address() {
+        city = null;
+        postCode = 0;
+        streetName = null;
+        streetNumber = null;
+        floor = null;
+        googleMapsLink = null;
+    }
 
     public Address(String city, int postCode, String streetName, String streetNumber, String floor, String googleMapsLink) {
+        this.city = city;
+        this.postCode = postCode;
+        this.streetName = streetName;
+        this.streetNumber = streetNumber;
+        this.floor = floor;
+        this.googleMapsLink = googleMapsLink;
+    }
+
+    public Address(int id, String city, int postCode, String streetName, String streetNumber, String floor, String googleMapsLink) {
+        this.id = id;
         this.city = city;
         this.postCode = postCode;
         this.streetName = streetName;
@@ -24,6 +42,14 @@ public class Address {
     public String toString() {
         return  city + " " + postCode + ", " + streetName + " " +
                 " " + streetNumber + " " + floor;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getGoogleMapsLink() {

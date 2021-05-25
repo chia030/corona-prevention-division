@@ -15,9 +15,15 @@ import java.util.List;
 
 @Controller
 public class ReportController {
-
+  
     @Autowired
     ReportService reportService;
+
+
+//     @PostMapping("/secretary")
+//     public String homeSecretary(@RequestParam User user) {
+//        homeSecretary(LoginController.staticUser);
+
 
 //    @PostMapping("/home-secretary")
 //    public String homeSecretary(@RequestParam User user) {
