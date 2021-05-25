@@ -34,8 +34,8 @@
                     <tbody>
                     <th:block th:each="center : ${centers}">
                         <tr>
-                            <td style="padding-left: 30px;" th:text="${center.getAddress().toString()}"></td>
-                            <td th:text="${center.getCenterType().toString()}"></td>
+                            <td style="padding-left: 30px;" th:text="${center.getAddress()}"></td>
+                            <td th:text="${center.getCenterType()}"></td>
                             <td>
                                 <button class="small-cta" type="submit" name="centerid" th:value="${center.getCenterID()}">Edit</button>
                             </td>
