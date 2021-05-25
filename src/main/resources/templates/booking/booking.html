@@ -3,80 +3,348 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>SARS-CoV-2 PCR test</title>
+    <title>Booking</title>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/resources/demos/style.css">
     <link rel="stylesheet" href="/booking-style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="/permanent.js"></script>
     <script>
-        $( function() {
-            $( "#datepicker" ).datepicker({
-                dateFormat: "yy-mm-dd",
-                firstDay: 1,
-                minDate: 1,
-                maxDate: "+1m"
-            });
-        } );
-        // Something like this will deactivate certain dates depending on the center capacity! ->
-        // $('input').datepicker({
-        //     beforeShowDay: function(date){
-        //         var string = jQuery.datepicker.formatDate('yy-mm-dd', date);
-        //         return [$.inArray(string, array) == -1];
-        //     }
-        // });
+        var selectedCenter; //declare as global to reuse later
+        var selectedTime;
     </script>
 </head>
 <body>
-<!--nav bar:-->
+
+<!--Navigation bar-->
 <div class="topnav"></div>
+<div style="height: 75px;" ></div>
+
+<div class="booking-content">
     <!--Header-->
-    <div>
-        <h1>
-            Book a PCR test
-        </h1>
+    <div class="title">
+        <h1 th:text="${title}"></h1>
     </div>
+    <form th:action="@{/confirm-booking}" method="post">
+        <input type="hidden" name="centerid" id="input-centerid" value="undefined"/>
+        <input type="hidden" name="year" id="input-year" value="undefined"/>
+        <input type="hidden" name="month" id="input-month" value="undefined"/>
+        <input type="hidden" name="day" id="input-day" value="undefined"/>
+        <input type="hidden" name="time" id="input-time" value="undefined">
 
-    <!--Select test center-->
-<!--Select center-->
-<div>
-    <form th:action="@{select-center}" method="post">
-        <select name="centerid">
-            <!--            <option th:text="Please select a center..."></option>-->
-            <option th:each="center : ${centers}" th:value="${center.centerID}" th:text="${center.address}">
-            </option>
-        </select>
-        <button type="submit">Select center</button>
+        <table style="width: 100%;">
+            <!--Visuals-->
+            <tr>
+                <td>
+                    <div class="pearl">
+                        <h1 style="margin-bottom: 50px;">1</h1>
+                    </div>
+                </td>
+                <td>
+                    <h2>Choose the location</h2>
+                </td>
+            </tr>
+            <!--Select center-->
+            <tr>
+                <!--Visual line-->
+                <td></td>
+                <!--Center selection content-->
+                <td>
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <script>
+                            function updateGoogleMaps(){
+                                selectedCenter = [].filter.call(document.querySelectorAll('option'), (e) => e.selected)[0].value;
+                                document.getElementById("input-centerid").value = selectedCenter;
+                                $.ajax({
+                                    url: 'get-google-maps-link',
+                                    type: 'post',
+                                    data: {centerid:selectedCenter},
+                                    success: function (response) {
+                                        document.getElementById("google-maps").src = response;
+                                        renderMonth(0);
+                                    }
+                                });
+                            }
+                        </script>
+                        <select id="select-google-maps" class="elegant-border center-content" name="center" onchange="updateGoogleMaps()" required>
+                            <option value="null" selected disabled>Please select a center...</option>
+                            <option th:each="center : ${centers}" th:value="${center.getCenterID()}" th:text="${center.address}">
+                            </option>
+                        </select>
+
+                        <!--Google Maps Embed-->
+                        <iframe id="google-maps" class="center-content accent-border picture-background" src="" width="600" height="450" style="margin: 20px 0px 50px 0px;" allowfullscreen="">
+                        </iframe>
+                    </div>
+                </td>
+                <td style="width: 80px;"></td>
+            </tr>
+
+
+
+            <!--Visuals-->
+            <tr>
+                <td>
+                    <div class="pearl">
+                        <h1 style="margin-bottom: 50px;">2</h1>
+                    </div>
+                </td>
+                <td>
+                    <h2>Select appointment date and time</h2>
+                </td>
+            </tr>
+            <!--Select a date-->
+            <tr>
+                <td></td>
+                <td>
+                    <div id="calendar-header" style="display: flex; justify-content: space-between; vertical-align: center;">
+                        <div class="but" onclick="renderMonth(-1)"><</div>
+                        <h4 id="calendar-selected"></h4>
+                        <div class="but" onclick="renderMonth(1)">></div>
+                    </div>
+                    <table id="calendar" class="elegant-border"></table>
+
+                    <div id="times-box"></div>
+
+                    <script>
+                        let table = document.querySelector('#calendar');
+                        let body = document.querySelector('#calendar tbody');
+                        let output = document.querySelector('#calendar-selected');
+
+                        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                        const numOfDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+                        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+                        let date = new Date();
+                        let selectedDay = date.getDate();
+                        let selectedMonth = date.getMonth();
+                        let selectedYear = date.getFullYear();
+
+                        renderMonth(0);
+
+                        function recreateCalendar(){
+                            $("#calendar tr").remove();
+                            $("#calendar th").remove();
+                            $("#calendar thead").remove();
+                            $("#calendar tbody").remove();
+
+                            table.tHead = document.createElement("thead");
+
+                            let tr = document.createElement("tr");
+                            table.tHead.appendChild(tr);
+
+                            for(d in days){
+
+                                let th = document.createElement("th");
+                                th.innerHTML = "<h4 style='height: 40px;'>" + days[d] + "</h4>";
+                                tr.appendChild(th);
+                            }
+
+                            table.tBody = document.createElement("tbody");
+                        }
+
+                        function renderMonth(mapMonth){
+                            //Disable the calendar before it is show
+
+                            //recreateCalendar();
+
+                            //Update Month selection
+                            selectedMonth += mapMonth;
+
+                            //Account for year change
+                            if (selectedMonth > 11){
+                                selectedMonth = 0;
+                                selectedYear++;
+                            }
+                            else if (selectedMonth < 0){
+                                selectedMonth = 11;
+                                selectedYear--;
+                            }
+
+                            document.getElementById("input-month").value = (selectedMonth+1);
+                            document.getElementById("input-year").value = selectedYear;
+
+                            let dayCount = numOfDays[selectedMonth];
+                            let currentRow;
+
+                            output.innerText = months[selectedMonth] + " " + selectedYear;
+
+                            let firstDayOfWeekInAMonth = new Date(selectedYear, selectedMonth, 1).getDay();
+                            $.ajax({
+                                url: 'get-available-days',
+                                type: 'post',
+                                data: {centerid:selectedCenter, year:selectedYear, month:selectedMonth, dayOfWeek:firstDayOfWeekInAMonth, dayNum:numOfDays[selectedMonth]},
+                                success: function (response) {
+                                    //Reenable the calendar here
+
+                                    recreateCalendar();
+
+                                    //Go through each day
+                                    for(let i = 0; i < dayCount; i++){
+                                        let dayOfWeek = new Date(selectedYear, selectedMonth, i).getDay();
+
+                                        //Create new row if needed
+                                        if (dayOfWeek === 0 || i === 0)
+                                            currentRow = table.insertRow(-1);
+
+                                        //Empty cells for offset
+                                        if (i === 0 && dayOfWeek !== 0){
+                                            for (let j = 0; j < dayOfWeek; j++){
+                                                currentRow.insertCell(-1);
+                                            }
+                                        }
+
+                                        //Add day
+                                        let currentCell = currentRow.insertCell(-1); //Add to the end
+                                        let m = selectedMonth.toString();
+                                        if (m.length < 2)
+                                            m = "0" + m;
+
+                                        let d = (i+1).toString();
+                                        if (d.length < 2)
+                                            d = "0" + d;
+
+                                        //currentCell.innerHTML = cellP(styling, available + " available", i + 1);
+
+                                        let p = document.createElement("p");
+                                        let br = document.createElement("br");
+                                        let it = document.createElement("i");
+
+                                        it.style.fontSize = "9px";
+                                        it.style.height = "20px";
+
+                                        p.innerHTML = (i + 1).toString();
+                                        p.style.color = "black";
+                                        p.style.fontSize = "20px";
+                                        p.style.fontWeight = "bold";
+                                        p.style.margin = "10px auto";
+                                        p.style.lineHeight = "15px";
+                                        p.appendChild(br);
+                                        p.appendChild(it);
+
+                                        if (response[i] !== "0") {
+                                            it.innerHTML = response[i] + " available";
+
+                                            currentCell.onclick = function () {
+                                                let y = selectedYear;
+                                                let m = selectedMonth + 1;
+                                                if (m < 10) m = "0" + m
+                                                let d = i + 1;
+                                                if (d < 10) d = "0" + d;
+                                                selectedDay = i;
+                                                document.getElementById("input-day").value = selectedDay+1;
+                                                let date = y + "-" + m + "-" + d;
+
+                                                //Remove 'selected' class from all other cells
+                                                document.querySelectorAll("#calendar td.selected").forEach(e => e.classList.remove("selected"));
+
+                                                //Add 'selected' class to this cell
+                                                currentCell.classList.add("selected");
+                                                renderTimes(date, dayOfWeek);
+                                            }
+                                        }
+                                        else {
+                                            currentCell.classList.add("disabled");
+                                            p.style.color = "#bfbfbf";
+                                            it.innerHTML = "";
+                                        }
+
+                                        currentCell.appendChild(p);
+                                    }
+                                }
+                            });
+                        }
+
+                        function renderTimes(date, dayOfWeek){
+                            //Remove all times in timesbox
+                            $('#times-box .times').remove();
+
+                            $.ajax({
+                                url: 'get-available-times',
+                                type: 'post',
+                                data: {centerid:selectedCenter, date:date, dayOfWeek:dayOfWeek},
+                                success: function (response) {
+                                    //Add new times
+                                    for(let i = 0; i < response.length; i++){
+                                        let time = document.createElement("div");
+                                        let hfour = document.createElement("h4");
+                                        let htwo = document.createElement("h2");
+
+                                        console.log("i: " + i + "available: " + response[i].available);
+                                        hfour.innerText = response[i].available;
+                                        htwo.innerText = response[i].timeStart + " - " + response[i].timeEnd;
+
+                                        time.classList.add("times");
+                                        time.appendChild(hfour);
+                                        time.appendChild(htwo);
+
+                                        time.onclick = function(){
+                                            document.querySelectorAll("#times-box div.times.selected").forEach(e => e.classList.remove("selected"));
+                                            document.getElementById("input-time").value = response[i].timeStart;
+                                            time.classList.add("selected");
+                                        }
+
+                                        document.getElementById("times-box").appendChild(time);
+                                    }
+                                }
+                            });
+                        }
+                    </script>
+                </td>
+            </tr>
+
+
+            <!--Visuals-->
+            <tr>
+                <td>
+                    <div class="pearl">
+                        <h1 style="margin-bottom: 50px;">3</h1>
+                    </div>
+                </td>
+                <td>
+                    <h2>Enter credentials</h2>
+                </td>
+            </tr>
+            <!--Enter credentials-->
+            <tr>
+                <td></td>
+                <td>
+                    <div class="center-content">
+
+                        <div class="booking-form">
+                            <div class="single-input">
+                                <label>CPR number:</label>
+                                <input type="number" name="cpr" oninput="this.value=this.value.slice(0,10)" required/>
+                                <br>
+                            </div>
+
+                            <div class="single-input">
+                                <label>First name:</label>
+                                <input type="text" maxlength="30" name="firstName" required/>
+                                <br>
+                            </div>
+
+                            <div class="single-input">
+                                <label>Last name:</label>
+                                <input type="text" maxlength="30" name="lastName" required/>
+                                <br>
+                            </div>
+
+                            <div class="single-input">
+                                <label>Email address:</label>
+                                <input type="email" maxlength="128" th:name="email" required/>
+                                <br>
+                            </div>
+
+                            <button type="submit" class="cta" style="margin: 40px 20px 100px 20px;">Book appointment</button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
     </form>
-
-    <!--Google Maps Embed-->
-    <div style="margin:20px;">
-        <iframe th:src="${googleMapsLink}" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-    </div>
 </div>
-
-    <!--Select date and time-->
-    <div>
-        <h2>Pick a date</h2>
-        <p>Date: <input type="text" id="datepicker"></p>
-        <h2>Pick a time</h2>
-        <select name="times-dropdown">
-<!--            <option th:each="testCenter : ${testCenters}" th:value="${testCenter.address}" th:text="${testCenter.address}">-->
-<!--            </option>-->
-        </select>
-    </div>
-
-    <!--Enter credentials-->
-    <div>
-        <h2>Enter your email</h2>
-        <form id="credentials" method="post">
-            <input name="email" type="text" autocomplete="email">
-            <input type="submit" value="Submit">
-<!-- then it will ask "Is this your CPR? if we have it in the DB or additional info if we don't-->
-        </form>
-    </div>
-
+<footer class="footer">© Copyright Corona prevention division, All rights reserved 2021</footer>
 </body>
 </html>

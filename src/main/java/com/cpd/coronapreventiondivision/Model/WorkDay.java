@@ -4,18 +4,32 @@ import java.time.LocalTime;
 
 public class WorkDay {
 
+    private int id;
     private LocalTime openingTime;
     private LocalTime closingTime;
     private int interval; //In minutes
     private int capacity;
-
-    public WorkDay() {}
 
     public WorkDay(LocalTime openingTime, LocalTime closingTime, int interval, int capacity) {
         this.openingTime = openingTime;
         this.closingTime = closingTime;
         this.interval = interval;
         this.capacity = capacity;
+    }
+
+    public WorkDay(int id, LocalTime openingTime, LocalTime closingTime, int interval, int capacity) {
+        this.id = id;
+        this.openingTime = openingTime;
+        this.closingTime = closingTime;
+        this.interval = interval;
+        this.capacity = capacity;
+    }
+
+    public WorkDay() {
+        openingTime = null;
+        closingTime = null;
+        interval = 0;
+        capacity = 0;
     }
 
     @Override
@@ -26,6 +40,14 @@ public class WorkDay {
                 ", interval=" + interval +
                 ", capacity=" + capacity +
                 '}';
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public LocalTime getOpeningTime() {
