@@ -30,6 +30,7 @@ public class AddressRepo implements RowMapper<Address> {
     public Address fetchById(int id){
         String query = "SELECT * FROM cpd1.addresses WHERE address_id = ?";
 
-        return template.queryForObject(query, new Object[]{id}, this);
+        List<Address> a = template.query(query, new Object[]{id}, this);
+        return (a.size() > 0) ? a.get(0) : null;
     }
 }

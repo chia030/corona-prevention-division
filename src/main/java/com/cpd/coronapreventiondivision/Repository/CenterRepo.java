@@ -49,4 +49,30 @@ public class CenterRepo implements RowMapper<Center> {
 
         return template.query(query, this);
     }
+<<<<<<< Updated upstream
+=======
+
+    public void update(int centerID, String centerType, int addressID, int workWeekID){
+        String query = "UPDATE cpd1.centers SET center_type = ?, address_id = ?, work_week_id = ? WHERE center_id = ?";
+
+        template.update(query, new Object[]{centerType, addressID, workWeekID, centerID});
+    }
+
+    public int insert(Center center){
+        String query = "INSERT INTO cpd1.centers (center_type, address_id, work_week_id) VALUES (?, (SELECT address_id FROM cpd1.addresses WHERE address_id = ?), (SELECT work_week_id FROM cpd1.work_weeks WHERE work_week_id = ?));";
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+
+        template.update(
+                connection -> {
+                    PreparedStatement ps = connection.prepareStatement(query, new String[] {"id"});
+                    ps.setString(1, center.getCenterType().toString());
+                    ps.setInt(2, center.getAddress().getId());
+                    ps.setInt(3, center.getWorkWeek().getId());
+                    return ps;
+                }, keyHolder);
+
+        return keyHolder.getKey().intValue();
+    }
+>>>>>>> Stashed changes
 }
