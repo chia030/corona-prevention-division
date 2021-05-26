@@ -8,14 +8,11 @@ import com.cpd.coronapreventiondivision.Repository.AddressRepo;
 import com.cpd.coronapreventiondivision.Repository.CenterRepo;
 import com.cpd.coronapreventiondivision.Repository.WorkDayRepo;
 import com.cpd.coronapreventiondivision.Repository.WorkWeekRepo;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
 import java.util.List;
 
-@Service
 public class AdminService {
 
     @Autowired
@@ -83,5 +80,14 @@ public class AdminService {
 
     public void removeCenter(int id){
         centerRepo.remove(id);
+    }
+
+    public void updateCenter(Center updatedCenter){
+        int centerID = updatedCenter.getCenterID();
+        String centerType = updatedCenter.getCenterType().toString();
+        int addressID = updatedCenter.getAddress().getId();
+        int workWeekID = updatedCenter.getWorkWeek().getId();
+
+        centerRepo.update(centerID, centerType, addressID, workWeekID);
     }
 }
