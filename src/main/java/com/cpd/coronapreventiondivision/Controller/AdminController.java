@@ -1,16 +1,16 @@
 package com.cpd.coronapreventiondivision.Controller;
 
-import com.cpd.coronapreventiondivision.Model.*;
+import com.cpd.coronapreventiondivision.Model.Address;
+import com.cpd.coronapreventiondivision.Model.Center;
+import com.cpd.coronapreventiondivision.Model.User;
+import com.cpd.coronapreventiondivision.Model.WorkWeek;
 import com.cpd.coronapreventiondivision.Service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalTime;
 import java.util.List;
 
-@Controller
 public class AdminController {
 
     @Autowired
@@ -88,14 +88,18 @@ public class AdminController {
                                /*Saturday*/ @RequestParam String sOpeningTime, @RequestParam String sClosingTime, @RequestParam Integer sInterval, @RequestParam Integer sCapacity,
                                /*Sunday*/ @RequestParam String suOpeningTime, @RequestParam String suClosingTime, @RequestParam Integer suInterval, @RequestParam Integer suCapacity){
         Center center = adminService.fetchCenterById(centerid);
+        Center.CenterType type = Center.CenterType.valueOf(centerType);
+        if (streetNumber.equals("")) streetNumber = null;
+        if (floor.equals("")) floor = null;
+        if (googleMapsLink.equals("")) googleMapsLink = null;
+        Address address = adminService.fetchAddress(city, postCode, streetName, streetNumber, floor, googleMapsLink);
+        if (address == null){
+            address = new Address(city, postCode, streetName, streetNumber, floor, googleMapsLink);
+            address.setId(adminService.insertAddress(address));
+        }
         if (center == null){
             //Create a new center
 
-            Address address = adminService.fetchAddress(city, postCode, streetName, streetNumber, floor, googleMapsLink);
-            if (address == null){
-                address = new Address(city, postCode, streetName, streetNumber, floor, googleMapsLink);
-                address.setId(adminService.insertAddress(address));
-            }
             WorkWeek week = adminService.getWorkWeek(
                     mOpeningTime, mClosingTime, mInterval, mCapacity,
                     tOpeningTime, tClosingTime, tInterval, tCapacity,
@@ -105,12 +109,21 @@ public class AdminController {
                     sOpeningTime, sClosingTime, sInterval, sCapacity,
                     suOpeningTime, suClosingTime, suInterval, suCapacity);
 
-            center = new Center(-1, Center.CenterType.valueOf(centerType), address, week);
+            center = new Center(-1, type, address, week);
             center.setCenterID(adminService.insertCenter(center));
         }
         else {
             //Center exists, update the differences
-            //adminService.updateCenter(center, String centerType, )
+            adminService.updateCenter(new Center(center.getCenterID(), type,
+                    address,
+                    adminService.getWorkWeek(
+                            mOpeningTime, mClosingTime, mInterval, mCapacity,
+                            tOpeningTime, tClosingTime, tInterval, tCapacity,
+                            wOpeningTime, wClosingTime, wInterval, wCapacity,
+                            thOpeningTime, thClosingTime, thInterval, thCapacity,
+                            fOpeningTime, fClosingTime, fInterval, fCapacity,
+                            sOpeningTime, sClosingTime, sInterval, sCapacity,
+                            suOpeningTime, suClosingTime, suInterval, suCapacity)));
         }
 
         return "redirect:/admin";
