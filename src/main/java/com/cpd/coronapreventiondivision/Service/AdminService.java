@@ -1,8 +1,19 @@
 package com.cpd.coronapreventiondivision.Service;
 
+import com.cpd.coronapreventiondivision.Model.Address;
+import com.cpd.coronapreventiondivision.Model.Center;
+import com.cpd.coronapreventiondivision.Model.WorkDay;
+import com.cpd.coronapreventiondivision.Model.WorkWeek;
+import com.cpd.coronapreventiondivision.Repository.AddressRepo;
+import com.cpd.coronapreventiondivision.Repository.CenterRepo;
+import com.cpd.coronapreventiondivision.Repository.WorkDayRepo;
+import com.cpd.coronapreventiondivision.Repository.WorkWeekRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalTime;
+import java.util.List;
+
 public class AdminService {
-<<<<<<< Updated upstream
-=======
 
     @Autowired
     CenterRepo centerRepo;
@@ -79,5 +90,4 @@ public class AdminService {
 
         centerRepo.update(centerID, centerType, addressID, workWeekID);
     }
->>>>>>> Stashed changes
 }

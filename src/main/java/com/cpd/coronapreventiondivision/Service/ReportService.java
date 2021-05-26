@@ -33,5 +33,8 @@ public class ReportService {
         return appointmentRepo.fetchByCenter(centerID);
     }
 
+    public Appointment fetchByID(int appointmentID) { return appointmentRepo.fetchById(appointmentID); }
+
+    public boolean updateAppointment(Appointment.Result status, int appointmentID) { return appointmentRepo.updateAppointment(status, appointmentID); }
 
 }
