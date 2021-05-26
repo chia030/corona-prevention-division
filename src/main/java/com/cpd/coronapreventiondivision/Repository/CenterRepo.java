@@ -50,7 +50,7 @@ public class CenterRepo implements RowMapper<Center> {
     }
 
     public List<Center> fetchByType(String type){
-        String query = "SELECT * FROM cpd1.centers WHERE type = ?";
+        String query = "SELECT * FROM cpd1.centers WHERE center_type = ?";
 
         return template.query(query, new Object[]{type}, this);
     }

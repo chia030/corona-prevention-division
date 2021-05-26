@@ -394,10 +394,10 @@ select#select-google-maps {
 /*INFO*/
 
 .info {
-    height: 100vh;
     width: 100%;
-    text-align: center;
     padding: 50px;
+    display: flex;
+    justify-content: space-between;
 }
 
 /*ADMIN*/
