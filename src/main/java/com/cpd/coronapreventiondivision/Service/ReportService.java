@@ -1,6 +1,8 @@
 package com.cpd.coronapreventiondivision.Service;
 
 
+import com.cpd.coronapreventiondivision.Model.Center;
+import com.cpd.coronapreventiondivision.Repository.CenterRepo;
 import org.springframework.stereotype.Service;
 
 
@@ -17,9 +19,16 @@ public class ReportService {
     @Autowired
     AppointmentRepo appointmentRepo;
 
-    public List<Appointment> fetchAll() {
+    @Autowired
+    CenterRepo centerRepo;
+
+    public void updateOldBooked() { appointmentRepo.updateOldBooked(); }
+
+    public List<Appointment> fetchAllAppointments() {
         return appointmentRepo.fetchAll();
     }
+
+    public List<Center> fetchAllCenters() { return centerRepo.fetchAll(); }
 
     public List<Appointment> fetchBooked() {
         return appointmentRepo.fetchBooked();
