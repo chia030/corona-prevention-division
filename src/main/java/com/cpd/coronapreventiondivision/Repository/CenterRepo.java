@@ -4,8 +4,11 @@ import com.cpd.coronapreventiondivision.Model.Center;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -32,6 +35,12 @@ public class CenterRepo implements RowMapper<Center> {
         );
     }
 
+    public void remove(int id){
+        String query = "DELETE FROM cpd1.centers WHERE center_id = ?";
+
+        template.update(query, new Object[]{id});
+    }
+
     public Center fetchById(int id){
         String query = "SELECT * FROM cpd1.centers WHERE center_id = ?";
 
@@ -49,8 +58,6 @@ public class CenterRepo implements RowMapper<Center> {
 
         return template.query(query, this);
     }
-<<<<<<< Updated upstream
-=======
 
     public void update(int centerID, String centerType, int addressID, int workWeekID){
         String query = "UPDATE cpd1.centers SET center_type = ?, address_id = ?, work_week_id = ? WHERE center_id = ?";
@@ -74,5 +81,4 @@ public class CenterRepo implements RowMapper<Center> {
 
         return keyHolder.getKey().intValue();
     }
->>>>>>> Stashed changes
 }
