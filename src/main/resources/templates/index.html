@@ -15,9 +15,9 @@
 <body>
 <!--Navigation bar-->
 <div class="topnav"></div>
-<div style="height: 75px;" ></div>
+<div style="height: 75px;"></div>
 
-<div class="booking-content">
+<div class="booking-content" style="padding-bottom: 0;">
     <!--Hero-->
     <div id="hero">
         <div class="hero-content">
@@ -25,7 +25,9 @@
             <div class="view-block">
                 <h1>Get a PCR test</h1>
                 <p>
-                    A PCR test shows if you currently have COVID-19. The virus test is performed by taking a throat swab (sample) from your throat. When you book an appointment for a test here, you book an appointment for a PCR test.
+                    A PCR test shows if you currently have COVID-19. The virus test is performed by taking a throat swab
+                    (sample) from your throat. When you book an appointment for a test here, you book an appointment for
+                    a PCR test.
                 </p>
                 <button class="cta" onclick="window.location.href='/test'">Book now</button>
             </div>
@@ -34,7 +36,9 @@
             <div class="view-block">
                 <h1>Get a vaccine</h1>
                 <p>
-                    With the vaccines currently approved in Denmark, you must be vaccinated twice within the space of a few weeks to achieve the full effect of the vaccination. You must therefore book times for both injections.
+                    With the vaccines currently approved in Denmark, you must be vaccinated twice within the space of a
+                    few weeks to achieve the full effect of the vaccination. You must therefore book times for both
+                    injections.
                 </p>
                 <button class="cta" onclick="window.location.href='/vaccine'">Book now</button>
             </div>
@@ -46,10 +50,45 @@
 
     <!--Info-->
     <div class="info">
-        <p>Information about the tests and vaccines is here</p>
+        <div style="width: 48%; text-align: left;">
+            <h2>Are vaccines safe?</h2>
+            <br>
+            <p>Once vaccines are demonstrated to be safe and efficacious, they must be authorized by national
+                regulators, manufactured to exacting standards, and distributed. WHO is working with partners around the
+                world to help coordinate key steps in this process, including to facilitate equitable access to safe and
+                effective COVID-19 vaccines for the billions of people who will need them. More information about
+                COVID-19 vaccine development is available here.</p>
+        </div>
+        <div style="width: 50%;">
+            <img src="https://www.pngarts.com/files/3/Syringe-PNG-Free-Download.png"
+                 style="margin-left: -20%; width: 100%; height: auto;"/>
+        </div>
+    </div>
+
+    <div style="height: 5vh;"></div>
+
+    <div class="info">
+        <div style="width: 45%;">
+            <img style="width: 100%; height: auto;" src="http://pngimg.com/uploads/doctor/doctor_PNG16003.png"/>
+        </div>
+        <div style="width: 50%; text-align: right; padding-right: 100px;">
+            <h2>What are the benefits of getting vaccinated?</h2>
+            <br>
+            <p>The COVID-19 vaccines produce protection against the disease, as a result of developing an immune
+                response to the SARS-Cov-2 virus. Developing immunity through vaccination means there is a reduced risk
+                of developing the illness and its consequences. This immunity helps you fight the virus if exposed.
+                Getting vaccinated may also protect people around you, because if you are protected from getting
+                infected and from disease, you are less likely to infect someone else. This is particularly important to
+                protect people at increased risk for severe illness from COVID-19, such as healthcare providers, older
+                or elderly adults, and people with other medical conditions.</p>
+            <br>
+            <br>
+            <button class="cta" onclick="window.location.href='/test'">Book vaccination appointment</button>
+        </div>
     </div>
 
 </div>
 <footer class="footer">© Copyright Corona prevention division, All rights reserved 2021</footer>
 </body>
+</html>
 </html>
