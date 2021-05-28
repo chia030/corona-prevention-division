@@ -3,6 +3,7 @@ package com.cpd.coronapreventiondivision.Controller;
 import com.cpd.coronapreventiondivision.Model.Appointment;
 import com.cpd.coronapreventiondivision.Model.Center;
 import com.cpd.coronapreventiondivision.Model.User;
+import com.cpd.coronapreventiondivision.Service.BookingService;
 import com.cpd.coronapreventiondivision.Service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,9 @@ public class ReportController {
     ReportService reportService;
 
 
+    private static boolean missingSet = false;
+
+
 //     @PostMapping("/secretary")
 //     public String homeSecretary(@RequestParam User user) {
 //        homeSecretary(LoginController.staticUser);
@@ -29,11 +33,34 @@ public class ReportController {
 //        return "logging/secretary-landing";
 //    }
 
+
+
     @GetMapping("/secretary")
     public String homeSecretary(/*@RequestParam(name = "user", value="user", required = false) User user*/ Model model) {
-        List<Appointment> appointmentList = reportService.fetchAll();
-        model.addAttribute("appointmentList", appointmentList);
+        setMissing(missingSet);
+//        List<Appointment> appointmentList = reportService.fetchAllAppointments();
+        List<Center> centerList = reportService.fetchAllCenters();
+//        model.addAttribute("appointmentList", appointmentList);
+        model.addAttribute("centerList", centerList);
         return "logging/secretary-landing";
+    }
+
+    @PostMapping("get-center-appointments")
+    @ResponseBody
+    public List<Appointment> getCenterAppointments(int centerid) {
+        try {
+            return reportService.fetchByCenter(centerid);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    //checks whether the old booked appointments have been set to 'missing'
+    public void setMissing(boolean update) {
+        if (!update) {
+            reportService.updateOldBooked();
+            missingSet =  true;
+        }
     }
 
     @PostMapping("/update-appointment-report")

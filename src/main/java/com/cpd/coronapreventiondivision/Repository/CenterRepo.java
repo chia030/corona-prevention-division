@@ -25,6 +25,7 @@ public class CenterRepo implements RowMapper<Center> {
     @Autowired
     private WorkWeekRepo workWeekRepo;
 
+
     @Override
     public Center mapRow(ResultSet rs, int rowNum) throws SQLException {
         return new Center(
@@ -37,9 +38,18 @@ public class CenterRepo implements RowMapper<Center> {
 
     public void remove(int id){
         String query = "DELETE FROM cpd1.centers WHERE center_id = ?";
+        template.update(query, new Object[]{id});
+        removeCenterAppointments(id);
+    }
 
+    //removes the appointments booked in the center that was deleted
+    public void removeCenterAppointments(int id) {
+        String query = "DELETE FROM cp1.appointments WHERE center_id = ?";
         template.update(query, new Object[]{id});
     }
+
+    // TODO: add something that alerts the customers about the appointments being deleted?
+    // or TODO: make it impossible to delete a center if it has future appointments (it could be disabled, until there are no more)
 
     public Center fetchById(int id){
         String query = "SELECT * FROM cpd1.centers WHERE center_id = ?";
