@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Appointments</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/booking-style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+</head>
+<body>
+
+<div class="table-container" style="display: flex; justify-content: center;">
+    <form action="#" th:action="@{/secretary/appointments}" th:method="get">
+        <table class="styled-table" style="padding: 20px; width: 80%;">
+            <thead class="styled-table-header">
+            <tr>
+                <th>ID</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>CPR</th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block id="appointment-table" th:each="appointment : ${appointmentList}">
+                <tr>
+                    <td th:text="${appointment.appointment_id}"></td>
+                    <td th:text="${appointment.result}"></td>
+                    <td th:text="${appointment.date}"></td>
+                    <td th:text="${appointment.time}"></td>
+                    <td th:text="${appointment.patient.getCPR()}"></td>
+                    <td>
+                        <button class="small-cta" type="submit" name="centerid" th:value="${appointment.appointment_id}">Save Changes</button>
+                    </td>
+                </tr>
+            </th:block>
+
+            </tbody>
+        </table>
+    </form>
+</div>
+
+</body>
+</html>
