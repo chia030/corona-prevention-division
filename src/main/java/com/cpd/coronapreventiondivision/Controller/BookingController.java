@@ -147,8 +147,4 @@ public class BookingController {
 
         return "booking/booking";
     }
-
-    @GetMapping("/locations")
-    public String locations(){ return "booking/locations"; }
-
 }

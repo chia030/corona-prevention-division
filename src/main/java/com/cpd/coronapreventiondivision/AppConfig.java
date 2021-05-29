@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -32,9 +33,22 @@ public class AppConfig extends WebSecurityConfigurerAdapter {
 //                .logout()//default logout handling
 //                .logoutSuccessUrl("/my-login?logout")//our new logout success url, we are not replacing other defaults.
                 .permitAll();//allow all as it will be accessed when user is not logged in anymore
-
     }
 
+    //This allows only specific pages to be accessed without logging in
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/");
+        web.ignoring().antMatchers("/test");
+        web.ignoring().antMatchers("/vaccine");
+        web.ignoring().antMatchers("/email-verification");
+        web.ignoring().antMatchers("/confirm-booking");
+        web.ignoring().antMatchers("/get-google-maps-link");
+        web.ignoring().antMatchers("/get-available-times");
+        web.ignoring().antMatchers("/get-available-days");
+    }
+
+    //Disabling some security measures to allow async POST calls from javascript to java
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
