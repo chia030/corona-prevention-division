@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -38,21 +39,33 @@ public class ReportController {
     @GetMapping("/secretary")
     public String homeSecretary(/*@RequestParam(name = "user", value="user", required = false) User user*/ Model model) {
         setMissing(missingSet);
-//        List<Appointment> appointmentList = reportService.fetchAllAppointments();
+        List<Appointment> appointmentList = new ArrayList<>();
         List<Center> centerList = reportService.fetchAllCenters();
-//        model.addAttribute("appointmentList", appointmentList);
+        model.addAttribute("appointmentList", appointmentList);
         model.addAttribute("centerList", centerList);
         return "logging/secretary-landing";
     }
 
-    @PostMapping("get-center-appointments")
+    @PostMapping("/get-center-appointments")
     @ResponseBody
-    public List<Appointment> getCenterAppointments(int centerid) {
+    public List<Appointment> getCenterAppointments(@RequestParam(required = false) Integer centerid, Model model) {
         try {
-            return reportService.fetchByCenter(centerid);
+            List<Appointment> appointmentList = reportService.fetchByCenter(centerid);
+            model.addAttribute("appointmentList", appointmentList);
+            return appointmentList;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
+    }
+
+    @GetMapping("/secretary/appointments")
+    public String displayAppointments (@RequestParam(required=false) int centerid , Model model) {
+
+        List<Appointment> appointmentList = getCenterAppointments(centerid,model);
+        model.addAttribute("appointmentList", appointmentList);
+
+        return "logging/appointments";
     }
 
     //checks whether the old booked appointments have been set to 'missing'
