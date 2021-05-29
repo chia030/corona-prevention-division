@@ -6,7 +6,6 @@ $(document).ready(function(){
         '<li><a href="/">Home</a></li>',
             '<li><a href="/test">Testing</a></li>',
             '<li><a href="/vaccine">Vaccination</a></li>',
-            '<li><a href="/locations">Locations</a></li>',
         '</ul>',
         '<div class="nav-shadow"></div>'
     ].join('\n');

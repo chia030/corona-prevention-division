@@ -6,11 +6,13 @@ import com.cpd.coronapreventiondivision.Model.User;
 import com.cpd.coronapreventiondivision.Model.WorkWeek;
 import com.cpd.coronapreventiondivision.Service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Controller
 public class AdminController {
 
     @Autowired
@@ -26,6 +28,7 @@ public class AdminController {
 //        model.addAttribute("user", user);
 
         //Adding a list of all centers
+        System.out.println("Hello im in admin page");
         List<Center> modernaVaccineCenters = adminService.fetchCenterByType("MODERNA_VACCINE");
         List<Center> comirnatyVaccineCenters = adminService.fetchCenterByType("COMIRNATY_VACCINE");
         List<Center> pcrTestCenters = adminService.fetchCenterByType("PCR_TEST");
