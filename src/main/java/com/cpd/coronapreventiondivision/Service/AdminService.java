@@ -9,10 +9,12 @@ import com.cpd.coronapreventiondivision.Repository.CenterRepo;
 import com.cpd.coronapreventiondivision.Repository.WorkDayRepo;
 import com.cpd.coronapreventiondivision.Repository.WorkWeekRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
 import java.util.List;
 
+@Service
 public class AdminService {
 
     @Autowired
