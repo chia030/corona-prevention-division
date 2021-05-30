@@ -3,13 +3,14 @@ package com.cpd.coronapreventiondivision.Repository;
 import com.cpd.coronapreventiondivision.Model.Appointment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -145,19 +146,19 @@ public class AppointmentRepo implements RowMapper<Appointment> {
 
     public List<Appointment> fetchResolved() {
 
-        String query = "SELECT * FROM cp1.appointments WHERE result =! 'BOOKED'";
+        String query = "SELECT * FROM cpd1.appointments WHERE result =! 'BOOKED'";
         return template.query(query, this);
 
     }
 
     public List<Appointment> fetchByCenter(int centerID) {
 
-        String query = "SELECT * FROM cp1.appointments WHERE center_id = ?";
+        String query = "SELECT * FROM cpd1.appointments WHERE center_id = ?";
         return template.query(query, this::mapRow, centerID);
     }
 
     public boolean updateAppointment(Appointment.Result status, int appointmentID ) {
-        String query = "UPDATE cp1.appointments SET result = ? WHERE appointment_id = ? AND result = 'BOOKED'";
+        String query = "UPDATE cpd1.appointments SET result = ? WHERE appointment_id = ? AND result = 'BOOKED'";
         try {
             template.update(
                     connection -> {
