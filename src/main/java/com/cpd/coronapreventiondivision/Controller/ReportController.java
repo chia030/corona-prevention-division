@@ -2,8 +2,6 @@ package com.cpd.coronapreventiondivision.Controller;
 
 import com.cpd.coronapreventiondivision.Model.Appointment;
 import com.cpd.coronapreventiondivision.Model.Center;
-import com.cpd.coronapreventiondivision.Model.User;
-import com.cpd.coronapreventiondivision.Service.BookingService;
 import com.cpd.coronapreventiondivision.Service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,10 +34,13 @@ public class ReportController {
 
 
 
-    @GetMapping("/secretary")
-    public String homeSecretary(/*@RequestParam(name = "user", value="user", required = false) User user*/ Model model) {
+    @RequestMapping(value = "/secretary", method = {RequestMethod.GET, RequestMethod.POST})
+    public String homeSecretary(@RequestParam(required = false) Integer centerid,/*@RequestParam(name = "user", value="user", required = false) User user*/ Model model) {
         setMissing(missingSet);
-        List<Appointment> appointmentList = new ArrayList<>();
+        List<Appointment> appointmentList;
+        if (centerid==null) {  appointmentList = new ArrayList<>(); }
+        else { appointmentList = reportService.fetchByCenter(centerid); }
+
         List<Center> centerList = reportService.fetchAllCenters();
         model.addAttribute("appointmentList", appointmentList);
         model.addAttribute("centerList", centerList);
@@ -48,25 +49,24 @@ public class ReportController {
 
     @PostMapping("/get-center-appointments")
     @ResponseBody
-    public List<Appointment> getCenterAppointments(@RequestParam(required = false) Integer centerid, Model model) {
+    public List<Appointment> getCenterAppointments(@RequestParam(required = false) Integer centerid) {
         try {
-            List<Appointment> appointmentList = reportService.fetchByCenter(centerid);
-            model.addAttribute("appointmentList", appointmentList);
+            List <Appointment> appointmentList = reportService.fetchByCenter(centerid);
             return appointmentList;
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return new ArrayList<>();
         }
     }
 
-    @GetMapping("/secretary/appointments")
-    public String displayAppointments (@RequestParam(required=false) int centerid , Model model) {
-
-        List<Appointment> appointmentList = getCenterAppointments(centerid,model);
-        model.addAttribute("appointmentList", appointmentList);
-
-        return "logging/appointments";
-    }
+//    @GetMapping("/secretary/appointments")
+//    public String displayAppointments (@RequestParam(required=false) int centerid , Model model) {
+//
+//        List<Appointment> appointmentList = getCenterAppointments(centerid,model);
+//        model.addAttribute("appointmentList", appointmentList);
+//
+//        return "logging/appointments";
+//    }
 
     //checks whether the old booked appointments have been set to 'missing'
     public void setMissing(boolean update) {
