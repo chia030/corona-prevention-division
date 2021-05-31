@@ -1,0 +1,82 @@
+create schema cpd1;
+
+create table addresses
+(
+	address_id int(9) auto_increment
+		primary key,
+	city varchar(25) not null,
+	post_code int(4) not null,
+	street_name varchar(25) not null,
+	street_number varchar(5) null,
+	floor varchar(5) null,
+	google_maps_link varchar(350) null
+);
+
+create table centers
+(
+	center_id int(9) auto_increment
+		primary key,
+	center_type enum('PCR_TEST', 'COMIRNATY_VACCINE', 'MODERNA_VACCINE', 'UNKNOWN') not null,
+	address_id int(9) not null,
+	work_week_id int(9) null
+);
+
+create table patients
+(
+	cpr char(10) not null
+		primary key,
+	email varchar(128) not null,
+	last_name varchar(30) not null,
+	first_name varchar(30) not null,
+	approved tinyint(1) not null,
+	approval_id varchar(64) null
+);
+
+create table appointments
+(
+	appointment_id int(9) auto_increment
+		primary key,
+	result enum('BOOKED', 'MISSED', 'POSITIVE', 'NEGATIVE', 'INCONCLUSIVE', 'PARTIAL_VACCINE', 'VACCINATED') not null,
+	date date not null,
+	time time not null,
+	cpr char(10) not null,
+	center_id int(9) not null,
+	patient_email varchar(128) not null,
+	constraint appointments_patients_cpr_fk
+		foreign key (cpr) references patients (cpr)
+);
+
+create index appointments_centers_center_id_fk
+	on appointments (center_id);
+
+create table users
+(
+	username varchar(25) not null
+		primary key,
+	password varchar(64) not null,
+	level enum('ADMIN', 'SECRETARY') not null
+);
+
+create table work_days
+(
+	work_day_id int(9) auto_increment
+		primary key,
+	opening_time time not null,
+	closing_time time not null,
+	interv int(4) not null,
+	capacity int(4) not null
+);
+
+create table work_weeks
+(
+	work_week_id int(9) auto_increment
+		primary key,
+	monday int null,
+	tuesday int null,
+	wednesday int null,
+	thursday int null,
+	friday int null,
+	saturday int null,
+	sunday int null
+);
+
