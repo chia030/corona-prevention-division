@@ -44,12 +44,12 @@ public class AdminController {
 
     @GetMapping("/create-center")
     public String createCenter(Model model){
-        //Administrator selects to create a new center,
-        //and is redirected to an empty form page to fill
-        //out all the info about the center
-
         model.addAttribute("title", "Declare a new center");
-        model.addAttribute("center", new Center(-1, Center.CenterType.UNKNOWN, new Address(), new WorkWeek()));
+        model.addAttribute("center", new Center(
+                -1,
+                Center.CenterType.UNKNOWN,
+                new Address(),
+                new WorkWeek()));
 
         return "admin/center";
     }

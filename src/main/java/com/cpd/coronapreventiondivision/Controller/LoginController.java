@@ -21,25 +21,19 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute(name = "user") User user, Model model) {
+    public String login(){
+        return "redirect:/";
+    }
 
-        user = loginService.verifyCredentials(user);
+    @PostMapping("/logout")
+    public String logout(){
+        return "redirect:/";
+    }
 
-        if (user != null) {
-            switch ((user.getLevel())) {
-                case ADMIN:
-                    model.addAttribute("user", user);
-                    System.out.println(user.toString());
-                    return "redirect:/admin?user=" + user;
-                case SECRETARY:
-                    model.addAttribute("user", user);
-                    return "redirect:/secretary?user=" + user;
-                default:
-                    return "redirect:/";
-            }
-        }
-
-        return "login";
+    @GetMapping("/error")
+    public String error(Model model){
+        model.addAttribute("message", "There was an unexpected error. please try again later.");
+        return "clue";
     }
 
 //    @GetMapping("/redirect/{username}")

@@ -97,7 +97,7 @@
         <div class="vertical-border" style="float: left;"></div>
 
         <!--Login Form-->
-        <div class="login">
+        <div class="login" style="margin: 50px;">
             <form th:action="@{/login}" th:object="${user}" th:name="user" method="post">
                 <label>Username:</label>
                 <input type="text" th:name="username" th:field="*{username}" required/>
