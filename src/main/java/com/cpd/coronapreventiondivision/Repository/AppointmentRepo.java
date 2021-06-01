@@ -76,12 +76,24 @@ public class AppointmentRepo implements RowMapper<Appointment> {
         }
     }
 
+
     public List<Appointment> fetchByCpr(long cpr){
         String query = "SELECT * FROM cpd1.appointments WHERE cpr = ?";
-
         return template.query(query, this, cpr);
-
     }
+
+    public List<Appointment> fetchByCenter(int centerID) {
+
+        String query = "SELECT * FROM cpd1.appointments WHERE center_id = ?";
+        return template.query(query, this::mapRow, centerID);
+    }
+
+    public List<Appointment> fetchByCprAndCenter(long cpr, int centerID) {
+
+        String query = "SELECT * FROM cpd1.appointments WHERE cpr = ? AND center_id = ?";
+        return template.query(query, this::mapRow, cpr, centerID);
+    }
+
 
     public int insert(Appointment appointment){
         String query = "INSERT INTO cpd1.appointments (result, date, time, cpr, center_id, patient_email) VALUES (?, ?, ?, ?, ?, ?);";
@@ -116,7 +128,7 @@ public class AppointmentRepo implements RowMapper<Appointment> {
     }
 
     public void updateOldBooked(){
-        String query = "UPDATE cpd1.appointments SET result = ? WHERE date < CURRENT_TIMESTAMP AND result = ?";
+        String query = "UPDATE cpd1.appointments SET result = ? WHERE date < '"+ LocalDate.now() +"' - INTERVAL 1 DAY AND result = ?";
 
         try {
             template.update(
@@ -132,29 +144,84 @@ public class AppointmentRepo implements RowMapper<Appointment> {
         }
     }
 
+    public List<Appointment> fetchPartialShot() {
+        String query = "SELECT * FROM cpd1.appointments WHERE result = 'PARTIAL_VACCINE'";
+        return template.query(query, this);
+    }
+
+    public List<Appointment> fetchFutureVaccineAppointments() {
+
+        String query = "SELECT *" +
+                "FROM cpd1.appointments" +
+                "JOIN cpd1.centers USING (center_id)" +
+                "WHERE cpd1.centers.center_type = 'COMIRNATY_VACCINE' OR 'MODERNA_VACCINE'" +
+                "AND cpd1.appointments.result = 'BOOKED'";
+
+        return template.query(query,this); //returns future booked vaccine appointments
+
+    }
+
+    public void updateToPartialShot() {
+
+        String query = "UPDATE cpd1.appointments" +
+
+                "    SET result = 'PARTIAL_VACCINE'" +
+                "    WHERE appointment_id IN (" +
+
+                "        SELECT appointment_id" +
+                "        FROM cpd1.appointments" +
+
+                "        JOIN cpd1.centers USING (center_id)" +
+
+                "        WHERE cpd1.appointments.result = 'BOOKED'" +
+                "            AND cpd1.centers.center_type = 'COMIRNATY_VACCINE'" +
+                "            OR cpd1.centers.center_type = 'MODERNA_VACCINE'" +
+                "            AND cpd1.appointments.cpr IN (" +
+
+                "                SELECT cpr" +
+                "                FROM cpd1.appointments" +
+                "                WHERE result = 'PARTIAL_VACCINE'" +
+
+                "            )" +
+                "    )";
+
+        template.update(query);
+    }
+
+
+
+
     public List<Appointment> fetchAll() {
         String query = "SELECT * FROM cpd1.appointments";
         return template.query(query, this::mapRow);
     }
 
-    public List<Appointment> fetchBooked() {
+    public List<Appointment> fetchTodayBooked() {
 
-        String query = "SELECT * FROM cpd1.appointments WHERE result = 'BOOKED'";
+        String query = "SELECT * FROM cpd1.appointments WHERE date = '"+ LocalDate.now() +"' - INTERVAL 1 DAY AND result = 'BOOKED'";
         return template.query(query, this);
 
     }
 
-    public List<Appointment> fetchResolved() {
+    public List<Appointment> fetchBookedByCpr(long cpr) {
 
-        String query = "SELECT * FROM cpd1.appointments WHERE result =! 'BOOKED'";
-        return template.query(query, this);
+        String query = "SELECT * FROM cpd1.appointments WHERE cpr = ? AND result = 'BOOKED' AND  date = '"+ LocalDate.now() +"' - INTERVAL 1 DAY ";
+        return template.query(query, this, cpr);
 
     }
 
-    public List<Appointment> fetchByCenter(int centerID) {
+    public List<Appointment> fetchBookedByCenter(int centerid) {
 
-        String query = "SELECT * FROM cpd1.appointments WHERE center_id = ?";
-        return template.query(query, this::mapRow, centerID);
+        String query = "SELECT * FROM cpd1.appointments WHERE center_id = ? AND result = 'BOOKED' AND  date = '"+ LocalDate.now() +"' - INTERVAL 1 DAY";
+        return template.query(query, this, centerid);
+
+    }
+
+    public List<Appointment> fetchBookedByCprAndCenter(long cpr, int centerid) {
+
+        String query = "SELECT * FROM cpd1.appointments WHERE cpr = ? AND center_id = ? AND result = 'BOOKED' AND date = '"+ LocalDate.now() +"' - INTERVAL 1 DAY";
+        return template.query(query, this, cpr, centerid);
+
     }
 
     public boolean updateAppointment(Appointment.Result status, int appointmentID ) {

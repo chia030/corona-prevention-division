@@ -2,6 +2,7 @@ package com.cpd.coronapreventiondivision.Controller;
 
 import com.cpd.coronapreventiondivision.Model.Appointment;
 import com.cpd.coronapreventiondivision.Model.Center;
+import com.cpd.coronapreventiondivision.Model.Patient;
 import com.cpd.coronapreventiondivision.Service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,30 +35,93 @@ public class ReportController {
 
 
 
-    @RequestMapping(value = "/secretary", method = {RequestMethod.GET, RequestMethod.POST})
-    public String homeSecretary(@RequestParam(required = false) Integer centerid,/*@RequestParam(name = "user", value="user", required = false) User user*/ Model model) {
+//    @RequestMapping(value = "/secretary", method = {RequestMethod.GET, RequestMethod.POST})
+    @GetMapping("/secretary")
+    public String homeSecretary(Model model) {
         setMissing(missingSet);
-        List<Appointment> appointmentList;
-        if (centerid==null) {  appointmentList = new ArrayList<>(); }
-        else { appointmentList = reportService.fetchByCenter(centerid); }
+
+//        if (appointmentList == null) {
+//            appointmentList = new ArrayList<>();
+//        }
 
         List<Center> centerList = reportService.fetchAllCenters();
-        model.addAttribute("appointmentList", appointmentList);
+        List<Patient> vaccinatedList = reportService.fetchVaccinated();
+//        model.addAttribute("appointmentList", appointmentList);
         model.addAttribute("centerList", centerList);
+        model.addAttribute("vaccinatedList", vaccinatedList);
         return "logging/secretary-landing";
     }
 
-    @PostMapping("/get-center-appointments")
+    @PostMapping("get-center-appointments")
     @ResponseBody
-    public List<Appointment> getCenterAppointments(@RequestParam(required = false) Integer centerid) {
+    public List<Appointment> getCenterAppointments(@RequestParam(required = false) long cpr, @RequestParam(required = false)Integer centerid, @RequestParam(required = false) boolean booked) {
+
+        List<Appointment> appointmentList;
+
+        System.out.println(cpr+" "+centerid+" "+booked);
+
         try {
-            List <Appointment> appointmentList = reportService.fetchByCenter(centerid);
-            return appointmentList;
+
+            //returns only today's booked appointments
+            if (booked) {
+
+                if(cpr == 1111111111 && centerid != 0) {
+                    appointmentList = reportService.fetchBookedByCenter(centerid);
+                }
+
+                else if (cpr != 1111111111 && centerid != 0) {
+                    appointmentList = reportService.fetchBookedByCprAndCenter(cpr,centerid);
+                }
+
+                else if (cpr != 1111111111) {
+                    appointmentList = reportService.fetchBookedByCpr(cpr);
+                }
+
+                else {
+                    appointmentList = reportService.fetchBooked();
+                }
+
+            }
+
+            //returns all
+            else {
+                if(cpr == 1111111111 && centerid != 0) {
+                    appointmentList = reportService.fetchByCenter(centerid);
+                }
+
+                else if (cpr != 1111111111 && centerid != 0) {
+                    appointmentList = reportService.fetchByCprAndCenter(cpr,centerid);
+                }
+
+                else if (cpr != 1111111111) {
+                    appointmentList = reportService.fetchByCpr(cpr);
+                }
+
+                else {
+                    appointmentList = reportService.fetchAllAppointments();
+                }
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
-            return new ArrayList<>();
+            appointmentList = new ArrayList<>();
         }
+
+        return appointmentList;
     }
+
+//    @PostMapping("/get-cpr-appointments")
+//    @ResponseBody
+//    public List<Appointment> getCprAppointments(@RequestParam(required = false) Integer centerid, Long cpr) {
+//        try {
+//            List <Appointment> appointmentList = reportService.fetchByCenter(centerid);
+//            return appointmentList;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return new ArrayList<>();
+//        }
+//    }
+
 
 //    @GetMapping("/secretary/appointments")
 //    public String displayAppointments (@RequestParam(required=false) int centerid , Model model) {
@@ -76,21 +140,17 @@ public class ReportController {
         }
     }
 
-    @PostMapping("/update-appointment-report")
-    public String updateResult(@RequestParam(required = false) Integer appointment_id, Model model) {
-        if (appointment_id == null) {
-            return "redirect:/secretary";
+    @PostMapping("update-appointment-report")
+    @ResponseBody
+    public void updateResult(@RequestParam(required = false) Integer appointment_id, @RequestParam(required = false) String result) {
+        if (result == null || appointment_id == null) {
+            return;
         }
 
-        Appointment appointment = reportService.fetchByID(appointment_id);
+        reportService.updateAppointment(Appointment.Result.valueOf(result), appointment_id);
 
-
-        return "redirect:/secretary";
     }
 
-    // TODO: search function, filter for booked and non-booked, date picker?
-    // TODO: make the system delete the appointments when a center is deleted
-    // TODO: make the 'booked' appointments turn into 'missed' if the status is not changed on that day
 
 
 
