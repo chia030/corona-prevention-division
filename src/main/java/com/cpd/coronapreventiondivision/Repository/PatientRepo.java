@@ -66,6 +66,14 @@ public class PatientRepo implements RowMapper<Patient> {
 
     }
 
+    public List<Patient> fetchPartialVaccinated() {
+        String query = "SELECT * FROM cpd1.patients " +
+                "JOIN cpd1.appointments USING (cpr) " +
+                "WHERE cpd1.appointments.result = 'PARTIAL_VACCINE'";
+
+        return template.query(query, this);
+    }
+
     public void setApproval(long cpr, String approvalID, String email){
         String query = "UPDATE cpd1.patients SET approval_id = ?, email = ? WHERE cpr = ?";
 
