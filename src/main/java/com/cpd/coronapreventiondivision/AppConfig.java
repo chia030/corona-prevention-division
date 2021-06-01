@@ -51,8 +51,6 @@ public class AppConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/get-available-days");
     }
 
-
-
 //    @Override
 //    public void configure(AuthenticationManagerBuilder builder)
 //            throws Exception {
