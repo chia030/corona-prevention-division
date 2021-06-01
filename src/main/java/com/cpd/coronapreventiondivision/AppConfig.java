@@ -21,22 +21,6 @@ import java.util.Arrays;
 @Configuration
 @EnableWebSecurity
 public class AppConfig extends WebSecurityConfigurerAdapter {
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.cors().and().csrf().disable();
-//        http.authorizeRequests()
-////                .antMatchers("")
-//                .anyRequest()//allow all urls
-//////                .authenticated()//all URLs are allowed by any authenticated user, no role restrictions.
-////                .and()
-////                .formLogin()//enable form based authentication
-////                .loginPage("/my-login")//use a custom login URI
-////                .permitAll(true)//login URI can be accessed by anyone
-////                .and()
-////                .logout()//default logout handling
-////                .logoutSuccessUrl("/my-login?logout")//our new logout success url, we are not replacing other defaults.
-//                .permitAll();//allow all as it will be accessed when user is not logged in anymore
-//    }
 
     //This allows only specific pages to be accessed without logging in
     @Override
@@ -49,28 +33,9 @@ public class AppConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/get-google-maps-link");
         web.ignoring().antMatchers("/get-available-times");
         web.ignoring().antMatchers("/get-available-days");
+        web.ignoring().antMatchers("/get-center-appointments");
+        web.ignoring().antMatchers("/update-appointment-report");
     }
-
-//    @Override
-//    public void configure(AuthenticationManagerBuilder builder)
-//            throws Exception {
-//        builder.inMemoryAuthentication()
-//                .withUser("joe")
-//                .password("123")
-//                .roles("ADMIN");
-//    }
-
-//    @Bean
-//    WebMvcConfigurer myWebMvcConfigurer() {
-//        return new WebMvcConfigurerAdapter() {
-//
-//            @Override
-//            public void addViewControllers(ViewControllerRegistry registry) {
-//                ViewControllerRegistration r = registry.addViewController("/my-login");
-//                r.setViewName("my-login-page");
-//            }
-//        };
-//    }
 
     @Autowired
     private DataSource dataSource;
@@ -92,6 +57,8 @@ public class AppConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/update-center").hasAuthority("ADMIN")
                 .antMatchers("/submit-center").hasAuthority("ADMIN")
                 .antMatchers("/secretary").hasAuthority("SECRETARY")
+                .antMatchers("/get-center-appointments").hasAuthority("SECRETARY")
+                .antMatchers("/update-appointment-report").hasAuthority("SECRETARY")
                 .antMatchers("/**").permitAll()
                 .and()
                 .formLogin().permitAll()
