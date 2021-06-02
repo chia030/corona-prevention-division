@@ -142,12 +142,12 @@ public class ReportController {
 
     @PostMapping("update-appointment-report")
     @ResponseBody
-    public void updateResult(@RequestParam(required = false) Integer appointment_id, @RequestParam(required = false) String result) {
-        if (result == null || appointment_id == null) {
-            return;
-        }
+    public void updateResult(@RequestParam(required = false) Integer appointment_id, @RequestParam(required = false) String status) {
+//        if (result == null || appointment_id == null) {
+//            return;
+//        }
 
-        reportService.updateAppointment(Appointment.Result.valueOf(result), appointment_id);
+        reportService.updateAppointment(Appointment.Result.valueOf(status), appointment_id);
 
     }
 
