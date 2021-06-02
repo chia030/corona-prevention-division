@@ -12,7 +12,10 @@
 </head>
 <body>
 <div class="booking-content">
-    <h1 class="title" style="margin-bottom: 0px;">Admin Dashboard</h1>
+    <form th:action="@{/logout}" method="post">
+        <button class="small-cta" style="margin-left: 50px;" type="submit">Log out</button>
+    </form>
+    <h1 class="title" style="margin-bottom: 0px; margin-top: 0px; padding-top: 0px;">Admin Dashboard</h1>
     <div>
         <div style="padding:50px 50px 20px 50px;">
             <form th:action="@{/create-center}" method="get">

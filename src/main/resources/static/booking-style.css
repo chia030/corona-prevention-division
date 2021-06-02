@@ -476,3 +476,23 @@ select#select-google-maps {
     padding: 20px;
     border: 2px solid #AFAFAF;
 }
+
+#filter input, select{
+    margin: 10px 20px;
+}
+
+#filter {
+    font-size: 15px;
+}
+
+.table-container {
+    margin: 20px;
+}
+
+.table-container form {
+    width: 100%;
+}
+
+.table-container form table tr td {
+    text-align: center;
+}
