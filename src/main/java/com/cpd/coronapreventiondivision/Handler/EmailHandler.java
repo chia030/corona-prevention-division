@@ -49,14 +49,16 @@ public class EmailHandler {
         }
     }
 
-    public boolean sendResults(String receivee, String resultCode){
+    public boolean sendResults(String resultCode, String receivee){
         try {
             String fileName = "src/main/resources/emailTemplates/results.html";
             Path path = Path.of(fileName);
 
             String subject = "Your test results are here";
             String htmlContent = Files.readString(path);
-            htmlContent = htmlContent.replace("website.com", "https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+            htmlContent = htmlContent.replace("website.com", "localhost:9090");
+            htmlContent = htmlContent.replace("verificationCode", resultCode);
+            htmlContent = htmlContent.replace("customer", receivee);
 
             return sendEmail(receivee, subject, htmlContent);
         }

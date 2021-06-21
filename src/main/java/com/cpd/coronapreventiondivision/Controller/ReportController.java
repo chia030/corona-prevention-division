@@ -22,18 +22,6 @@ public class ReportController {
     private static boolean missingSet = false;
 
 
-//     @PostMapping("/secretary")
-//     public String homeSecretary(@RequestParam User user) {
-//        homeSecretary(LoginController.staticUser);
-
-
-//    @PostMapping("/home-secretary")
-//    public String homeSecretary(@RequestParam User user) {
-////        homeSecretary(LoginController.staticUser);
-//        return "logging/secretary-landing";
-//    }
-
-
 
 //    @RequestMapping(value = "/secretary", method = {RequestMethod.GET, RequestMethod.POST})
     @GetMapping("/secretary")
@@ -110,28 +98,6 @@ public class ReportController {
         return appointmentList;
     }
 
-//    @PostMapping("/get-cpr-appointments")
-//    @ResponseBody
-//    public List<Appointment> getCprAppointments(@RequestParam(required = false) Integer centerid, Long cpr) {
-//        try {
-//            List <Appointment> appointmentList = reportService.fetchByCenter(centerid);
-//            return appointmentList;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return new ArrayList<>();
-//        }
-//    }
-
-
-//    @GetMapping("/secretary/appointments")
-//    public String displayAppointments (@RequestParam(required=false) int centerid , Model model) {
-//
-//        List<Appointment> appointmentList = getCenterAppointments(centerid,model);
-//        model.addAttribute("appointmentList", appointmentList);
-//
-//        return "logging/appointments";
-//    }
-
     //checks whether the old booked appointments have been set to 'missing'
     public void setMissing(boolean update) {
         if (!update) {
@@ -143,9 +109,7 @@ public class ReportController {
     @PostMapping("update-appointment-report")
     @ResponseBody
     public void updateResult(@RequestParam(required = false) Integer appointment_id, @RequestParam(required = false) String status) {
-//        if (result == null || appointment_id == null) {
-//            return;
-//        }
+
 
         reportService.updateAppointment(Appointment.Result.valueOf(status), appointment_id);
 

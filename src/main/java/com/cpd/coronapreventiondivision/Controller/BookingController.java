@@ -72,7 +72,8 @@ public class BookingController {
                 model.addAttribute("outcome", "Your appointment has been booked");
             }
             else {
-                return "booking/booking";
+                model.addAttribute("message", "There was an error sending out the email.\nError code: "+ emailSent);
+                return "booking/clue";
             }
 
             //Unseen data
@@ -95,7 +96,8 @@ public class BookingController {
             model.addAttribute("locationV", bookingService.fetchCenterById(center).getAddress().toString());
         }
         else {
-            return "booking/booking";
+            model.addAttribute("message", "You forgot to input some of your credentials properly.");
+            return "booking/clue";
         }
 
         return "booking/booking-overview";
@@ -145,8 +147,5 @@ public class BookingController {
 
         return "booking/booking";
     }
-
-    @GetMapping("/locations")
-    public String locations(){ return "booking/locations"; }
 
 }

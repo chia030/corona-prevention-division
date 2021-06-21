@@ -5,8 +5,8 @@ import com.cpd.coronapreventiondivision.Service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class LoginController {
@@ -20,10 +20,10 @@ public class LoginController {
         return "login";
     }
 
-    @PostMapping("/login")
-    public String login(){
-        return "redirect:/";
-    }
+//    @PostMapping("/login")
+//    public String login(){
+//        return "redirect:/";
+//    }
 
     @PostMapping("/logout")
     public String logout(){
@@ -35,38 +35,6 @@ public class LoginController {
         model.addAttribute("message", "There was an unexpected error. please try again later.");
         return "booking/clue";
     }
-
-//    @GetMapping("/redirect/{username}")
-//    public RedirectView redirect(@RequestParam Model model, @PathVariable("username") String username) {
-//
-//        RedirectView rv = new RedirectView();
-//
-//        if (model.containsAttribute("ADMIN")) {
-//            homeAdmin(model, username);
-//            rv.setUrl("/home-admin/");
-//        }
-//        else if(model.containsAttribute("SECRETARY")) {
-//            homeSecretary(model, username);
-//            rv.setUrl("/home-secretary/");
-//        }
-//        else { errorPage(); }
-//        return rv;
-//    }
-//
-//    @GetMapping("/home-admin/{username}")
-//    public String homeAdmin(@RequestParam Model model, @PathVariable("username") String username) {
-//        return "admin/admin-landing";
-//    }
-//
-//    @GetMapping("/home-secretary/{username}")
-//    public String homeSecretary(@RequestParam Model model, @PathVariable("username") String username) {
-//        return "logging/secretary-landing";
-//    }
-//
-//    @GetMapping("/something-went-wrong")
-//    public String errorPage() {
-//        return "error-page";
-//    }
 
 
 

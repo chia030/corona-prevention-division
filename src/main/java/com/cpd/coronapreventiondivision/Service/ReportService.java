@@ -1,6 +1,7 @@
 package com.cpd.coronapreventiondivision.Service;
 
 
+import com.cpd.coronapreventiondivision.CoronaPreventionDivisionApplication;
 import com.cpd.coronapreventiondivision.Model.Appointment;
 import com.cpd.coronapreventiondivision.Model.Center;
 import com.cpd.coronapreventiondivision.Model.Patient;
@@ -52,6 +53,17 @@ public class ReportService {
 
     public List<Appointment> fetchByCpr(long cpr) { return appointmentRepo.fetchByCpr(cpr); }
 
-    public boolean updateAppointment(Appointment.Result status, int appointmentID) { return appointmentRepo.updateAppointment(status, appointmentID); }
+    public boolean updateAppointment(Appointment.Result status, int appointmentID) {
+
+        boolean updated = appointmentRepo.updateAppointment(status, appointmentID);
+
+        if (updated) {
+            CoronaPreventionDivisionApplication.emailhandler.sendResults(String.valueOf(appointmentID), "patient");
+            System.out.println("email sent to patient");
+        }
+
+        return updated;
+
+    }
 
 }
