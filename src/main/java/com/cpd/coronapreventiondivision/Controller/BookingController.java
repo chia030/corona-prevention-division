@@ -50,8 +50,6 @@ public class BookingController {
                            " email: " + email +
                            " name: " + firstName + " " + lastName);
 
-
-
         if (cpr != null && email != null && firstName != null && lastName != null){
             int emailSent = bookingService.sendConfirmation(cpr, email, firstName, lastName);
 

@@ -33,7 +33,7 @@ public class LoginController {
     @GetMapping("/error")
     public String error(Model model){
         model.addAttribute("message", "There was an unexpected error. please try again later.");
-        return "clue";
+        return "booking/clue";
     }
 
 //    @GetMapping("/redirect/{username}")
