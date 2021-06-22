@@ -56,9 +56,9 @@ public class EmailHandler {
 
             String subject = "Your test results are here";
             String htmlContent = Files.readString(path);
-            htmlContent = htmlContent.replace("website.com", "localhost:9090");
+            htmlContent = htmlContent.replace("website.com", "http://localhost:9090");
             htmlContent = htmlContent.replace("verificationCode", resultCode);
-            htmlContent = htmlContent.replace("customer", receivee);
+//            htmlContent = htmlContent.replace("customer", receivee);
 
             return sendEmail(receivee, subject, htmlContent);
         }

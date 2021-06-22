@@ -128,7 +128,7 @@ public class AppointmentRepo implements RowMapper<Appointment> {
     }
 
     public void updateOldBooked(){
-        String query = "UPDATE cpd1.appointments SET result = ? WHERE date < '"+ LocalDate.now() +"' - INTERVAL 1 DAY AND result = ?";
+        String query = "UPDATE cpd1.appointments SET result = ? WHERE date < '"+ df.format(LocalDate.now()) +"' AND result = ?";
 
         try {
             template.update(
@@ -198,28 +198,28 @@ public class AppointmentRepo implements RowMapper<Appointment> {
 
     public List<Appointment> fetchTodayBooked() {
 
-        String query = "SELECT * FROM cpd1.appointments WHERE date = '"+ LocalDate.now() +"' - INTERVAL 1 DAY AND result = 'BOOKED'";
+        String query = "SELECT * FROM cpd1.appointments WHERE date = '"+ df.format(LocalDate.now()) +"' AND result = 'BOOKED'";
         return template.query(query, this);
 
     }
 
     public List<Appointment> fetchBookedByCpr(long cpr) {
 
-        String query = "SELECT * FROM cpd1.appointments WHERE cpr = ? AND result = 'BOOKED' AND  date = '"+ LocalDate.now() +"' - INTERVAL 1 DAY ";
+        String query = "SELECT * FROM cpd1.appointments WHERE cpr = ? AND result = 'BOOKED' AND  date = '"+ df.format(LocalDate.now()) +"'";
         return template.query(query, this, cpr);
 
     }
 
     public List<Appointment> fetchBookedByCenter(int centerid) {
 
-        String query = "SELECT * FROM cpd1.appointments WHERE center_id = ? AND result = 'BOOKED' AND  date = '"+ LocalDate.now() +"' - INTERVAL 1 DAY";
+        String query = "SELECT * FROM cpd1.appointments WHERE center_id = ? AND result = 'BOOKED' AND  date = '"+ df.format(LocalDate.now()) +"'";
         return template.query(query, this, centerid);
 
     }
 
     public List<Appointment> fetchBookedByCprAndCenter(long cpr, int centerid) {
 
-        String query = "SELECT * FROM cpd1.appointments WHERE cpr = ? AND center_id = ? AND result = 'BOOKED' AND date = '"+ LocalDate.now() +"' - INTERVAL 1 DAY";
+        String query = "SELECT * FROM cpd1.appointments WHERE cpr = ? AND center_id = ? AND result = 'BOOKED' AND date = '"+ df.format(LocalDate.now()) +"'";
         return template.query(query, this, cpr, centerid);
 
     }

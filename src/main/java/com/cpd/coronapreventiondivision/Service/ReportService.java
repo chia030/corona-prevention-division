@@ -58,8 +58,10 @@ public class ReportService {
         boolean updated = appointmentRepo.updateAppointment(status, appointmentID);
 
         if (updated) {
-            CoronaPreventionDivisionApplication.emailhandler.sendResults(String.valueOf(appointmentID), "patient");
-            System.out.println("email sent to patient");
+            try {
+                CoronaPreventionDivisionApplication.emailhandler.sendResults(String.valueOf(appointmentID), fetchByID(appointmentID).getPatientEmail());
+                System.out.println("email sent to patient");
+            } catch (Exception e) {e.printStackTrace();}
         }
 
         return updated;
